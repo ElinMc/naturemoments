@@ -149,6 +149,8 @@
     <br>
     <strong>iPhone no sound?</strong> Flip the silent switch on the side off, or turn your volume up.
   </div>
+
+  <div id="debug" style="display:none; font-size:0.65rem; color:#64748b; text-align:center; word-break:break-all;"></div>
 </div>
 
 <script>
@@ -235,6 +237,8 @@ function pickDrumFromMotion(ax, ay, az) {
 }
 
 function handleMotion(e) {
+  motionEventCount++;
+  if (motionEventCount % 20 === 0) updateDebug();
   if (mode !== 'motion') return;
   const a = e.acceleration || e.accelerationIncludingGravity;
   if (!a) return;
@@ -252,27 +256,35 @@ function handleMotion(e) {
   }
 }
 
-async function start() {
+let motionPermissionResult = 'not-asked';
+let motionEventCount = 0;
+
+function start() {
+  // STEP 1: Request motion permission FIRST, synchronously from the user tap.
+  // iOS is very strict: any awaits or other async work before this can "use up"
+  // the user gesture and silently block the permission prompt.
+  if (typeof DeviceMotionEvent !== 'undefined' &&
+      typeof DeviceMotionEvent.requestPermission === 'function') {
+    DeviceMotionEvent.requestPermission()
+      .then(p => {
+        motionPermissionResult = p;
+        updateDebug();
+      })
+      .catch(err => {
+        motionPermissionResult = 'error: ' + err.message;
+        updateDebug();
+      });
+  } else {
+    motionPermissionResult = 'no-prompt-needed';
+  }
+
+  // STEP 2: Start audio.
   try {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioCtx.state === 'suspended') await audioCtx.resume();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
   } catch (err) {
     status.textContent = 'Audio failed: ' + err.message;
     return;
-  }
-
-  if (typeof DeviceMotionEvent !== 'undefined' &&
-      typeof DeviceMotionEvent.requestPermission === 'function') {
-    try {
-      const p = await DeviceMotionEvent.requestPermission();
-      if (p !== 'granted') {
-        status.textContent = 'Motion denied — tap mode only. (Clear site data in Settings → Safari to retry.)';
-      } else {
-        status.textContent = 'Motion allowed! Pick a mode.';
-      }
-    } catch (err) {
-      status.textContent = 'Motion unavailable — tap mode only.';
-    }
   }
 
   playDrum('snare', 0.6);
@@ -285,7 +297,18 @@ async function start() {
   sensWrap.style.display = 'flex';
   meterWrap.style.display = 'block';
   hint.style.display = 'block';
+  document.getElementById('debug').style.display = 'block';
   status.textContent = 'Ready. Pick a mode.';
+  updateDebug();
+}
+
+function updateDebug() {
+  const dbg = document.getElementById('debug');
+  if (!dbg) return;
+  dbg.textContent =
+    'Permission: ' + motionPermissionResult +
+    ' | Motion events: ' + motionEventCount +
+    ' | DeviceMotionEvent: ' + (typeof DeviceMotionEvent !== 'undefined' ? 'yes' : 'no');
 }
 
 startBtn.addEventListener('click', start);
