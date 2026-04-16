@@ -6,18 +6,19 @@
 <title>Air Drums</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; overflow: hidden; }
+  html, body { min-height: 100%; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 100%);
     color: #f1f5f9;
     user-select: none;
     touch-action: manipulation;
+    min-height: 100vh;
   }
   .wrap {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
     padding: 16px;
     gap: 12px;
   }
@@ -47,11 +48,11 @@
   }
   .start-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 #b45309; }
   .pads {
-    flex: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 10px;
+    min-height: 50vh;
   }
   .pad {
     border-radius: 16px;
@@ -144,7 +145,9 @@
   <div class="hint" id="hint" style="display:none;">
     Tap Mode: tap the pads.<br>
     Motion Mode: swing your phone (or a stick holding it) like a drumstick.<br>
-    Swing direction picks the drum: down=snare, up=hi-hat, left=tom, right=kick.
+    Swing direction picks the drum: down=snare, up=hi-hat, left=tom, right=kick.<br>
+    <br>
+    <strong>iPhone no sound?</strong> Flip the silent switch on the side off, or turn your volume up.
   </div>
 </div>
 
@@ -263,12 +266,16 @@ async function start() {
     try {
       const p = await DeviceMotionEvent.requestPermission();
       if (p !== 'granted') {
-        status.textContent = 'Motion denied — tap mode only.';
+        status.textContent = 'Motion denied — tap mode only. (Clear site data in Settings → Safari to retry.)';
+      } else {
+        status.textContent = 'Motion allowed! Pick a mode.';
       }
     } catch (err) {
       status.textContent = 'Motion unavailable — tap mode only.';
     }
   }
+
+  playDrum('snare', 0.6);
 
   window.addEventListener('devicemotion', handleMotion);
 
