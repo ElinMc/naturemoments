@@ -15,103 +15,62 @@
     touch-action: manipulation;
     min-height: 100vh;
   }
-  .wrap {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    padding: 16px;
-    gap: 12px;
-  }
-  h1 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-align: center;
-    color: #f59e0b;
-  }
-  .status {
-    text-align: center;
-    font-size: 0.75rem;
-    color: #94a3b8;
-    min-height: 1em;
-  }
+  .wrap { display: flex; flex-direction: column; min-height: 100vh; padding: 12px; gap: 10px; }
+  h1 { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.1em; text-align: center; color: #f59e0b; }
+  .status { text-align: center; font-size: 0.75rem; color: #94a3b8; min-height: 1em; }
   .start-btn {
-    padding: 18px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    background: #f59e0b;
-    color: #0f172a;
-    border: none;
-    border-radius: 14px;
-    cursor: pointer;
-    box-shadow: 0 6px 0 #b45309;
+    padding: 18px; font-size: 1.1rem; font-weight: 700;
+    background: #f59e0b; color: #0f172a; border: none;
+    border-radius: 14px; cursor: pointer; box-shadow: 0 6px 0 #b45309;
   }
   .start-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 #b45309; }
-  .pads {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 10px;
-    min-height: 50vh;
-  }
+  .pads { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .pad {
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 1rem;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: transform 0.08s, filter 0.08s;
-    border: 2px solid rgba(255,255,255,0.08);
+    padding: 22px 10px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem; letter-spacing: 0.1em;
+    cursor: pointer; transition: transform 0.08s, filter 0.08s;
+    border: 2px solid rgba(255,255,255,0.08); text-align: center;
   }
   .pad.hit { transform: scale(0.96); filter: brightness(1.6); }
   .kick   { background: linear-gradient(135deg, #7c3aed, #4c1d95); }
   .snare  { background: linear-gradient(135deg, #ef4444, #991b1b); }
   .hihat  { background: linear-gradient(135deg, #eab308, #854d0e); }
   .tom    { background: linear-gradient(135deg, #10b981, #065f46); }
-  .controls {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
+  .ride   { background: linear-gradient(135deg, #06b6d4, #155e75); }
+  .controls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
   .btn {
-    padding: 12px;
-    background: #1e293b;
-    color: #f1f5f9;
-    border: 1px solid #334155;
-    border-radius: 10px;
-    font-size: 0.85rem;
-    cursor: pointer;
+    padding: 10px 6px; background: #1e293b; color: #f1f5f9;
+    border: 1px solid #334155; border-radius: 10px;
+    font-size: 0.78rem; cursor: pointer; font-weight: 600;
   }
   .btn.active { background: #f59e0b; color: #0f172a; border-color: #f59e0b; }
-  .sens {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.8rem;
-    color: #cbd5e1;
-  }
+  .btn.rec { background: #ef4444; color: white; border-color: #ef4444; }
+  .btn.rec.on { animation: pulse 0.8s infinite; }
+  @keyframes pulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.4); } }
+  .btn.play { background: #10b981; color: #0f172a; border-color: #10b981; }
+  .section-title { font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+  .sens { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #cbd5e1; }
   input[type=range] { flex: 1; }
-  .meter {
-    height: 4px;
-    background: #1e293b;
-    border-radius: 2px;
+  .meter { height: 4px; background: #1e293b; border-radius: 2px; overflow: hidden; }
+  .meter-fill { height: 100%; background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444); width: 0%; transition: width 0.05s; }
+  .kit-map {
+    position: relative; height: 180px;
+    background: #0b1220; border: 1px solid #1e293b; border-radius: 14px;
     overflow: hidden;
   }
-  .meter-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
-    width: 0%;
-    transition: width 0.05s;
+  .zone {
+    position: absolute; transform: translate(-50%, -50%);
+    width: 64px; height: 64px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em;
+    opacity: 0.55; transition: opacity 0.08s, transform 0.08s;
   }
-  .hint {
-    font-size: 0.7rem;
-    color: #64748b;
-    text-align: center;
-    line-height: 1.4;
-  }
+  .zone.hit { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+  .you { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%);
+    font-size: 0.6rem; color: #64748b; }
+  .hint { font-size: 0.68rem; color: #64748b; text-align: center; line-height: 1.4; }
+  .rec-time { text-align: center; font-size: 0.85rem; color: #f1f5f9; font-weight: 600; min-height: 1em; }
 </style>
 </head>
 <body>
@@ -121,112 +80,189 @@
 
   <button class="start-btn" id="start">START</button>
 
-  <div class="pads" id="pads" style="display:none;">
-    <div class="pad hihat" data-drum="hihat">HI-HAT</div>
-    <div class="pad snare" data-drum="snare">SNARE</div>
-    <div class="pad kick"  data-drum="kick">KICK</div>
-    <div class="pad tom"   data-drum="tom">TOM</div>
-  </div>
+  <div id="main" style="display:none; display:none; flex-direction:column; gap:10px;">
+    <div class="controls">
+      <button class="btn active" id="mode-tap">Tap</button>
+      <button class="btn" id="mode-motion">Swing</button>
+      <button class="btn" id="mode-ghost">Ghost Kit</button>
+    </div>
 
-  <div class="meter" id="meterWrap" style="display:none;">
-    <div class="meter-fill" id="meter"></div>
-  </div>
+    <div class="pads" id="pads">
+      <div class="pad hihat" data-drum="hihat">HI-HAT</div>
+      <div class="pad snare" data-drum="snare">SNARE</div>
+      <div class="pad kick"  data-drum="kick">KICK</div>
+      <div class="pad tom"   data-drum="tom">TOM</div>
+    </div>
 
-  <div class="controls" id="controls" style="display:none;">
-    <button class="btn active" id="mode-tap">Tap Mode</button>
-    <button class="btn" id="mode-motion">Motion Mode</button>
-  </div>
+    <div class="kit-map" id="kitMap" style="display:none;">
+      <div class="you">you</div>
+    </div>
 
-  <div class="sens" id="sensWrap" style="display:none;">
-    <span>Sensitivity</span>
-    <input type="range" id="sens" min="8" max="35" value="18">
-  </div>
+    <div class="meter"><div class="meter-fill" id="meter"></div></div>
 
-  <div class="hint" id="hint" style="display:none;">
-    Tap Mode: tap the pads.<br>
-    Motion Mode: swing your phone (or a stick holding it) like a drumstick.<br>
-    Swing direction picks the drum: down=snare, up=hi-hat, left=tom, right=kick.<br>
-    <br>
-    <strong>iPhone no sound?</strong> Flip the silent switch on the side off, or turn your volume up.
-  </div>
+    <div class="section-title">Record</div>
+    <div class="rec-time" id="recTime">Ready</div>
+    <div class="controls">
+      <button class="btn rec" id="recBtn">● Record</button>
+      <button class="btn play" id="playBtn">▶ Play</button>
+      <button class="btn" id="clearBtn">Clear</button>
+    </div>
 
-  <div id="debug" style="display:none; font-size:0.65rem; color:#64748b; text-align:center; word-break:break-all;"></div>
+    <div class="section-title">Ghost Kit</div>
+    <div class="controls" style="grid-template-columns: 1fr;">
+      <button class="btn" id="calibBtn">Point at snare, then tap to calibrate</button>
+    </div>
+
+    <div class="sens">
+      <span>Sensitivity</span>
+      <input type="range" id="sens" min="8" max="35" value="18">
+    </div>
+
+    <div class="hint">
+      <strong>Tap:</strong> tap the coloured pads.<br>
+      <strong>Swing:</strong> swing your phone — direction picks the drum.<br>
+      <strong>Ghost Kit:</strong> calibrate, then swing phone toward invisible drums around you.<br>
+      <strong>iPhone silent:</strong> flip the side switch off.
+    </div>
+
+    <div id="debug" style="font-size:0.6rem; color:#475569; text-align:center; word-break:break-all;"></div>
+  </div>
 </div>
 
 <script>
+// ===== state =====
 let audioCtx = null;
 let mode = 'tap';
 let threshold = 18;
 let lastHitTime = 0;
 const COOLDOWN_MS = 120;
+let motionPermissionResult = 'not-asked';
+let motionEventCount = 0;
+let currentBeta = 0, currentGamma = 0;
+let calibBeta = 0, calibGamma = 0;
+let calibrated = false;
 
+// Ghost kit zones (offsets in degrees from calibrated centre).
+// beta = tilt forward/back, gamma = tilt left/right
+// Screen position: x = gamma direction (left-right), y = beta direction (up-down)
+const KIT = [
+  { drum: 'hihat', dGamma: -35, dBeta: -15, label: 'HH',    x: 18, y: 30 },
+  { drum: 'ride',  dGamma:  35, dBeta: -15, label: 'RIDE',  x: 82, y: 30 },
+  { drum: 'snare', dGamma:   0, dBeta:   0, label: 'SNARE', x: 50, y: 55 },
+  { drum: 'tom',   dGamma:  20, dBeta:  20, label: 'TOM',   x: 72, y: 70 },
+  { drum: 'kick',  dGamma:   0, dBeta:  40, label: 'KICK',  x: 50, y: 88 },
+];
+
+// ===== recording =====
+let recording = false;
+let recStartTime = 0;
+let recEvents = [];
+let recTimer = null;
+let playbackTimers = [];
+
+// ===== dom =====
 const status = document.getElementById('status');
 const startBtn = document.getElementById('start');
+const main = document.getElementById('main');
 const pads = document.getElementById('pads');
-const controls = document.getElementById('controls');
-const sensWrap = document.getElementById('sensWrap');
-const meterWrap = document.getElementById('meterWrap');
+const kitMap = document.getElementById('kitMap');
 const meter = document.getElementById('meter');
-const hint = document.getElementById('hint');
+const recTime = document.getElementById('recTime');
+const recBtn = document.getElementById('recBtn');
+const playBtn = document.getElementById('playBtn');
+const clearBtn = document.getElementById('clearBtn');
+const calibBtn = document.getElementById('calibBtn');
+const debug = document.getElementById('debug');
 
+// ===== sound =====
 function playDrum(drum, velocity = 1) {
   if (!audioCtx) return;
   const now = audioCtx.currentTime;
   const v = Math.min(1, Math.max(0.2, velocity));
 
   if (drum === 'kick') {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+    const osc = audioCtx.createOscillator(), g = audioCtx.createGain();
     osc.frequency.setValueAtTime(150, now);
     osc.frequency.exponentialRampToValueAtTime(40, now + 0.15);
-    gain.gain.setValueAtTime(v, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-    osc.connect(gain).connect(audioCtx.destination);
+    g.gain.setValueAtTime(v, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    osc.connect(g).connect(audioCtx.destination);
     osc.start(now); osc.stop(now + 0.3);
   } else if (drum === 'snare') {
-    const noise = audioCtx.createBufferSource();
-    const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.2, audioCtx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-    noise.buffer = buf;
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = 'highpass';
-    filter.frequency.value = 1200;
-    const gain = audioCtx.createGain();
-    gain.gain.setValueAtTime(v * 0.6, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-    noise.connect(filter).connect(gain).connect(audioCtx.destination);
-    noise.start(now);
+    const n = makeNoise(0.2), f = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
+    f.type = 'highpass'; f.frequency.value = 1200;
+    g.gain.setValueAtTime(v * 0.6, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+    n.connect(f).connect(g).connect(audioCtx.destination);
+    n.start(now);
   } else if (drum === 'hihat') {
-    const noise = audioCtx.createBufferSource();
-    const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.1, audioCtx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-    noise.buffer = buf;
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = 'highpass';
-    filter.frequency.value = 7000;
-    const gain = audioCtx.createGain();
-    gain.gain.setValueAtTime(v * 0.4, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-    noise.connect(filter).connect(gain).connect(audioCtx.destination);
-    noise.start(now);
+    const n = makeNoise(0.1), f = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
+    f.type = 'highpass'; f.frequency.value = 7000;
+    g.gain.setValueAtTime(v * 0.4, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+    n.connect(f).connect(g).connect(audioCtx.destination);
+    n.start(now);
   } else if (drum === 'tom') {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+    const osc = audioCtx.createOscillator(), g = audioCtx.createGain();
     osc.frequency.setValueAtTime(220, now);
     osc.frequency.exponentialRampToValueAtTime(90, now + 0.2);
-    gain.gain.setValueAtTime(v * 0.8, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-    osc.connect(gain).connect(audioCtx.destination);
+    g.gain.setValueAtTime(v * 0.8, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+    osc.connect(g).connect(audioCtx.destination);
     osc.start(now); osc.stop(now + 0.35);
+  } else if (drum === 'ride') {
+    const n = makeNoise(0.4), f = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
+    f.type = 'bandpass'; f.frequency.value = 5000; f.Q.value = 2;
+    g.gain.setValueAtTime(v * 0.3, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+    n.connect(f).connect(g).connect(audioCtx.destination);
+    n.start(now);
   }
 
-  const el = document.querySelector(`.pad[data-drum="${drum}"]`);
-  if (el) {
-    el.classList.add('hit');
-    setTimeout(() => el.classList.remove('hit'), 90);
+  const pad = document.querySelector(`.pad[data-drum="${drum}"]`);
+  if (pad) { pad.classList.add('hit'); setTimeout(() => pad.classList.remove('hit'), 90); }
+  const zone = document.querySelector(`.zone[data-drum="${drum}"]`);
+  if (zone) { zone.classList.add('hit'); setTimeout(() => zone.classList.remove('hit'), 120); }
+
+  if (recording) {
+    recEvents.push({ drum, velocity: v, t: Date.now() - recStartTime });
   }
+}
+
+function makeNoise(seconds) {
+  const n = audioCtx.createBufferSource();
+  const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * seconds, audioCtx.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  n.buffer = buf;
+  return n;
+}
+
+// ===== ghost kit =====
+function buildKitMap() {
+  kitMap.innerHTML = '<div class="you">you</div>';
+  KIT.forEach(z => {
+    const el = document.createElement('div');
+    el.className = 'zone ' + z.drum;
+    el.dataset.drum = z.drum;
+    el.style.left = z.x + '%';
+    el.style.top = z.y + '%';
+    el.textContent = z.label;
+    kitMap.appendChild(el);
+  });
+}
+
+function pickGhostDrum() {
+  if (!calibrated) return 'snare';
+  const relBeta = currentBeta - calibBeta;
+  const relGamma = currentGamma - calibGamma;
+  let best = KIT[0], bestDist = Infinity;
+  for (const z of KIT) {
+    const dB = relBeta - z.dBeta, dG = relGamma - z.dGamma;
+    const d = dB*dB + dG*dG;
+    if (d < bestDist) { bestDist = d; best = z; }
+  }
+  return best.drum;
 }
 
 function pickDrumFromMotion(ax, ay, az) {
@@ -236,49 +272,89 @@ function pickDrumFromMotion(ax, ay, az) {
   return 'snare';
 }
 
+// ===== motion =====
 function handleMotion(e) {
   motionEventCount++;
   if (motionEventCount % 20 === 0) updateDebug();
-  if (mode !== 'motion') return;
+  if (mode !== 'motion' && mode !== 'ghost') return;
   const a = e.acceleration || e.accelerationIncludingGravity;
   if (!a) return;
   const ax = a.x || 0, ay = a.y || 0, az = a.z || 0;
   const mag = Math.sqrt(ax*ax + ay*ay + az*az);
-
   meter.style.width = Math.min(100, (mag / 40) * 100) + '%';
-
   const now = Date.now();
   if (mag > threshold && now - lastHitTime > COOLDOWN_MS) {
     lastHitTime = now;
-    const drum = pickDrumFromMotion(ax, ay, az);
+    const drum = mode === 'ghost' ? pickGhostDrum() : pickDrumFromMotion(ax, ay, az);
     const velocity = Math.min(1, (mag - threshold) / 20 + 0.4);
     playDrum(drum, velocity);
   }
 }
 
-let motionPermissionResult = 'not-asked';
-let motionEventCount = 0;
+function handleOrientation(e) {
+  currentBeta = e.beta || 0;
+  currentGamma = e.gamma || 0;
+}
 
+// ===== recording =====
+function startRecording() {
+  recEvents = [];
+  recording = true;
+  recStartTime = Date.now();
+  recBtn.classList.add('on');
+  recBtn.textContent = '■ Stop';
+  if (recTimer) clearInterval(recTimer);
+  recTimer = setInterval(() => {
+    const s = ((Date.now() - recStartTime) / 1000).toFixed(1);
+    recTime.textContent = 'Recording ' + s + 's';
+  }, 100);
+}
+function stopRecording() {
+  recording = false;
+  recBtn.classList.remove('on');
+  recBtn.textContent = '● Record';
+  if (recTimer) { clearInterval(recTimer); recTimer = null; }
+  recTime.textContent = recEvents.length ? recEvents.length + ' hits recorded' : 'Nothing recorded';
+}
+function playRecording() {
+  if (!recEvents.length) { recTime.textContent = 'Nothing to play — record first!'; return; }
+  stopPlayback();
+  recTime.textContent = 'Playing...';
+  const startedAt = Date.now();
+  recEvents.forEach(ev => {
+    const t = setTimeout(() => playDrum(ev.drum, ev.velocity), ev.t);
+    playbackTimers.push(t);
+  });
+  const totalMs = recEvents[recEvents.length - 1].t + 500;
+  const doneT = setTimeout(() => { recTime.textContent = recEvents.length + ' hits (played)'; }, totalMs);
+  playbackTimers.push(doneT);
+}
+function stopPlayback() {
+  playbackTimers.forEach(t => clearTimeout(t));
+  playbackTimers = [];
+}
+function clearRecording() {
+  stopPlayback();
+  recEvents = [];
+  recTime.textContent = 'Cleared';
+}
+
+// ===== start =====
 function start() {
-  // STEP 1: Request motion permission FIRST, synchronously from the user tap.
-  // iOS is very strict: any awaits or other async work before this can "use up"
-  // the user gesture and silently block the permission prompt.
+  // iOS: request motion + orientation permission FIRST, still inside tap handler.
   if (typeof DeviceMotionEvent !== 'undefined' &&
       typeof DeviceMotionEvent.requestPermission === 'function') {
     DeviceMotionEvent.requestPermission()
-      .then(p => {
-        motionPermissionResult = p;
-        updateDebug();
-      })
-      .catch(err => {
-        motionPermissionResult = 'error: ' + err.message;
-        updateDebug();
-      });
+      .then(p => { motionPermissionResult = p; updateDebug(); })
+      .catch(err => { motionPermissionResult = 'err:' + err.message; updateDebug(); });
   } else {
-    motionPermissionResult = 'no-prompt-needed';
+    motionPermissionResult = 'no-prompt';
+  }
+  if (typeof DeviceOrientationEvent !== 'undefined' &&
+      typeof DeviceOrientationEvent.requestPermission === 'function') {
+    DeviceOrientationEvent.requestPermission().catch(() => {});
   }
 
-  // STEP 2: Start audio.
   try {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -286,54 +362,60 @@ function start() {
     status.textContent = 'Audio failed: ' + err.message;
     return;
   }
-
   playDrum('snare', 0.6);
 
   window.addEventListener('devicemotion', handleMotion);
+  window.addEventListener('deviceorientation', handleOrientation);
 
+  buildKitMap();
   startBtn.style.display = 'none';
-  pads.style.display = 'grid';
-  controls.style.display = 'grid';
-  sensWrap.style.display = 'flex';
-  meterWrap.style.display = 'block';
-  hint.style.display = 'block';
-  document.getElementById('debug').style.display = 'block';
-  status.textContent = 'Ready. Pick a mode.';
+  main.style.display = 'flex';
+  status.textContent = 'Ready — pick a mode.';
   updateDebug();
 }
 
 function updateDebug() {
-  const dbg = document.getElementById('debug');
-  if (!dbg) return;
-  dbg.textContent =
-    'Permission: ' + motionPermissionResult +
-    ' | Motion events: ' + motionEventCount +
-    ' | DeviceMotionEvent: ' + (typeof DeviceMotionEvent !== 'undefined' ? 'yes' : 'no');
+  debug.textContent =
+    'perm:' + motionPermissionResult +
+    ' | events:' + motionEventCount +
+    ' | β:' + currentBeta.toFixed(0) + ' γ:' + currentGamma.toFixed(0) +
+    (calibrated ? ' | calibrated' : '');
 }
 
+// ===== mode switching =====
+function setMode(newMode) {
+  mode = newMode;
+  ['tap','motion','ghost'].forEach(m => {
+    const el = document.getElementById('mode-' + m);
+    if (el) el.classList.toggle('active', m === newMode);
+  });
+  pads.style.display = (newMode === 'ghost') ? 'none' : 'grid';
+  kitMap.style.display = (newMode === 'ghost') ? 'block' : 'none';
+  if (newMode === 'tap') status.textContent = 'Tap Mode — tap the pads.';
+  if (newMode === 'motion') status.textContent = 'Swing Mode — swing the phone!';
+  if (newMode === 'ghost') status.textContent = calibrated ? 'Ghost Kit — swing toward invisible drums!' : 'Calibrate first!';
+}
+
+// ===== events =====
 startBtn.addEventListener('click', start);
-
-pads.addEventListener('pointerdown', (e) => {
-  const pad = e.target.closest('.pad');
-  if (!pad) return;
-  if (mode === 'tap') playDrum(pad.dataset.drum, 1);
+pads.addEventListener('pointerdown', e => {
+  const p = e.target.closest('.pad');
+  if (p && mode === 'tap') playDrum(p.dataset.drum, 1);
 });
-
-document.getElementById('mode-tap').addEventListener('click', () => {
-  mode = 'tap';
-  document.getElementById('mode-tap').classList.add('active');
-  document.getElementById('mode-motion').classList.remove('active');
-  status.textContent = 'Tap Mode — tap the pads.';
-});
-document.getElementById('mode-motion').addEventListener('click', () => {
-  mode = 'motion';
-  document.getElementById('mode-motion').classList.add('active');
-  document.getElementById('mode-tap').classList.remove('active');
-  status.textContent = 'Motion Mode — swing your phone!';
-});
-
-document.getElementById('sens').addEventListener('input', (e) => {
-  threshold = parseInt(e.target.value, 10);
+document.getElementById('mode-tap').addEventListener('click', () => setMode('tap'));
+document.getElementById('mode-motion').addEventListener('click', () => setMode('motion'));
+document.getElementById('mode-ghost').addEventListener('click', () => setMode('ghost'));
+document.getElementById('sens').addEventListener('input', e => threshold = parseInt(e.target.value, 10));
+recBtn.addEventListener('click', () => recording ? stopRecording() : startRecording());
+playBtn.addEventListener('click', playRecording);
+clearBtn.addEventListener('click', clearRecording);
+calibBtn.addEventListener('click', () => {
+  calibBeta = currentBeta;
+  calibGamma = currentGamma;
+  calibrated = true;
+  calibBtn.textContent = '✓ Calibrated (tap to redo)';
+  if (mode === 'ghost') status.textContent = 'Ghost Kit — swing toward invisible drums!';
+  updateDebug();
 });
 </script>
 </body>
