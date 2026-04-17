@@ -122,6 +122,22 @@
   }
   .beat-dot.on { background: #f59e0b; box-shadow: 0 0 12px #f59e0b; transform: scale(1.3); }
   .beat-dot.downbeat.on { background: #ef4444; box-shadow: 0 0 12px #ef4444; }
+  /* Stats + XP bar */
+  .stat-row { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; }
+  .stat-val { font-family: 'SF Mono', Menlo, monospace; color: #f59e0b; font-weight: 800; }
+  .xp-bar { height: 8px; background: #0f172a; border-radius: 4px; overflow: hidden; border: 1px solid #1f2937; margin-top: 6px; }
+  .xp-fill { height: 100%; background: linear-gradient(90deg, #10b981, #f59e0b); transition: width 0.3s; }
+  /* Confetti overlay */
+  #fx { position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
+  /* Song Mode scroller */
+  .song-lane { position: relative; height: 140px; background: #0b1220; border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; margin-top: 8px; }
+  .note-chip { position: absolute; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.55rem; font-weight: 800; color: #0a0a0a; top: 50%; transform: translate(-50%, -50%); box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+  .hit-line { position: absolute; left: 12%; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, transparent, #f59e0b, transparent); box-shadow: 0 0 8px #f59e0b; }
+  .combo { position: absolute; top: 4px; right: 8px; font-family: 'SF Mono', Menlo, monospace; font-size: 0.9rem; color: #f59e0b; font-weight: 800; }
+  .score { position: absolute; top: 4px; left: 8px; font-family: 'SF Mono', Menlo, monospace; font-size: 0.75rem; color: #94a3b8; font-weight: 700; }
+  .toast { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #f59e0b, #ef4444); color: #0a0a0a; padding: 10px 18px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; z-index: 10000; box-shadow: 0 8px 32px rgba(245, 158, 11, 0.5); animation: toast-in 0.3s ease-out, toast-out 0.4s ease-in 1.7s forwards; }
+  @keyframes toast-in { from { opacity: 0; transform: translate(-50%, -20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  @keyframes toast-out { to { opacity: 0; transform: translate(-50%, -20px); } }
   .cam-wrap {
     position: relative; width: 100%; aspect-ratio: 4/3;
     background: #000; border-radius: 14px; overflow: hidden;
@@ -179,6 +195,7 @@
 </style>
 </head>
 <body>
+<canvas id="fx"></canvas>
 <div class="wrap">
   <div class="brand">
     <h1>Air Drums</h1>
@@ -218,6 +235,47 @@
     </div>
 
     <div class="meter"><div class="meter-fill" id="meter"></div></div>
+
+    <div class="card">
+      <div class="section-title">Stats</div>
+      <div class="stat-row">
+        <span>Level</span><span class="stat-val" id="statLevel">1</span>
+        <span style="flex:1"></span>
+        <span>XP</span><span class="stat-val" id="statXP">0</span>
+      </div>
+      <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+      <div class="stat-row" style="margin-top:8px;">
+        <span>Streak</span><span class="stat-val" id="statStreak">0</span>
+        <span style="flex:1"></span>
+        <span>Total Hits</span><span class="stat-val" id="statHits">0</span>
+      </div>
+      <div id="achievementList" style="margin-top:10px; font-size:0.7rem; color:#94a3b8; line-height:1.5;"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Daily Challenge</div>
+      <div id="challengeText" style="font-size:0.85rem; color:#f1f5f9; font-weight:600;">Loading...</div>
+      <div class="xp-bar" style="margin-top:8px;"><div class="xp-fill" id="challengeFill" style="width:0%"></div></div>
+      <div class="stat-row" style="margin-top:8px; font-size:0.7rem;">
+        <span id="challengeProgress">0 / 0</span>
+        <span style="flex:1"></span>
+        <span id="challengeReward" style="color:#f59e0b; font-weight:700;">+0 XP</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Song Mode</div>
+      <div class="controls" id="songList"></div>
+      <div class="song-lane" id="songLane" style="display:none;">
+        <div class="hit-line"></div>
+        <div class="combo" id="combo">x0</div>
+        <div class="score" id="score">Score: 0</div>
+      </div>
+      <div class="controls" style="margin-top:6px; grid-template-columns:1fr 1fr;">
+        <button class="btn" id="songStopBtn" style="display:none;">Stop</button>
+        <button class="btn" id="songResultBtn" style="display:none;">Again</button>
+      </div>
+    </div>
 
     <button class="settings-toggle" id="settingsToggle">
       <span data-i18n="settings">Settings</span><span class="chev">▼</span>
@@ -259,6 +317,14 @@
         <button class="btn active" data-kit="rock" id="kit-rock" data-i18n="rock">Rock</button>
         <button class="btn" data-kit="electronic" id="kit-electronic" data-i18n="electronic">Electronic</button>
         <button class="btn" data-kit="jazz" id="kit-jazz" data-i18n="jazz">Jazz</button>
+      </div>
+      <div class="controls" style="margin-top:6px;">
+        <button class="btn" data-kit="hiphop" id="kit-hiphop">Hip-Hop</button>
+        <button class="btn" data-kit="metal" id="kit-metal">Metal</button>
+        <button class="btn" data-kit="bit8" id="kit-bit8">8-bit</button>
+      </div>
+      <div class="controls" style="margin-top:6px; grid-template-columns:1fr;">
+        <button class="btn" data-kit="orchestra" id="kit-orchestra">Orchestra</button>
       </div>
     </div>
 
@@ -314,6 +380,375 @@
 </div>
 
 <script>
+// ===== stats / XP / achievements =====
+const defaultStats = { xp: 0, level: 1, streak: 0, lastPlay: null, totalHits: 0,
+  dailyDate: null, dailyHits: 0, dailyDone: false, achievements: [] };
+let stats = defaultStats;
+try {
+  const s = JSON.parse(localStorage.getItem('airdrums-stats') || 'null');
+  if (s) stats = Object.assign({}, defaultStats, s);
+} catch (e) {}
+
+function saveStats() { localStorage.setItem('airdrums-stats', JSON.stringify(stats)); }
+function xpForLevel(lvl) { return lvl * lvl * 50; }
+function levelForXP(xp) { return 1 + Math.floor(Math.sqrt(xp / 50)); }
+
+const ACHIEVEMENTS = [
+  { id: 'first',    name: 'First Drummer',     check: s => s.totalHits >= 1 },
+  { id: 'hundred',  name: 'Hundred Club',       check: s => s.totalHits >= 100 },
+  { id: 'thousand', name: 'Thousand Strong',    check: s => s.totalHits >= 1000 },
+  { id: 'tenthou',  name: 'Ten-Thousand Hero',  check: s => s.totalHits >= 10000 },
+  { id: 'streak3',  name: '3-Day Streak',       check: s => s.streak >= 3 },
+  { id: 'streak7',  name: '7-Day Streak',       check: s => s.streak >= 7 },
+  { id: 'lvl5',     name: 'Level 5',            check: s => s.level >= 5 },
+  { id: 'lvl10',    name: 'Level 10',           check: s => s.level >= 10 },
+  { id: 'lvl25',    name: 'Level 25 — Pro',     check: s => s.level >= 25 },
+];
+
+function addXP(amount) {
+  stats.xp += amount;
+  stats.totalHits++;
+  // Streak update on first play of the day
+  const today = new Date().toDateString();
+  if (stats.lastPlay !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    stats.streak = (stats.lastPlay === yesterday) ? stats.streak + 1 : 1;
+    stats.lastPlay = today;
+  }
+  // Daily challenge progress
+  if (stats.dailyDate === today && !stats.dailyDone) {
+    stats.dailyHits++;
+    if (stats.dailyHits >= CHALLENGE.target) {
+      stats.dailyDone = true;
+      stats.xp += CHALLENGE.reward;
+      showToast('Daily done! +' + CHALLENGE.reward + ' XP');
+      confettiBurst();
+    }
+  }
+  // Level up?
+  const newLevel = levelForXP(stats.xp);
+  if (newLevel > stats.level) {
+    stats.level = newLevel;
+    showToast('Level ' + newLevel + '!');
+    confettiBurst();
+  }
+  // Achievements
+  for (const a of ACHIEVEMENTS) {
+    if (!stats.achievements.includes(a.id) && a.check(stats)) {
+      stats.achievements.push(a.id);
+      showToast('🏆 ' + a.name);
+      confettiBurst();
+    }
+  }
+  saveStats();
+  updateStatsUI();
+}
+
+function updateStatsUI() {
+  const lvlEl = document.getElementById('statLevel');
+  if (!lvlEl) return;
+  lvlEl.textContent = stats.level;
+  document.getElementById('statXP').textContent = stats.xp;
+  document.getElementById('statStreak').textContent = stats.streak;
+  document.getElementById('statHits').textContent = stats.totalHits;
+  const xpBase = xpForLevel(stats.level - 1);
+  const xpNext = xpForLevel(stats.level);
+  const pct = Math.min(100, Math.max(0, ((stats.xp - xpBase) / (xpNext - xpBase)) * 100));
+  document.getElementById('xpFill').style.width = pct + '%';
+  // Achievements list
+  const list = document.getElementById('achievementList');
+  if (list) {
+    list.innerHTML = ACHIEVEMENTS.map(a => {
+      const got = stats.achievements.includes(a.id);
+      return `<div style="opacity:${got ? 1 : 0.35}">${got ? '🏆' : '▢'} ${a.name}</div>`;
+    }).join('');
+  }
+  // Daily challenge UI
+  const cText = document.getElementById('challengeText');
+  if (cText) {
+    cText.textContent = CHALLENGE.text;
+    document.getElementById('challengeProgress').textContent = stats.dailyHits + ' / ' + CHALLENGE.target;
+    document.getElementById('challengeReward').textContent = stats.dailyDone ? '✓ Complete' : '+' + CHALLENGE.reward + ' XP';
+    const pct = Math.min(100, (stats.dailyHits / CHALLENGE.target) * 100);
+    document.getElementById('challengeFill').style.width = pct + '%';
+  }
+}
+
+// ===== daily challenge =====
+const CHALLENGE_POOL = [
+  { text: 'Hit 50 drums today', target: 50, reward: 100 },
+  { text: 'Hit 100 drums today', target: 100, reward: 200 },
+  { text: 'Hit 200 drums today', target: 200, reward: 400 },
+];
+let CHALLENGE = CHALLENGE_POOL[0];
+function pickDailyChallenge() {
+  const today = new Date().toDateString();
+  if (stats.dailyDate !== today) {
+    const seed = Array.from(today).reduce((a, c) => a + c.charCodeAt(0), 0);
+    CHALLENGE = CHALLENGE_POOL[seed % CHALLENGE_POOL.length];
+    stats.dailyDate = today;
+    stats.dailyHits = 0;
+    stats.dailyDone = false;
+    saveStats();
+  } else {
+    // Pick same challenge for this date
+    const seed = Array.from(today).reduce((a, c) => a + c.charCodeAt(0), 0);
+    CHALLENGE = CHALLENGE_POOL[seed % CHALLENGE_POOL.length];
+  }
+}
+pickDailyChallenge();
+
+// ===== toasts =====
+function showToast(text) {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2500);
+}
+
+// ===== confetti / stage effects =====
+let fxCanvas, fxCtx;
+const particles = [];
+function confettiBurst(x = null, y = null) {
+  if (!fxCanvas) return;
+  const cx = x != null ? x : fxCanvas.width / 2;
+  const cy = y != null ? y : fxCanvas.height / 3;
+  const colors = ['#f59e0b','#ef4444','#10b981','#3b82f6','#a855f7','#facc15'];
+  for (let i = 0; i < 60; i++) {
+    particles.push({
+      x: cx, y: cy,
+      vx: (Math.random() - 0.5) * 14,
+      vy: -Math.random() * 12 - 4,
+      g: 0.4,
+      size: 4 + Math.random() * 6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 70 + Math.random() * 30,
+      rot: Math.random() * Math.PI * 2,
+      vr: (Math.random() - 0.5) * 0.3,
+    });
+  }
+}
+function stepFx() {
+  if (!fxCtx) return;
+  fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.vy += p.g;
+    p.x += p.vx; p.y += p.vy;
+    p.rot += p.vr;
+    p.life--;
+    if (p.life <= 0 || p.y > fxCanvas.height + 30) { particles.splice(i, 1); continue; }
+    fxCtx.save();
+    fxCtx.translate(p.x, p.y);
+    fxCtx.rotate(p.rot);
+    fxCtx.fillStyle = p.color;
+    fxCtx.globalAlpha = Math.min(1, p.life / 30);
+    fxCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+    fxCtx.restore();
+  }
+  requestAnimationFrame(stepFx);
+}
+function initFx() {
+  fxCanvas = document.getElementById('fx');
+  const resize = () => { fxCanvas.width = window.innerWidth; fxCanvas.height = window.innerHeight; };
+  resize();
+  window.addEventListener('resize', resize);
+  fxCtx = fxCanvas.getContext('2d');
+  requestAnimationFrame(stepFx);
+}
+
+// ===== song mode =====
+// Patterns: array of {t (ms from start), drum}. All at 100 BPM = 600ms per beat = 150ms per 1/16.
+const STEP = 150; // ms per 16th at 100 BPM
+function p(beat, drum) { return { t: beat * STEP, drum }; }
+const SONGS = {
+  'Rock Basic': {
+    bpm: 100, length: 32,
+    notes: [
+      p(0,'kick'),p(0,'hihat'), p(2,'hihat'), p(4,'snare'),p(4,'hihat'), p(6,'hihat'),
+      p(8,'kick'),p(8,'hihat'), p(10,'kick'),p(10,'hihat'), p(12,'snare'),p(12,'hihat'), p(14,'hihat'),
+      p(16,'kick'),p(16,'hihat'), p(18,'hihat'), p(20,'snare'),p(20,'hihat'), p(22,'hihat'),
+      p(24,'kick'),p(24,'hihat'), p(26,'kick'),p(26,'hihat'), p(28,'snare'),p(28,'hihat'), p(30,'crash'),
+    ],
+  },
+  'Funky Beat': {
+    bpm: 95, length: 32,
+    notes: [
+      p(0,'kick'),p(0,'hihat'), p(2,'hihat'), p(3,'hihat'), p(4,'snare'), p(6,'kick'),p(6,'hihat'), p(7,'snare'),
+      p(8,'kick'),p(8,'hihat'), p(10,'hihat'), p(11,'hihat'), p(12,'snare'), p(14,'hihat'),
+      p(16,'kick'),p(16,'hihat'), p(18,'hihat'), p(19,'hihat'), p(20,'snare'), p(22,'kick'),p(22,'hihat'),
+      p(24,'kick'),p(24,'hihat'), p(26,'hihat'), p(28,'snare'), p(28,'floortom'), p(30,'crash'),
+    ],
+  },
+  'Hip Hop': {
+    bpm: 85, length: 32,
+    notes: [
+      p(0,'kick'),p(0,'hihat'), p(2,'hihat'), p(4,'snare'),p(4,'hihat'), p(6,'hihat'), p(7,'kick'),
+      p(8,'kick'),p(8,'hihat'), p(10,'hihat'), p(12,'snare'),p(12,'hihat'), p(14,'hihat'),
+      p(16,'kick'),p(16,'hihat'), p(18,'hihat'), p(20,'snare'),p(20,'hihat'), p(22,'hihat'),
+      p(24,'kick'),p(24,'hihat'), p(26,'hihat'), p(28,'snare'),p(28,'hihat'), p(30,'snare'),
+    ],
+  },
+  'We Will Rock': {
+    bpm: 80, length: 16,
+    notes: [
+      p(0,'kick'), p(2,'kick'), p(4,'snare'),
+      p(8,'kick'), p(10,'kick'), p(12,'snare'),
+    ],
+  },
+  'Fast Metal': {
+    bpm: 140, length: 32,
+    notes: [
+      p(0,'kick'),p(0,'hihat'), p(1,'hihat'), p(2,'kick'),p(2,'hihat'), p(3,'hihat'),
+      p(4,'snare'),p(4,'hihat'), p(5,'hihat'), p(6,'hihat'), p(7,'hihat'),
+      p(8,'kick'),p(8,'hihat'), p(9,'hihat'), p(10,'kick'),p(10,'hihat'), p(11,'hihat'),
+      p(12,'snare'),p(12,'crash'), p(14,'floortom'), p(15,'floortom'),
+      p(16,'kick'),p(16,'hihat'), p(18,'kick'),p(18,'hihat'), p(20,'snare'),p(20,'hihat'), p(22,'hihat'),
+      p(24,'kick'),p(24,'hihat'), p(26,'snare'),p(26,'hihat'), p(28,'snare'),p(28,'hihat'), p(30,'crash'),
+    ],
+  },
+};
+let songActive = false;
+let songStart = 0;
+let songScore = 0;
+let songCombo = 0;
+let songMaxCombo = 0;
+let songTotal = 0;
+let songHits = 0;
+let songPerfect = 0;
+let songNoteElements = [];
+let songAnimationId = null;
+let currentSong = null;
+let songScale = 1; // ms scale based on BPM
+
+function startSong(name) {
+  const song = SONGS[name];
+  if (!song) return;
+  currentSong = song;
+  songActive = true;
+  songScore = 0;
+  songCombo = 0;
+  songMaxCombo = 0;
+  songHits = 0;
+  songPerfect = 0;
+  songTotal = song.notes.length;
+  songScale = 100 / song.bpm; // slow down / speed up note times
+  songStart = performance.now() + 2000; // 2s lead-in
+  document.getElementById('songList').style.display = 'none';
+  document.getElementById('songLane').style.display = 'block';
+  document.getElementById('songStopBtn').style.display = 'block';
+  document.getElementById('songResultBtn').style.display = 'none';
+  // Clear old notes
+  songNoteElements.forEach(el => el.remove());
+  songNoteElements = [];
+  const lane = document.getElementById('songLane');
+  for (const n of song.notes) {
+    const el = document.createElement('div');
+    el.className = 'note-chip';
+    const drumColor = {
+      kick:'#a855f7', snare:'#f87171', hihat:'#facc15',
+      hitom:'#60a5fa', tom:'#34d399', floortom:'#fb923c',
+      ride:'#22d3ee', crash:'#f59e0b',
+    }[n.drum] || '#f59e0b';
+    el.style.background = drumColor;
+    el.dataset.drum = n.drum;
+    el.dataset.noteTime = String(n.t * songScale);
+    el.dataset.hit = '0';
+    const label = { kick:'K', snare:'S', hihat:'H', hitom:'T1', tom:'T2', floortom:'F', ride:'R', crash:'C' }[n.drum];
+    el.textContent = label;
+    // Vertical position based on drum type (rough visual grouping)
+    const yPos = ({kick:80,snare:55,hihat:30,hitom:20,tom:25,floortom:60,ride:15,crash:10})[n.drum] || 50;
+    el.style.top = yPos + '%';
+    lane.appendChild(el);
+    songNoteElements.push(el);
+  }
+  updateSongDisplay();
+}
+
+function stopSong() {
+  songActive = false;
+  if (songAnimationId) cancelAnimationFrame(songAnimationId);
+  document.getElementById('songList').style.display = 'grid';
+  document.getElementById('songLane').style.display = 'none';
+  document.getElementById('songStopBtn').style.display = 'none';
+  document.getElementById('songResultBtn').style.display = 'none';
+  songNoteElements.forEach(el => el.remove());
+  songNoteElements = [];
+}
+
+function finishSong() {
+  songActive = false;
+  const pct = songTotal ? Math.round((songHits / songTotal) * 100) : 0;
+  const bonus = Math.round(songScore * 0.1);
+  stats.xp += bonus;
+  saveStats();
+  updateStatsUI();
+  showToast('Score ' + songScore + ' · ' + pct + '% · +' + bonus + ' XP');
+  if (pct >= 80) confettiBurst();
+  document.getElementById('songStopBtn').style.display = 'none';
+  document.getElementById('songResultBtn').style.display = 'block';
+}
+
+function updateSongDisplay() {
+  if (!songActive) return;
+  const now = performance.now();
+  const songTime = now - songStart;
+  const lane = document.getElementById('songLane');
+  const laneW = lane.clientWidth;
+  const hitLineX = laneW * 0.12;
+  const pxPerMs = (laneW - hitLineX) / 2000; // notes travel for 2s
+  let pendingNotes = 0;
+  for (const el of songNoteElements) {
+    const noteT = parseFloat(el.dataset.noteTime);
+    const dt = noteT - songTime;
+    const x = hitLineX + dt * pxPerMs;
+    el.style.left = x + 'px';
+    if (el.dataset.hit === '0' && dt < -300) {
+      el.dataset.hit = 'miss';
+      el.style.opacity = '0.2';
+      songCombo = 0;
+      document.getElementById('combo').textContent = 'x0';
+    }
+    if (el.dataset.hit === '0') pendingNotes++;
+  }
+  if (songTime > 0 && pendingNotes === 0) {
+    finishSong();
+    return;
+  }
+  songAnimationId = requestAnimationFrame(updateSongDisplay);
+}
+
+function trySongHit(drum) {
+  if (!songActive) return false;
+  const now = performance.now();
+  const songTime = now - songStart;
+  // Find nearest un-hit note of this drum within window
+  let best = null, bestDt = Infinity;
+  for (const el of songNoteElements) {
+    if (el.dataset.hit !== '0' || el.dataset.drum !== drum) continue;
+    const dt = Math.abs(parseFloat(el.dataset.noteTime) - songTime);
+    if (dt < bestDt) { bestDt = dt; best = el; }
+  }
+  if (!best || bestDt > 250) return false;
+  let judge = 'miss', pts = 0;
+  if (bestDt < 60)       { judge = 'perfect'; pts = 100; songPerfect++; }
+  else if (bestDt < 120) { judge = 'great';   pts = 70; }
+  else if (bestDt < 200) { judge = 'good';    pts = 40; }
+  else                   { judge = 'ok';      pts = 20; }
+  best.dataset.hit = judge;
+  best.style.boxShadow = '0 0 20px #ffffff';
+  best.style.opacity = '0.5';
+  songHits++;
+  songScore += pts * (1 + songCombo * 0.02);
+  songCombo++;
+  if (songCombo > songMaxCombo) songMaxCombo = songCombo;
+  document.getElementById('combo').textContent = 'x' + songCombo;
+  document.getElementById('score').textContent = 'Score: ' + Math.round(songScore);
+  if (songCombo > 0 && songCombo % 10 === 0) confettiBurst();
+  return true;
+}
+
 // ===== i18n =====
 // Keys cover UI chrome. Drum names (hi-hat, snare, kick) are universal
 // musical terms and stay in English in every language.
@@ -712,6 +1147,30 @@ const KITS = {
     hihatHP: 6500, hihatBP: 8500, hihatDecay: 0.09, hihatGain: 0.32,
     rideHP: 3500, rideBP: 5500, rideDecay: 0.7, rideBellF: 2200,
   },
+  hiphop: {
+    kickF1: 260, kickF2: 25, kickDecay: 0.8, kickOscType: 'sine',
+    snareF: 330, snareDecay: 0.09, snareNoiseHP: 2600, snareNoiseGain: 0.7, snareBodyType: 'square',
+    hihatHP: 9500, hihatBP: 12000, hihatDecay: 0.04, hihatGain: 0.36,
+    rideHP: 5000, rideBP: 7500, rideDecay: 0.3, rideBellF: 3500,
+  },
+  metal: {
+    kickF1: 220, kickF2: 38, kickDecay: 0.28, kickOscType: 'sine',
+    snareF: 230, snareDecay: 0.12, snareNoiseHP: 1800, snareNoiseGain: 0.85, snareBodyType: 'sawtooth',
+    hihatHP: 8500, hihatBP: 10500, hihatDecay: 0.05, hihatGain: 0.45,
+    rideHP: 4500, rideBP: 7000, rideDecay: 0.6, rideBellF: 2900,
+  },
+  bit8: {
+    kickF1: 110, kickF2: 45, kickDecay: 0.22, kickOscType: 'square',
+    snareF: 400, snareDecay: 0.09, snareNoiseHP: 2000, snareNoiseGain: 0.55, snareBodyType: 'square',
+    hihatHP: 8000, hihatBP: 10000, hihatDecay: 0.04, hihatGain: 0.3,
+    rideHP: 4000, rideBP: 5800, rideDecay: 0.3, rideBellF: 2400,
+  },
+  orchestra: {
+    kickF1: 90, kickF2: 35, kickDecay: 0.9, kickOscType: 'sine',
+    snareF: 180, snareDecay: 0.25, snareNoiseHP: 1200, snareNoiseGain: 0.45, snareBodyType: 'triangle',
+    hihatHP: 6000, hihatBP: 8000, hihatDecay: 0.15, hihatGain: 0.28,
+    rideHP: 3000, rideBP: 5000, rideDecay: 1.1, rideBellF: 1800,
+  },
 };
 
 function playDrum(drum, velocity = 1, when = null) {
@@ -828,6 +1287,13 @@ function playDrum(drum, velocity = 1, when = null) {
 
   if (recording) {
     recEvents.push({ drum, velocity: v, t: Date.now() - recStartTime });
+  }
+
+  // Gamification: XP + song mode scoring.
+  // Skip XP/song tracking for metronome click so it doesn't inflate stats.
+  if (drum !== 'click') {
+    trySongHit(drum);
+    addXP(1);
   }
 }
 
@@ -1461,10 +1927,11 @@ loopBtn.addEventListener('click', () => {
 });
 
 // Kit selector
-['rock','electronic','jazz'].forEach(k => {
+const ALL_KITS = ['rock','electronic','jazz','hiphop','metal','bit8','orchestra'];
+ALL_KITS.forEach(k => {
   document.getElementById('kit-' + k).addEventListener('click', () => {
     currentKit = k;
-    ['rock','electronic','jazz'].forEach(other => {
+    ALL_KITS.forEach(other => {
       document.getElementById('kit-' + other).classList.toggle('active', other === k);
     });
     playDrum('snare', 0.7);
@@ -1479,6 +1946,22 @@ document.getElementById('vol').addEventListener('input', e => {
     masterGain.gain.setTargetAtTime(masterVolume, audioCtx.currentTime, 0.02);
   }
 });
+
+// Song mode buttons
+const songList = document.getElementById('songList');
+Object.keys(SONGS).forEach(name => {
+  const btn = document.createElement('button');
+  btn.className = 'btn';
+  btn.textContent = name;
+  btn.addEventListener('click', () => startSong(name));
+  songList.appendChild(btn);
+});
+document.getElementById('songStopBtn').addEventListener('click', stopSong);
+document.getElementById('songResultBtn').addEventListener('click', stopSong);
+
+// Initialise gamification UI
+initFx();
+updateStatsUI();
 
 // Language selector
 const langSelect = document.getElementById('lang');
