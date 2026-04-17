@@ -255,6 +255,19 @@
       </div>
     </div>
 
+    <div class="card">
+      <div class="section-title">Camera Sticks</div>
+      <div class="sens" style="margin-bottom:10px;">
+        <span>Drumstick Mode</span>
+        <button class="btn active" id="stickToggle" style="padding:8px 14px;">ON</button>
+      </div>
+      <div class="sens">
+        <span>Length</span>
+        <input type="range" id="stickLen" min="10" max="30" value="18">
+        <span class="sens-val" id="stickLenVal">1.8</span>
+      </div>
+    </div>
+
     </div><!-- /settings-body -->
 
     <div class="hint">
@@ -293,6 +306,8 @@ const KIT = [
 let camera = null;
 let hands = null;
 let camRunning = false;
+let stickMode = true; // extrapolate stick tip past the hand
+let stickLength = 1.8; // how far past the knuckle to place the tip (multiplier)
 const wristHistory = [null, null]; // last y positions per hand
 const lastCamHit = [0, 0];
 const CAM_HIT_COOLDOWN = 200;
@@ -784,16 +799,58 @@ function onHandResults(results) {
 
   for (let i = 0; i < results.multiHandLandmarks.length && i < 2; i++) {
     const landmarks = results.multiHandLandmarks[i];
-    const wrist = landmarks[0]; // wrist
-    const tip = landmarks[12];  // middle finger tip
-    const x = tip.x; // already 0-1 normalised
-    const y = tip.y;
+    const wrist = landmarks[0];
+    const midKnuckle = landmarks[9]; // base of middle finger — stable point at the front of the fist
+    const midTip = landmarks[12];
 
-    // Draw hand
-    ctx.fillStyle = i === 0 ? '#ef4444' : '#10b981';
-    ctx.beginPath();
-    ctx.arc(x * canvas.width, y * canvas.height, 14, 0, Math.PI * 2);
-    ctx.fill();
+    // Virtual stick tip = extrapolate past the knuckle along the wrist→knuckle
+    // direction. This puts the "impact point" where a drumstick tip would be
+    // when the user holds any stick-shaped object (real drumstick, chopstick,
+    // pencil). Falls back to the fingertip if stickMode is off.
+    let x, y;
+    if (stickMode) {
+      const dx = midKnuckle.x - wrist.x;
+      const dy = midKnuckle.y - wrist.y;
+      x = midKnuckle.x + dx * stickLength;
+      y = midKnuckle.y + dy * stickLength;
+      // Clamp inside canvas
+      x = Math.max(0, Math.min(1, x));
+      y = Math.max(0, Math.min(1, y));
+    } else {
+      x = midTip.x;
+      y = midTip.y;
+    }
+
+    const color = i === 0 ? '#ef4444' : '#10b981';
+
+    if (stickMode) {
+      // Draw the virtual drumstick: line from knuckle to tip
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 6;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(midKnuckle.x * canvas.width, midKnuckle.y * canvas.height);
+      ctx.lineTo(x * canvas.width, y * canvas.height);
+      ctx.stroke();
+      // Stick tip marker
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(x * canvas.width, y * canvas.height, 10, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      // Small dot on the fist (grip)
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(wrist.x * canvas.width, wrist.y * canvas.height, 8, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x * canvas.width, y * canvas.height, 14, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
     // Detect downward swing: y increases rapidly
     const prev = wristHistory[i];
@@ -858,6 +915,17 @@ document.getElementById('bpm').addEventListener('input', e => {
 });
 document.getElementById('metroBtn').addEventListener('click', () => {
   if (metroOn) stopMetronome(); else startMetronome();
+});
+
+const stickToggle = document.getElementById('stickToggle');
+stickToggle.addEventListener('click', () => {
+  stickMode = !stickMode;
+  stickToggle.textContent = stickMode ? 'ON' : 'OFF';
+  stickToggle.classList.toggle('active', stickMode);
+});
+document.getElementById('stickLen').addEventListener('input', e => {
+  stickLength = parseInt(e.target.value, 10) / 10;
+  document.getElementById('stickLenVal').textContent = stickLength.toFixed(1);
 });
 </script>
 </body>
