@@ -8,83 +8,156 @@
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { min-height: 100%; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 100%);
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #05070b;
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(245, 158, 11, 0.08), transparent 50%),
+      radial-gradient(circle at 80% 100%, rgba(239, 68, 68, 0.06), transparent 50%);
     color: #f1f5f9;
     user-select: none;
     touch-action: manipulation;
     min-height: 100vh;
   }
-  .wrap { display: flex; flex-direction: column; min-height: 100vh; padding: 12px; gap: 10px; }
-  h1 { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.1em; text-align: center; color: #f59e0b; }
-  .status { text-align: center; font-size: 0.75rem; color: #94a3b8; min-height: 1em; }
+  .wrap { display: flex; flex-direction: column; min-height: 100vh; padding: 14px; gap: 10px; max-width: 480px; margin: 0 auto; }
+  .brand { display: flex; align-items: center; justify-content: space-between; padding: 0 4px; }
+  h1 {
+    font-size: 0.95rem; font-weight: 800; letter-spacing: 0.35em;
+    color: #f8fafc; text-transform: uppercase;
+    background: linear-gradient(90deg, #f59e0b, #ef4444);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .logo-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #ef4444; box-shadow: 0 0 12px #ef4444;
+    animation: heartbeat 1.4s infinite;
+  }
+  @keyframes heartbeat { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .status {
+    text-align: center; font-size: 0.72rem;
+    color: #64748b; letter-spacing: 0.08em; text-transform: uppercase;
+    min-height: 1em;
+  }
   .start-btn {
-    padding: 18px; font-size: 1.1rem; font-weight: 700;
-    background: #f59e0b; color: #0f172a; border: none;
-    border-radius: 14px; cursor: pointer; box-shadow: 0 6px 0 #b45309;
+    padding: 20px; font-size: 1.2rem; font-weight: 800; letter-spacing: 0.3em;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    color: #0a0a0a; border: none; border-radius: 16px; cursor: pointer;
+    box-shadow: 0 8px 32px rgba(245, 158, 11, 0.4), inset 0 -4px 0 rgba(0,0,0,0.2);
+    text-transform: uppercase;
   }
-  .start-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 #b45309; }
-  .pads { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .start-btn:active { transform: translateY(2px); box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4), inset 0 -2px 0 rgba(0,0,0,0.2); }
+  .pads { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .pad {
-    padding: 22px 10px; border-radius: 14px;
+    padding: 28px 10px; border-radius: 18px; position: relative;
     display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 0.9rem; letter-spacing: 0.1em;
-    cursor: pointer; transition: transform 0.08s, filter 0.08s;
-    border: 2px solid rgba(255,255,255,0.08); text-align: center;
+    font-weight: 800; font-size: 0.85rem; letter-spacing: 0.18em;
+    cursor: pointer; transition: transform 0.06s, filter 0.06s, box-shadow 0.06s;
+    border: 1px solid rgba(255,255,255,0.1); text-align: center;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
   }
-  .pad.hit { transform: scale(0.96); filter: brightness(1.6); }
-  .kick   { background: linear-gradient(135deg, #7c3aed, #4c1d95); }
-  .snare  { background: linear-gradient(135deg, #ef4444, #991b1b); }
-  .hihat  { background: linear-gradient(135deg, #eab308, #854d0e); }
-  .tom    { background: linear-gradient(135deg, #10b981, #065f46); }
-  .ride   { background: linear-gradient(135deg, #06b6d4, #155e75); }
+  .pad::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.2), transparent 60%);
+    pointer-events: none;
+  }
+  .pad.hit { transform: scale(0.95); filter: brightness(1.8); box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15); }
+  .kick   { background: linear-gradient(160deg, #a855f7, #4c1d95); }
+  .snare  { background: linear-gradient(160deg, #f87171, #991b1b); }
+  .hihat  { background: linear-gradient(160deg, #facc15, #854d0e); }
+  .tom    { background: linear-gradient(160deg, #34d399, #065f46); }
+  .ride   { background: linear-gradient(160deg, #22d3ee, #155e75); }
   .controls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
   .btn {
-    padding: 10px 6px; background: #1e293b; color: #f1f5f9;
-    border: 1px solid #334155; border-radius: 10px;
-    font-size: 0.78rem; cursor: pointer; font-weight: 600;
+    padding: 12px 6px; background: #111827; color: #cbd5e1;
+    border: 1px solid #1f2937; border-radius: 12px;
+    font-size: 0.75rem; cursor: pointer; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.1s;
   }
-  .btn.active { background: #f59e0b; color: #0f172a; border-color: #f59e0b; }
-  .btn.rec { background: #ef4444; color: white; border-color: #ef4444; }
+  .btn:active { transform: scale(0.97); }
+  .btn.active {
+    background: linear-gradient(135deg, #f59e0b, #ef4444); color: #0a0a0a;
+    border-color: transparent; box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+  }
+  .btn.rec { background: linear-gradient(135deg, #ef4444, #991b1b); color: white; border-color: transparent; }
   .btn.rec.on { animation: pulse 0.8s infinite; }
-  @keyframes pulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.4); } }
-  .btn.play { background: #10b981; color: #0f172a; border-color: #10b981; }
-  .section-title { font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
-  .sens { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #cbd5e1; }
-  input[type=range] { flex: 1; }
-  .meter { height: 4px; background: #1e293b; border-radius: 2px; overflow: hidden; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); } 50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); } }
+  .btn.play { background: linear-gradient(135deg, #10b981, #047857); color: white; border-color: transparent; }
+  .card {
+    background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.06); border-radius: 14px;
+    padding: 12px;
+  }
+  .section-title {
+    font-size: 0.62rem; color: #475569;
+    text-transform: uppercase; letter-spacing: 0.25em;
+    margin-bottom: 8px; font-weight: 700;
+  }
+  .sens { display: flex; align-items: center; gap: 10px; font-size: 0.7rem; color: #94a3b8; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+  .sens-val { min-width: 24px; text-align: right; color: #f59e0b; font-weight: 700; }
+  input[type=range] {
+    flex: 1; -webkit-appearance: none; appearance: none;
+    height: 4px; background: #1f2937; border-radius: 2px; outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    cursor: pointer; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+  }
+  .meter { height: 6px; background: #0f172a; border-radius: 3px; overflow: hidden; border: 1px solid #1f2937; }
   .meter-fill { height: 100%; background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444); width: 0%; transition: width 0.05s; }
+  .bpm-row { display: flex; align-items: center; gap: 10px; }
+  .bpm-val { font-family: 'SF Mono', Menlo, monospace; font-size: 1.1rem; font-weight: 800; color: #f59e0b; min-width: 52px; }
+  .beat-dots { display: flex; gap: 6px; justify-content: center; margin-top: 8px; }
+  .beat-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #1f2937; transition: all 0.08s;
+  }
+  .beat-dot.on { background: #f59e0b; box-shadow: 0 0 12px #f59e0b; transform: scale(1.3); }
+  .beat-dot.downbeat.on { background: #ef4444; box-shadow: 0 0 12px #ef4444; }
   .kit-map {
-    position: relative; height: 180px;
-    background: #0b1220; border: 1px solid #1e293b; border-radius: 14px;
-    overflow: hidden;
+    position: relative; height: 200px;
+    background: radial-gradient(ellipse at 50% 80%, #0f172a, #05070b);
+    border: 1px solid #1f2937; border-radius: 14px; overflow: hidden;
   }
   .zone {
     position: absolute; transform: translate(-50%, -50%);
-    width: 64px; height: 64px; border-radius: 50%;
+    width: 68px; height: 68px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em;
-    opacity: 0.55; transition: opacity 0.08s, transform 0.08s;
+    font-size: 0.65rem; font-weight: 800; letter-spacing: 0.12em;
+    opacity: 0.45; transition: opacity 0.08s, transform 0.08s, box-shadow 0.08s;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.4);
   }
-  .zone.hit { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
-  .you { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%);
-    font-size: 0.6rem; color: #64748b; }
-  .hint { font-size: 0.68rem; color: #64748b; text-align: center; line-height: 1.4; }
-  .rec-time { text-align: center; font-size: 0.85rem; color: #f1f5f9; font-weight: 600; min-height: 1em; }
+  .zone.hit { opacity: 1; transform: translate(-50%, -50%) scale(1.2); box-shadow: 0 0 28px currentColor; }
+  .you {
+    position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%);
+    font-size: 0.6rem; color: #475569; letter-spacing: 0.2em; text-transform: uppercase;
+  }
+  .hint { font-size: 0.68rem; color: #475569; text-align: center; line-height: 1.5; }
+  .rec-time {
+    text-align: center; font-family: 'SF Mono', Menlo, monospace;
+    font-size: 1rem; color: #f1f5f9; font-weight: 700; min-height: 1em;
+    letter-spacing: 0.08em;
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>AIR DRUMS</h1>
-  <div class="status" id="status">Tap Start to enable motion + sound</div>
+  <div class="brand">
+    <h1>Air Drums</h1>
+    <div class="logo-dot"></div>
+  </div>
+  <div class="status" id="status">Tap Start to begin</div>
 
-  <button class="start-btn" id="start">START</button>
+  <button class="start-btn" id="start">Start</button>
 
-  <div id="main" style="display:none; display:none; flex-direction:column; gap:10px;">
+  <div id="main" style="display:none; flex-direction:column; gap:12px;">
     <div class="controls">
       <button class="btn active" id="mode-tap">Tap</button>
       <button class="btn" id="mode-motion">Swing</button>
-      <button class="btn" id="mode-ghost">Ghost Kit</button>
+      <button class="btn" id="mode-ghost">Ghost</button>
     </div>
 
     <div class="pads" id="pads">
@@ -100,29 +173,46 @@
 
     <div class="meter"><div class="meter-fill" id="meter"></div></div>
 
-    <div class="section-title">Record</div>
-    <div class="rec-time" id="recTime">Ready</div>
-    <div class="controls">
-      <button class="btn rec" id="recBtn">● Record</button>
-      <button class="btn play" id="playBtn">▶ Play</button>
-      <button class="btn" id="clearBtn">Clear</button>
+    <div class="card">
+      <div class="section-title">Metronome</div>
+      <div class="bpm-row">
+        <span class="bpm-val" id="bpmVal">90</span>
+        <input type="range" id="bpm" min="40" max="200" value="90">
+        <button class="btn" id="metroBtn" style="padding:8px 10px; min-width:72px;">Start</button>
+      </div>
+      <div class="beat-dots">
+        <div class="beat-dot downbeat" id="dot0"></div>
+        <div class="beat-dot" id="dot1"></div>
+        <div class="beat-dot" id="dot2"></div>
+        <div class="beat-dot" id="dot3"></div>
+      </div>
     </div>
 
-    <div class="section-title">Ghost Kit</div>
-    <div class="controls" style="grid-template-columns: 1fr;">
-      <button class="btn" id="calibBtn">Point at snare, then tap to calibrate</button>
+    <div class="card">
+      <div class="section-title">Recording</div>
+      <div class="rec-time" id="recTime">00:00.0</div>
+      <div class="controls" style="margin-top:8px;">
+        <button class="btn rec" id="recBtn">Record</button>
+        <button class="btn play" id="playBtn">Play</button>
+        <button class="btn" id="clearBtn">Clear</button>
+      </div>
     </div>
 
-    <div class="sens">
-      <span>Sensitivity</span>
-      <input type="range" id="sens" min="8" max="35" value="18">
+    <div class="card">
+      <div class="section-title">Ghost Kit</div>
+      <button class="btn" id="calibBtn" style="width:100%;">Calibrate</button>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Sensitivity</div>
+      <div class="sens">
+        <input type="range" id="sens" min="8" max="35" value="14">
+        <span class="sens-val" id="sensVal">14</span>
+      </div>
     </div>
 
     <div class="hint">
-      <strong>Tap:</strong> tap the coloured pads.<br>
-      <strong>Swing:</strong> swing your phone — direction picks the drum.<br>
-      <strong>Ghost Kit:</strong> calibrate, then swing phone toward invisible drums around you.<br>
-      <strong>iPhone silent:</strong> flip the side switch off.
+      Tap = touch pads · Swing = swing phone · Ghost = invisible kit around you
     </div>
 
     <div id="debug" style="font-size:0.6rem; color:#475569; text-align:center; word-break:break-all;"></div>
@@ -133,9 +223,9 @@
 // ===== state =====
 let audioCtx = null;
 let mode = 'tap';
-let threshold = 18;
+let threshold = 14;
 let lastHitTime = 0;
-const COOLDOWN_MS = 120;
+const COOLDOWN_MS = 90;
 let motionPermissionResult = 'not-asked';
 let motionEventCount = 0;
 let currentBeta = 0, currentGamma = 0;
@@ -160,6 +250,12 @@ let recEvents = [];
 let recTimer = null;
 let playbackTimers = [];
 
+// ===== metronome =====
+let metroOn = false;
+let metroBpm = 90;
+let metroBeat = 0;
+let metroInterval = null;
+
 // ===== dom =====
 const status = document.getElementById('status');
 const startBtn = document.getElementById('start');
@@ -181,55 +277,104 @@ function ensureAudio() {
   }
 }
 
-function playDrum(drum, velocity = 1) {
+function playDrum(drum, velocity = 1, when = null) {
   if (!audioCtx) return;
   ensureAudio();
-  const now = audioCtx.currentTime;
+  const now = when != null ? when : audioCtx.currentTime;
   const v = Math.min(1, Math.max(0.2, velocity));
 
   if (drum === 'kick') {
+    // Body: deep sine sweep
     const osc = audioCtx.createOscillator(), g = audioCtx.createGain();
-    osc.frequency.setValueAtTime(150, now);
-    osc.frequency.exponentialRampToValueAtTime(40, now + 0.15);
-    g.gain.setValueAtTime(v, now);
-    g.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(180, now);
+    osc.frequency.exponentialRampToValueAtTime(35, now + 0.12);
+    g.gain.setValueAtTime(v * 1.1, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
     osc.connect(g).connect(audioCtx.destination);
-    osc.start(now); osc.stop(now + 0.3);
+    osc.start(now); osc.stop(now + 0.45);
+    // Click: short noise burst for attack
+    const click = makeNoise(0.02), cf = audioCtx.createBiquadFilter(), cg = audioCtx.createGain();
+    cf.type = 'bandpass'; cf.frequency.value = 2500;
+    cg.gain.setValueAtTime(v * 0.3, now);
+    cg.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+    click.connect(cf).connect(cg).connect(audioCtx.destination);
+    click.start(now);
   } else if (drum === 'snare') {
-    const n = makeNoise(0.2), f = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
-    f.type = 'highpass'; f.frequency.value = 1200;
-    g.gain.setValueAtTime(v * 0.6, now);
-    g.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+    // Tone body
+    const osc = audioCtx.createOscillator(), og = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(220, now);
+    og.gain.setValueAtTime(v * 0.35, now);
+    og.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+    osc.connect(og).connect(audioCtx.destination);
+    osc.start(now); osc.stop(now + 0.15);
+    // Snare wires: filtered noise
+    const n = makeNoise(0.25), f = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
+    f.type = 'highpass'; f.frequency.value = 1800;
+    g.gain.setValueAtTime(v * 0.7, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
     n.connect(f).connect(g).connect(audioCtx.destination);
     n.start(now);
   } else if (drum === 'hihat') {
-    const n = makeNoise(0.1), f = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
-    f.type = 'highpass'; f.frequency.value = 7000;
-    g.gain.setValueAtTime(v * 0.4, now);
-    g.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-    n.connect(f).connect(g).connect(audioCtx.destination);
+    // Metallic: layered high-frequency oscillators through bandpass
+    const n = makeNoise(0.08), hf = audioCtx.createBiquadFilter();
+    const bf = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
+    hf.type = 'highpass'; hf.frequency.value = 8000;
+    bf.type = 'bandpass'; bf.frequency.value = 10000; bf.Q.value = 1;
+    g.gain.setValueAtTime(v * 0.35, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+    n.connect(hf).connect(bf).connect(g).connect(audioCtx.destination);
     n.start(now);
   } else if (drum === 'tom') {
     const osc = audioCtx.createOscillator(), g = audioCtx.createGain();
-    osc.frequency.setValueAtTime(220, now);
-    osc.frequency.exponentialRampToValueAtTime(90, now + 0.2);
-    g.gain.setValueAtTime(v * 0.8, now);
-    g.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(260, now);
+    osc.frequency.exponentialRampToValueAtTime(100, now + 0.2);
+    g.gain.setValueAtTime(v * 0.9, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
     osc.connect(g).connect(audioCtx.destination);
-    osc.start(now); osc.stop(now + 0.35);
-  } else if (drum === 'ride') {
-    const n = makeNoise(0.4), f = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
-    f.type = 'bandpass'; f.frequency.value = 5000; f.Q.value = 2;
-    g.gain.setValueAtTime(v * 0.3, now);
-    g.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-    n.connect(f).connect(g).connect(audioCtx.destination);
+    osc.start(now); osc.stop(now + 0.4);
+    // Slight pitch noise for attack
+    const n = makeNoise(0.03), ng = audioCtx.createGain();
+    ng.gain.setValueAtTime(v * 0.2, now);
+    ng.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+    n.connect(ng).connect(audioCtx.destination);
     n.start(now);
+  } else if (drum === 'ride') {
+    const n = makeNoise(0.6), hf = audioCtx.createBiquadFilter();
+    const bf = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
+    hf.type = 'highpass'; hf.frequency.value = 4000;
+    bf.type = 'bandpass'; bf.frequency.value = 6000; bf.Q.value = 2;
+    g.gain.setValueAtTime(v * 0.25, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+    n.connect(hf).connect(bf).connect(g).connect(audioCtx.destination);
+    n.start(now);
+    // Bell ping
+    const osc = audioCtx.createOscillator(), og = audioCtx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(2800, now);
+    og.gain.setValueAtTime(v * 0.05, now);
+    og.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+    osc.connect(og).connect(audioCtx.destination);
+    osc.start(now); osc.stop(now + 0.35);
+  } else if (drum === 'click') {
+    const osc = audioCtx.createOscillator(), g = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(v > 0.8 ? 1800 : 1200, now);
+    g.gain.setValueAtTime(v * 0.25, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+    osc.connect(g).connect(audioCtx.destination);
+    osc.start(now); osc.stop(now + 0.06);
   }
 
   const pad = document.querySelector(`.pad[data-drum="${drum}"]`);
   if (pad) { pad.classList.add('hit'); setTimeout(() => pad.classList.remove('hit'), 90); }
   const zone = document.querySelector(`.zone[data-drum="${drum}"]`);
   if (zone) { zone.classList.add('hit'); setTimeout(() => zone.classList.remove('hit'), 120); }
+
+  hitCount++;
+  updateDebug();
 
   if (recording) {
     recEvents.push({ drum, velocity: v, t: Date.now() - recStartTime });
@@ -259,13 +404,25 @@ function buildKitMap() {
   });
 }
 
-function pickGhostDrum() {
+function pickGhostDrum(ax, ay, az) {
   if (!calibrated) return 'snare';
   const relBeta = currentBeta - calibBeta;
   const relGamma = currentGamma - calibGamma;
+  // Convert swing acceleration to a virtual direction in degree-space so
+  // it can be compared with orientation offsets on the same scale.
+  const swingGamma = (ax || 0) * 4;
+  const swingBeta = -(ay || 0) * 4;
+  // Pick whichever signal is stronger — the phone's tilt or the swing
+  // direction. That way the user can either aim by tilting the phone
+  // (pointing toward the drum) OR by swinging in the drum's direction.
+  const orientMag = Math.abs(relBeta) + Math.abs(relGamma);
+  const swingMag = Math.abs(swingBeta) + Math.abs(swingGamma);
+  const useSwing = swingMag > orientMag;
+  const effGamma = useSwing ? swingGamma : relGamma;
+  const effBeta  = useSwing ? swingBeta  : relBeta;
   let best = KIT[0], bestDist = Infinity;
   for (const z of KIT) {
-    const dB = relBeta - z.dBeta, dG = relGamma - z.dGamma;
+    const dB = effBeta - z.dBeta, dG = effGamma - z.dGamma;
     const d = dB*dB + dG*dG;
     if (d < bestDist) { bestDist = d; best = z; }
   }
@@ -292,7 +449,7 @@ function handleMotion(e) {
   const now = Date.now();
   if (mag > threshold && now - lastHitTime > COOLDOWN_MS) {
     lastHitTime = now;
-    const drum = mode === 'ghost' ? pickGhostDrum() : pickDrumFromMotion(ax, ay, az);
+    const drum = mode === 'ghost' ? pickGhostDrum(ax, ay, az) : pickDrumFromMotion(ax, ay, az);
     const velocity = Math.min(1, (mag - threshold) / 20 + 0.4);
     playDrum(drum, velocity);
   }
@@ -304,36 +461,53 @@ function handleOrientation(e) {
 }
 
 // ===== recording =====
+function fmtTime(ms) {
+  const s = ms / 1000;
+  const whole = Math.floor(s);
+  const deci = Math.floor((s - whole) * 10);
+  const mm = Math.floor(whole / 60);
+  const ss = whole % 60;
+  return String(mm).padStart(2, '0') + ':' + String(ss).padStart(2, '0') + '.' + deci;
+}
+
 function startRecording() {
   recEvents = [];
   recording = true;
   recStartTime = Date.now();
   recBtn.classList.add('on');
-  recBtn.textContent = '■ Stop';
+  recBtn.textContent = 'Stop';
   if (recTimer) clearInterval(recTimer);
   recTimer = setInterval(() => {
-    const s = ((Date.now() - recStartTime) / 1000).toFixed(1);
-    recTime.textContent = 'Recording ' + s + 's';
-  }, 100);
+    recTime.textContent = fmtTime(Date.now() - recStartTime);
+  }, 80);
 }
 function stopRecording() {
   recording = false;
   recBtn.classList.remove('on');
-  recBtn.textContent = '● Record';
+  recBtn.textContent = 'Record';
   if (recTimer) { clearInterval(recTimer); recTimer = null; }
-  recTime.textContent = recEvents.length ? recEvents.length + ' hits recorded' : 'Nothing recorded';
+  if (recEvents.length) {
+    const last = recEvents[recEvents.length - 1].t;
+    recTime.textContent = fmtTime(last) + '  ·  ' + recEvents.length + ' hits';
+  } else {
+    recTime.textContent = '00:00.0';
+  }
 }
 function playRecording() {
-  if (!recEvents.length) { recTime.textContent = 'Nothing to play — record first!'; return; }
+  if (!recEvents.length) { recTime.textContent = 'No recording'; return; }
   stopPlayback();
-  recTime.textContent = 'Playing...';
-  const startedAt = Date.now();
+  const playStart = Date.now();
+  const total = recEvents[recEvents.length - 1].t;
   recEvents.forEach(ev => {
-    const t = setTimeout(() => playDrum(ev.drum, ev.velocity), ev.t);
+    const t = setTimeout(() => {
+      playDrum(ev.drum, ev.velocity);
+      recTime.textContent = fmtTime(ev.t) + '  ▶';
+    }, ev.t);
     playbackTimers.push(t);
   });
-  const totalMs = recEvents[recEvents.length - 1].t + 500;
-  const doneT = setTimeout(() => { recTime.textContent = recEvents.length + ' hits (played)'; }, totalMs);
+  const doneT = setTimeout(() => {
+    recTime.textContent = fmtTime(total) + '  ·  ' + recEvents.length + ' hits';
+  }, total + 200);
   playbackTimers.push(doneT);
 }
 function stopPlayback() {
@@ -343,7 +517,37 @@ function stopPlayback() {
 function clearRecording() {
   stopPlayback();
   recEvents = [];
-  recTime.textContent = 'Cleared';
+  recTime.textContent = '00:00.0';
+}
+
+// ===== metronome =====
+function startMetronome() {
+  if (metroInterval) clearInterval(metroInterval);
+  metroOn = true;
+  metroBeat = 0;
+  const tick = () => {
+    const isDownbeat = metroBeat % 4 === 0;
+    playDrum('click', isDownbeat ? 1 : 0.6);
+    for (let i = 0; i < 4; i++) {
+      const d = document.getElementById('dot' + i);
+      if (d) d.classList.toggle('on', i === metroBeat % 4);
+    }
+    metroBeat++;
+  };
+  tick();
+  metroInterval = setInterval(tick, 60000 / metroBpm);
+  document.getElementById('metroBtn').textContent = 'Stop';
+  document.getElementById('metroBtn').classList.add('active');
+}
+function stopMetronome() {
+  metroOn = false;
+  if (metroInterval) { clearInterval(metroInterval); metroInterval = null; }
+  for (let i = 0; i < 4; i++) {
+    const d = document.getElementById('dot' + i);
+    if (d) d.classList.remove('on');
+  }
+  document.getElementById('metroBtn').textContent = 'Start';
+  document.getElementById('metroBtn').classList.remove('active');
 }
 
 // ===== start =====
@@ -369,10 +573,21 @@ function start() {
     return;
   }
 
+  // iOS "unlock" trick: play a silent buffer inside the user-gesture
+  // handler. Without this, iOS routes Web Audio to the muted category
+  // and the phone speaker stays silent even if the ringer is on.
+  try {
+    const silent = audioCtx.createBuffer(1, 1, 22050);
+    const src = audioCtx.createBufferSource();
+    src.buffer = silent;
+    src.connect(audioCtx.destination);
+    src.start(0);
+  } catch (_) {}
+
   // Play a test snare AFTER the audio context actually resumes. iOS can leave
   // the context suspended for a split second after a user gesture, and any
   // sounds scheduled during that window are silently dropped.
-  const playTest = () => playDrum('snare', 0.6);
+  const playTest = () => playDrum('snare', 0.8);
   if (audioCtx.state === 'suspended') {
     audioCtx.resume().then(playTest).catch(playTest);
   } else {
@@ -389,10 +604,13 @@ function start() {
   updateDebug();
 }
 
+let hitCount = 0;
 function updateDebug() {
+  const state = audioCtx ? audioCtx.state : 'no-ctx';
   debug.textContent =
-    'perm:' + motionPermissionResult +
-    ' | events:' + motionEventCount +
+    'audio:' + state + ' | hits:' + hitCount +
+    ' | perm:' + motionPermissionResult +
+    ' | motion-events:' + motionEventCount +
     ' | β:' + currentBeta.toFixed(0) + ' γ:' + currentGamma.toFixed(0) +
     (calibrated ? ' | calibrated' : '');
 }
@@ -420,7 +638,10 @@ pads.addEventListener('pointerdown', e => {
 document.getElementById('mode-tap').addEventListener('click', () => setMode('tap'));
 document.getElementById('mode-motion').addEventListener('click', () => setMode('motion'));
 document.getElementById('mode-ghost').addEventListener('click', () => setMode('ghost'));
-document.getElementById('sens').addEventListener('input', e => threshold = parseInt(e.target.value, 10));
+document.getElementById('sens').addEventListener('input', e => {
+  threshold = parseInt(e.target.value, 10);
+  document.getElementById('sensVal').textContent = threshold;
+});
 recBtn.addEventListener('click', () => recording ? stopRecording() : startRecording());
 playBtn.addEventListener('click', playRecording);
 clearBtn.addEventListener('click', clearRecording);
@@ -428,9 +649,22 @@ calibBtn.addEventListener('click', () => {
   calibBeta = currentBeta;
   calibGamma = currentGamma;
   calibrated = true;
-  calibBtn.textContent = '✓ Calibrated (tap to redo)';
-  if (mode === 'ghost') status.textContent = 'Ghost Kit — swing toward invisible drums!';
+  calibBtn.textContent = 'Recalibrate';
+  calibBtn.classList.add('active');
+  if (mode === 'ghost') status.textContent = 'Ghost kit calibrated — swing!';
   updateDebug();
+});
+
+document.getElementById('bpm').addEventListener('input', e => {
+  metroBpm = parseInt(e.target.value, 10);
+  document.getElementById('bpmVal').textContent = metroBpm;
+  if (metroOn) {
+    stopMetronome();
+    startMetronome();
+  }
+});
+document.getElementById('metroBtn').addEventListener('click', () => {
+  if (metroOn) stopMetronome(); else startMetronome();
 });
 </script>
 </body>
