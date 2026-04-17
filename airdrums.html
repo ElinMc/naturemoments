@@ -133,9 +133,9 @@
 // ===== state =====
 let audioCtx = null;
 let mode = 'tap';
-let threshold = 18;
+let threshold = 14;
 let lastHitTime = 0;
-const COOLDOWN_MS = 120;
+const COOLDOWN_MS = 90;
 let motionPermissionResult = 'not-asked';
 let motionEventCount = 0;
 let currentBeta = 0, currentGamma = 0;
@@ -259,13 +259,19 @@ function buildKitMap() {
   });
 }
 
-function pickGhostDrum() {
+function pickGhostDrum(ax, ay, az) {
   if (!calibrated) return 'snare';
+  // Combine the phone's current tilt (vs calibration) with the swing
+  // direction. This lets users hit distinct drums even when they hold
+  // the phone vertical and barely change orientation — the direction
+  // of the swing fills in the missing signal.
   const relBeta = currentBeta - calibBeta;
   const relGamma = currentGamma - calibGamma;
+  const effGamma = relGamma + (ax || 0) * 2.5;
+  const effBeta  = relBeta  + (-(ay || 0)) * 2.5;
   let best = KIT[0], bestDist = Infinity;
   for (const z of KIT) {
-    const dB = relBeta - z.dBeta, dG = relGamma - z.dGamma;
+    const dB = effBeta - z.dBeta, dG = effGamma - z.dGamma;
     const d = dB*dB + dG*dG;
     if (d < bestDist) { bestDist = d; best = z; }
   }
@@ -292,7 +298,7 @@ function handleMotion(e) {
   const now = Date.now();
   if (mag > threshold && now - lastHitTime > COOLDOWN_MS) {
     lastHitTime = now;
-    const drum = mode === 'ghost' ? pickGhostDrum() : pickDrumFromMotion(ax, ay, az);
+    const drum = mode === 'ghost' ? pickGhostDrum(ax, ay, az) : pickDrumFromMotion(ax, ay, az);
     const velocity = Math.min(1, (mag - threshold) / 20 + 0.4);
     playDrum(drum, velocity);
   }
