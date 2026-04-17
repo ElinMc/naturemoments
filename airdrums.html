@@ -66,6 +66,7 @@
   .kick     { background: linear-gradient(160deg, #a855f7, #4c1d95); }
   .snare    { background: linear-gradient(160deg, #f87171, #991b1b); }
   .hihat    { background: linear-gradient(160deg, #facc15, #854d0e); }
+  .crash    { background: linear-gradient(160deg, #f59e0b, #78350f); }
   .tom      { background: linear-gradient(160deg, #34d399, #065f46); }
   .hitom    { background: linear-gradient(160deg, #60a5fa, #1e3a8a); }
   .floortom { background: linear-gradient(160deg, #fb923c, #7c2d12); }
@@ -183,16 +184,16 @@
     <h1>Air Drums</h1>
     <div class="logo-dot"></div>
   </div>
-  <div class="status" id="status">Tap Start to begin</div>
+  <div class="status" id="status" data-i18n="tapStart">Tap Start to begin</div>
 
-  <button class="start-btn" id="start">Start</button>
+  <button class="start-btn" id="start" data-i18n="start">Start</button>
 
   <div id="main" style="display:none; flex-direction:column; gap:12px;">
     <div class="mode-grid">
-      <button class="btn active" id="mode-tap">Tap</button>
-      <button class="btn" id="mode-motion">Swing</button>
-      <button class="btn" id="mode-ghost">Ghost</button>
-      <button class="btn" id="mode-camera">Cam</button>
+      <button class="btn active" id="mode-tap" data-i18n="modeTap">Tap</button>
+      <button class="btn" id="mode-motion" data-i18n="modeSwing">Swing</button>
+      <button class="btn" id="mode-ghost" data-i18n="modeGhost">Ghost</button>
+      <button class="btn" id="mode-camera" data-i18n="modeCam">Cam</button>
     </div>
 
     <div class="cam-wrap" id="camWrap" style="display:none;">
@@ -202,8 +203,9 @@
     </div>
 
     <div class="pads" id="pads">
-      <div class="pad hihat"    data-drum="hihat">HI-HAT</div>
+      <div class="pad crash"    data-drum="crash">CRASH</div>
       <div class="pad ride"     data-drum="ride">RIDE</div>
+      <div class="pad hihat"    data-drum="hihat">HI-HAT</div>
       <div class="pad hitom"    data-drum="hitom">HI TOM</div>
       <div class="pad tom"      data-drum="tom">MID TOM</div>
       <div class="pad snare"    data-drum="snare">SNARE</div>
@@ -218,17 +220,17 @@
     <div class="meter"><div class="meter-fill" id="meter"></div></div>
 
     <button class="settings-toggle" id="settingsToggle">
-      <span>Settings</span><span class="chev">▼</span>
+      <span data-i18n="settings">Settings</span><span class="chev">▼</span>
     </button>
 
     <div class="settings-body" id="settingsBody">
 
     <div class="card">
-      <div class="section-title">Metronome</div>
+      <div class="section-title" data-i18n="metronome">Metronome</div>
       <div class="bpm-row">
         <span class="bpm-val" id="bpmVal">90</span>
         <input type="range" id="bpm" min="40" max="200" value="90">
-        <button class="btn" id="metroBtn" style="padding:8px 10px; min-width:72px;">Start</button>
+        <button class="btn" id="metroBtn" style="padding:8px 10px; min-width:72px;" data-i18n="startBtn">Start</button>
       </div>
       <div class="beat-dots">
         <div class="beat-dot downbeat" id="dot0"></div>
@@ -239,12 +241,12 @@
     </div>
 
     <div class="card">
-      <div class="section-title">Recording</div>
+      <div class="section-title" data-i18n="recording">Recording</div>
       <div class="rec-time" id="recTime">00:00.0</div>
       <div class="controls" style="margin-top:8px;">
-        <button class="btn rec" id="recBtn">Record</button>
-        <button class="btn play" id="playBtn">Play</button>
-        <button class="btn" id="clearBtn">Clear</button>
+        <button class="btn rec" id="recBtn" data-i18n="record">Record</button>
+        <button class="btn play" id="playBtn" data-i18n="play">Play</button>
+        <button class="btn" id="clearBtn" data-i18n="clear">Clear</button>
       </div>
       <div class="controls" style="margin-top:6px; grid-template-columns: 1fr;">
         <button class="btn" id="loopBtn">Loop: OFF</button>
@@ -252,16 +254,16 @@
     </div>
 
     <div class="card">
-      <div class="section-title">Kit Sound</div>
+      <div class="section-title" data-i18n="kitSound">Kit Sound</div>
       <div class="controls">
-        <button class="btn active" data-kit="rock" id="kit-rock">Rock</button>
-        <button class="btn" data-kit="electronic" id="kit-electronic">Electronic</button>
-        <button class="btn" data-kit="jazz" id="kit-jazz">Jazz</button>
+        <button class="btn active" data-kit="rock" id="kit-rock" data-i18n="rock">Rock</button>
+        <button class="btn" data-kit="electronic" id="kit-electronic" data-i18n="electronic">Electronic</button>
+        <button class="btn" data-kit="jazz" id="kit-jazz" data-i18n="jazz">Jazz</button>
       </div>
     </div>
 
     <div class="card">
-      <div class="section-title">Master Volume</div>
+      <div class="section-title" data-i18n="masterVolume">Master Volume</div>
       <div class="sens">
         <input type="range" id="vol" min="0" max="100" value="80">
         <span class="sens-val" id="volVal">80</span>
@@ -269,12 +271,12 @@
     </div>
 
     <div class="card">
-      <div class="section-title">Ghost Kit</div>
-      <button class="btn" id="calibBtn" style="width:100%;">Calibrate</button>
+      <div class="section-title" data-i18n="ghostKit">Ghost Kit</div>
+      <button class="btn" id="calibBtn" style="width:100%;" data-i18n="calibrate">Calibrate</button>
     </div>
 
     <div class="card">
-      <div class="section-title">Sensitivity</div>
+      <div class="section-title" data-i18n="sensitivity">Sensitivity</div>
       <div class="sens">
         <input type="range" id="sens" min="8" max="35" value="14">
         <span class="sens-val" id="sensVal">14</span>
@@ -282,16 +284,22 @@
     </div>
 
     <div class="card">
-      <div class="section-title">Camera Sticks</div>
+      <div class="section-title" data-i18n="cameraSticks">Camera Sticks</div>
       <div class="sens" style="margin-bottom:10px;">
-        <span>Drumstick Mode</span>
+        <span data-i18n="drumstickMode">Drumstick Mode</span>
         <button class="btn active" id="stickToggle" style="padding:8px 14px;">ON</button>
       </div>
       <div class="sens">
-        <span>Length</span>
+        <span data-i18n="length">Length</span>
         <input type="range" id="stickLen" min="10" max="30" value="18">
         <span class="sens-val" id="stickLenVal">1.8</span>
       </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title" data-i18n="language">Language</div>
+      <select id="lang" style="width:100%; padding:10px; background:#111827; color:#f1f5f9; border:1px solid #1f2937; border-radius:10px; font-size:0.9rem;">
+      </select>
     </div>
 
     </div><!-- /settings-body -->
@@ -306,6 +314,240 @@
 </div>
 
 <script>
+// ===== i18n =====
+// Keys cover UI chrome. Drum names (hi-hat, snare, kick) are universal
+// musical terms and stay in English in every language.
+const I18N = {
+  en: { name: 'English', tapStart: 'Tap Start to begin', start: 'Start', startBtn: 'Start',
+        modeTap: 'Tap', modeSwing: 'Swing', modeGhost: 'Ghost', modeCam: 'Cam',
+        settings: 'Settings', metronome: 'Metronome', recording: 'Recording',
+        record: 'Record', play: 'Play', clear: 'Clear', kitSound: 'Kit Sound',
+        rock: 'Rock', electronic: 'Electronic', jazz: 'Jazz',
+        masterVolume: 'Master Volume', ghostKit: 'Ghost Kit', calibrate: 'Calibrate',
+        sensitivity: 'Sensitivity', cameraSticks: 'Camera Sticks',
+        drumstickMode: 'Drumstick Mode', length: 'Length', language: 'Language' },
+  nl: { name: 'Nederlands', tapStart: 'Tik Start om te beginnen', start: 'Start', startBtn: 'Start',
+        modeTap: 'Tik', modeSwing: 'Zwaai', modeGhost: 'Ghost', modeCam: 'Camera',
+        settings: 'Instellingen', metronome: 'Metronoom', recording: 'Opname',
+        record: 'Opnemen', play: 'Afspelen', clear: 'Wissen', kitSound: 'Drumstel Geluid',
+        rock: 'Rock', electronic: 'Elektronisch', jazz: 'Jazz',
+        masterVolume: 'Volume', ghostKit: 'Ghost Kit', calibrate: 'Kalibreer',
+        sensitivity: 'Gevoeligheid', cameraSticks: 'Camera Stokken',
+        drumstickMode: 'Drumstok Modus', length: 'Lengte', language: 'Taal' },
+  de: { name: 'Deutsch', tapStart: 'Auf Start tippen', start: 'Start', startBtn: 'Start',
+        modeTap: 'Tippen', modeSwing: 'Schwung', modeGhost: 'Ghost', modeCam: 'Kamera',
+        settings: 'Einstellungen', metronome: 'Metronom', recording: 'Aufnahme',
+        record: 'Aufnehmen', play: 'Abspielen', clear: 'Löschen', kitSound: 'Kit-Sound',
+        rock: 'Rock', electronic: 'Elektronisch', jazz: 'Jazz',
+        masterVolume: 'Lautstärke', ghostKit: 'Ghost Kit', calibrate: 'Kalibrieren',
+        sensitivity: 'Empfindlichkeit', cameraSticks: 'Kamera-Sticks',
+        drumstickMode: 'Stock-Modus', length: 'Länge', language: 'Sprache' },
+  fr: { name: 'Français', tapStart: 'Touchez Démarrer', start: 'Démarrer', startBtn: 'Démarrer',
+        modeTap: 'Toucher', modeSwing: 'Balancer', modeGhost: 'Ghost', modeCam: 'Caméra',
+        settings: 'Paramètres', metronome: 'Métronome', recording: 'Enregistrement',
+        record: 'Enregistrer', play: 'Lire', clear: 'Effacer', kitSound: 'Son Batterie',
+        rock: 'Rock', electronic: 'Électronique', jazz: 'Jazz',
+        masterVolume: 'Volume', ghostKit: 'Kit Fantôme', calibrate: 'Calibrer',
+        sensitivity: 'Sensibilité', cameraSticks: 'Baguettes Caméra',
+        drumstickMode: 'Mode Baguette', length: 'Longueur', language: 'Langue' },
+  es: { name: 'Español', tapStart: 'Toca Iniciar', start: 'Iniciar', startBtn: 'Iniciar',
+        modeTap: 'Tocar', modeSwing: 'Balancear', modeGhost: 'Ghost', modeCam: 'Cámara',
+        settings: 'Ajustes', metronome: 'Metrónomo', recording: 'Grabación',
+        record: 'Grabar', play: 'Reproducir', clear: 'Borrar', kitSound: 'Sonido de Batería',
+        rock: 'Rock', electronic: 'Electrónica', jazz: 'Jazz',
+        masterVolume: 'Volumen', ghostKit: 'Kit Fantasma', calibrate: 'Calibrar',
+        sensitivity: 'Sensibilidad', cameraSticks: 'Baquetas Cámara',
+        drumstickMode: 'Modo Baqueta', length: 'Longitud', language: 'Idioma' },
+  pt: { name: 'Português', tapStart: 'Toque em Iniciar', start: 'Iniciar', startBtn: 'Iniciar',
+        modeTap: 'Toque', modeSwing: 'Balanço', modeGhost: 'Ghost', modeCam: 'Câmera',
+        settings: 'Configurações', metronome: 'Metrônomo', recording: 'Gravação',
+        record: 'Gravar', play: 'Tocar', clear: 'Limpar', kitSound: 'Som da Bateria',
+        rock: 'Rock', electronic: 'Eletrônico', jazz: 'Jazz',
+        masterVolume: 'Volume', ghostKit: 'Kit Fantasma', calibrate: 'Calibrar',
+        sensitivity: 'Sensibilidade', cameraSticks: 'Baquetas Câmera',
+        drumstickMode: 'Modo Baqueta', length: 'Comprimento', language: 'Idioma' },
+  it: { name: 'Italiano', tapStart: 'Tocca Avvia', start: 'Avvia', startBtn: 'Avvia',
+        modeTap: 'Tocca', modeSwing: 'Oscilla', modeGhost: 'Ghost', modeCam: 'Cam',
+        settings: 'Impostazioni', metronome: 'Metronomo', recording: 'Registrazione',
+        record: 'Registra', play: 'Riproduci', clear: 'Cancella', kitSound: 'Suono Batteria',
+        rock: 'Rock', electronic: 'Elettronica', jazz: 'Jazz',
+        masterVolume: 'Volume', ghostKit: 'Kit Fantasma', calibrate: 'Calibra',
+        sensitivity: 'Sensibilità', cameraSticks: 'Bacchette Camera',
+        drumstickMode: 'Modalità Bacchetta', length: 'Lunghezza', language: 'Lingua' },
+  pl: { name: 'Polski', tapStart: 'Dotknij Start', start: 'Start', startBtn: 'Start',
+        modeTap: 'Dotyk', modeSwing: 'Zamach', modeGhost: 'Ghost', modeCam: 'Kamera',
+        settings: 'Ustawienia', metronome: 'Metronom', recording: 'Nagrywanie',
+        record: 'Nagraj', play: 'Odtwórz', clear: 'Wyczyść', kitSound: 'Brzmienie',
+        rock: 'Rock', electronic: 'Elektroniczny', jazz: 'Jazz',
+        masterVolume: 'Głośność', ghostKit: 'Ghost Kit', calibrate: 'Kalibruj',
+        sensitivity: 'Czułość', cameraSticks: 'Pałeczki Kamera',
+        drumstickMode: 'Tryb Pałeczki', length: 'Długość', language: 'Język' },
+  ru: { name: 'Русский', tapStart: 'Нажмите Старт', start: 'Старт', startBtn: 'Старт',
+        modeTap: 'Касание', modeSwing: 'Взмах', modeGhost: 'Призрак', modeCam: 'Камера',
+        settings: 'Настройки', metronome: 'Метроном', recording: 'Запись',
+        record: 'Запись', play: 'Играть', clear: 'Очистить', kitSound: 'Звук',
+        rock: 'Рок', electronic: 'Электронный', jazz: 'Джаз',
+        masterVolume: 'Громкость', ghostKit: 'Призрачный набор', calibrate: 'Калибровать',
+        sensitivity: 'Чувствительность', cameraSticks: 'Палочки Камера',
+        drumstickMode: 'Режим Палочки', length: 'Длина', language: 'Язык' },
+  tr: { name: 'Türkçe', tapStart: 'Başlat\'a dokunun', start: 'Başlat', startBtn: 'Başlat',
+        modeTap: 'Dokun', modeSwing: 'Salla', modeGhost: 'Hayalet', modeCam: 'Kamera',
+        settings: 'Ayarlar', metronome: 'Metronom', recording: 'Kayıt',
+        record: 'Kaydet', play: 'Oynat', clear: 'Temizle', kitSound: 'Davul Sesi',
+        rock: 'Rock', electronic: 'Elektronik', jazz: 'Caz',
+        masterVolume: 'Ses', ghostKit: 'Hayalet Set', calibrate: 'Kalibre Et',
+        sensitivity: 'Hassasiyet', cameraSticks: 'Kamera Çubukları',
+        drumstickMode: 'Çubuk Modu', length: 'Uzunluk', language: 'Dil' },
+  sv: { name: 'Svenska', tapStart: 'Tryck Start', start: 'Start', startBtn: 'Start',
+        modeTap: 'Tryck', modeSwing: 'Sväng', modeGhost: 'Ghost', modeCam: 'Kamera',
+        settings: 'Inställningar', metronome: 'Metronom', recording: 'Inspelning',
+        record: 'Spela in', play: 'Spela', clear: 'Rensa', kitSound: 'Trumljud',
+        rock: 'Rock', electronic: 'Elektronisk', jazz: 'Jazz',
+        masterVolume: 'Volym', ghostKit: 'Spöktrumset', calibrate: 'Kalibrera',
+        sensitivity: 'Känslighet', cameraSticks: 'Kamerastickor',
+        drumstickMode: 'Stickläge', length: 'Längd', language: 'Språk' },
+  da: { name: 'Dansk', tapStart: 'Tryk Start', start: 'Start', startBtn: 'Start',
+        modeTap: 'Tryk', modeSwing: 'Sving', modeGhost: 'Ghost', modeCam: 'Kamera',
+        settings: 'Indstillinger', metronome: 'Metronom', recording: 'Optagelse',
+        record: 'Optag', play: 'Afspil', clear: 'Ryd', kitSound: 'Trommelyd',
+        rock: 'Rock', electronic: 'Elektronisk', jazz: 'Jazz',
+        masterVolume: 'Lydstyrke', ghostKit: 'Spøgelsessæt', calibrate: 'Kalibrer',
+        sensitivity: 'Følsomhed', cameraSticks: 'Kamerapinde',
+        drumstickMode: 'Pindetilstand', length: 'Længde', language: 'Sprog' },
+  no: { name: 'Norsk', tapStart: 'Trykk Start', start: 'Start', startBtn: 'Start',
+        modeTap: 'Trykk', modeSwing: 'Sving', modeGhost: 'Ghost', modeCam: 'Kamera',
+        settings: 'Innstillinger', metronome: 'Metronom', recording: 'Opptak',
+        record: 'Ta opp', play: 'Spill', clear: 'Tøm', kitSound: 'Trommelyd',
+        rock: 'Rock', electronic: 'Elektronisk', jazz: 'Jazz',
+        masterVolume: 'Volum', ghostKit: 'Spøkelsessett', calibrate: 'Kalibrer',
+        sensitivity: 'Følsomhet', cameraSticks: 'Kamerastikker',
+        drumstickMode: 'Stikkmodus', length: 'Lengde', language: 'Språk' },
+  fi: { name: 'Suomi', tapStart: 'Paina Aloita', start: 'Aloita', startBtn: 'Aloita',
+        modeTap: 'Kosketa', modeSwing: 'Heilauta', modeGhost: 'Ghost', modeCam: 'Kamera',
+        settings: 'Asetukset', metronome: 'Metronomi', recording: 'Tallennus',
+        record: 'Tallenna', play: 'Toista', clear: 'Tyhjennä', kitSound: 'Rumpu',
+        rock: 'Rock', electronic: 'Elektroninen', jazz: 'Jazz',
+        masterVolume: 'Äänenvoimakkuus', ghostKit: 'Haamusetti', calibrate: 'Kalibroi',
+        sensitivity: 'Herkkyys', cameraSticks: 'Kameratikut',
+        drumstickMode: 'Tikkutila', length: 'Pituus', language: 'Kieli' },
+  el: { name: 'Ελληνικά', tapStart: 'Πατήστε Έναρξη', start: 'Έναρξη', startBtn: 'Έναρξη',
+        modeTap: 'Άγγιγμα', modeSwing: 'Αιώρηση', modeGhost: 'Ghost', modeCam: 'Κάμερα',
+        settings: 'Ρυθμίσεις', metronome: 'Μετρονόμος', recording: 'Εγγραφή',
+        record: 'Εγγραφή', play: 'Αναπαραγωγή', clear: 'Εκκαθάριση', kitSound: 'Ήχος',
+        rock: 'Ροκ', electronic: 'Ηλεκτρονικό', jazz: 'Τζαζ',
+        masterVolume: 'Ένταση', ghostKit: 'Κιτ Φαντάσματος', calibrate: 'Βαθμονόμηση',
+        sensitivity: 'Ευαισθησία', cameraSticks: 'Μπαγκέτες Κάμερας',
+        drumstickMode: 'Λειτουργία Μπαγκέτας', length: 'Μήκος', language: 'Γλώσσα' },
+  cs: { name: 'Čeština', tapStart: 'Stiskněte Start', start: 'Start', startBtn: 'Start',
+        modeTap: 'Klepnutí', modeSwing: 'Rozmach', modeGhost: 'Ghost', modeCam: 'Kamera',
+        settings: 'Nastavení', metronome: 'Metronom', recording: 'Nahrávání',
+        record: 'Nahrát', play: 'Přehrát', clear: 'Vymazat', kitSound: 'Zvuk',
+        rock: 'Rock', electronic: 'Elektronické', jazz: 'Jazz',
+        masterVolume: 'Hlasitost', ghostKit: 'Ghost Kit', calibrate: 'Kalibrovat',
+        sensitivity: 'Citlivost', cameraSticks: 'Paličky Kamera',
+        drumstickMode: 'Režim Palička', length: 'Délka', language: 'Jazyk' },
+  uk: { name: 'Українська', tapStart: 'Натисніть Старт', start: 'Старт', startBtn: 'Старт',
+        modeTap: 'Дотик', modeSwing: 'Мах', modeGhost: 'Привид', modeCam: 'Камера',
+        settings: 'Налаштування', metronome: 'Метроном', recording: 'Запис',
+        record: 'Запис', play: 'Відтворити', clear: 'Очистити', kitSound: 'Звук',
+        rock: 'Рок', electronic: 'Електронний', jazz: 'Джаз',
+        masterVolume: 'Гучність', ghostKit: 'Привидний набір', calibrate: 'Калібрувати',
+        sensitivity: 'Чутливість', cameraSticks: 'Палички Камера',
+        drumstickMode: 'Режим Палички', length: 'Довжина', language: 'Мова' },
+  ar: { name: 'العربية', tapStart: 'اضغط بدء', start: 'بدء', startBtn: 'بدء',
+        modeTap: 'لمس', modeSwing: 'تأرجح', modeGhost: 'شبح', modeCam: 'كاميرا',
+        settings: 'الإعدادات', metronome: 'المترونوم', recording: 'تسجيل',
+        record: 'تسجيل', play: 'تشغيل', clear: 'مسح', kitSound: 'صوت الطبول',
+        rock: 'روك', electronic: 'إلكتروني', jazz: 'جاز',
+        masterVolume: 'الصوت', ghostKit: 'طقم الشبح', calibrate: 'معايرة',
+        sensitivity: 'الحساسية', cameraSticks: 'عصي الكاميرا',
+        drumstickMode: 'وضع العصا', length: 'الطول', language: 'اللغة' },
+  he: { name: 'עברית', tapStart: 'הקש התחל', start: 'התחל', startBtn: 'התחל',
+        modeTap: 'נקישה', modeSwing: 'נדנוד', modeGhost: 'רוח', modeCam: 'מצלמה',
+        settings: 'הגדרות', metronome: 'מטרונום', recording: 'הקלטה',
+        record: 'הקלט', play: 'נגן', clear: 'נקה', kitSound: 'צליל',
+        rock: 'רוק', electronic: 'אלקטרוני', jazz: 'ג׳אז',
+        masterVolume: 'עוצמה', ghostKit: 'ערכת רוחות', calibrate: 'כייל',
+        sensitivity: 'רגישות', cameraSticks: 'מקלות מצלמה',
+        drumstickMode: 'מצב מקל', length: 'אורך', language: 'שפה' },
+  hi: { name: 'हिन्दी', tapStart: 'शुरू करें पर टैप करें', start: 'शुरू', startBtn: 'शुरू',
+        modeTap: 'टैप', modeSwing: 'झूला', modeGhost: 'घोस्ट', modeCam: 'कैमरा',
+        settings: 'सेटिंग्स', metronome: 'मेट्रोनोम', recording: 'रिकॉर्डिंग',
+        record: 'रिकॉर्ड', play: 'चलाएं', clear: 'साफ़ करें', kitSound: 'ध्वनि',
+        rock: 'रॉक', electronic: 'इलेक्ट्रॉनिक', jazz: 'जैज़',
+        masterVolume: 'वॉल्यूम', ghostKit: 'घोस्ट किट', calibrate: 'कैलिब्रेट',
+        sensitivity: 'संवेदनशीलता', cameraSticks: 'कैमरा स्टिक',
+        drumstickMode: 'स्टिक मोड', length: 'लंबाई', language: 'भाषा' },
+  id: { name: 'Indonesia', tapStart: 'Ketuk Mulai', start: 'Mulai', startBtn: 'Mulai',
+        modeTap: 'Ketuk', modeSwing: 'Ayun', modeGhost: 'Ghost', modeCam: 'Kamera',
+        settings: 'Pengaturan', metronome: 'Metronom', recording: 'Rekaman',
+        record: 'Rekam', play: 'Putar', clear: 'Hapus', kitSound: 'Suara Drum',
+        rock: 'Rock', electronic: 'Elektronik', jazz: 'Jazz',
+        masterVolume: 'Volume', ghostKit: 'Kit Hantu', calibrate: 'Kalibrasi',
+        sensitivity: 'Sensitivitas', cameraSticks: 'Stik Kamera',
+        drumstickMode: 'Mode Stik', length: 'Panjang', language: 'Bahasa' },
+  vi: { name: 'Tiếng Việt', tapStart: 'Chạm Bắt đầu', start: 'Bắt đầu', startBtn: 'Bắt đầu',
+        modeTap: 'Chạm', modeSwing: 'Vẫy', modeGhost: 'Bóng ma', modeCam: 'Máy quay',
+        settings: 'Cài đặt', metronome: 'Máy nhịp', recording: 'Ghi âm',
+        record: 'Ghi', play: 'Phát', clear: 'Xóa', kitSound: 'Âm trống',
+        rock: 'Rock', electronic: 'Điện tử', jazz: 'Jazz',
+        masterVolume: 'Âm lượng', ghostKit: 'Trống ma', calibrate: 'Hiệu chỉnh',
+        sensitivity: 'Độ nhạy', cameraSticks: 'Dùi Camera',
+        drumstickMode: 'Chế độ dùi', length: 'Chiều dài', language: 'Ngôn ngữ' },
+  th: { name: 'ไทย', tapStart: 'แตะเริ่ม', start: 'เริ่ม', startBtn: 'เริ่ม',
+        modeTap: 'แตะ', modeSwing: 'แกว่ง', modeGhost: 'ผี', modeCam: 'กล้อง',
+        settings: 'ตั้งค่า', metronome: 'เมโทรนอม', recording: 'บันทึก',
+        record: 'บันทึก', play: 'เล่น', clear: 'ล้าง', kitSound: 'เสียงกลอง',
+        rock: 'ร็อค', electronic: 'อิเล็กทรอนิกส์', jazz: 'แจ๊ส',
+        masterVolume: 'เสียง', ghostKit: 'ชุดผี', calibrate: 'ปรับเทียบ',
+        sensitivity: 'ความไว', cameraSticks: 'ไม้กล้อง',
+        drumstickMode: 'โหมดไม้', length: 'ความยาว', language: 'ภาษา' },
+  zh: { name: '中文', tapStart: '点击开始', start: '开始', startBtn: '开始',
+        modeTap: '点击', modeSwing: '挥动', modeGhost: '幽灵', modeCam: '相机',
+        settings: '设置', metronome: '节拍器', recording: '录音',
+        record: '录制', play: '播放', clear: '清除', kitSound: '鼓组',
+        rock: '摇滚', electronic: '电子', jazz: '爵士',
+        masterVolume: '音量', ghostKit: '幽灵鼓', calibrate: '校准',
+        sensitivity: '灵敏度', cameraSticks: '相机鼓棒',
+        drumstickMode: '鼓棒模式', length: '长度', language: '语言' },
+  ja: { name: '日本語', tapStart: 'スタートをタップ', start: 'スタート', startBtn: 'スタート',
+        modeTap: 'タップ', modeSwing: 'スイング', modeGhost: 'ゴースト', modeCam: 'カメラ',
+        settings: '設定', metronome: 'メトロノーム', recording: '録音',
+        record: '録音', play: '再生', clear: 'クリア', kitSound: 'キット',
+        rock: 'ロック', electronic: 'エレクトロニック', jazz: 'ジャズ',
+        masterVolume: '音量', ghostKit: 'ゴーストキット', calibrate: '調整',
+        sensitivity: '感度', cameraSticks: 'カメラスティック',
+        drumstickMode: 'スティックモード', length: '長さ', language: '言語' },
+  ko: { name: '한국어', tapStart: '시작을 누르세요', start: '시작', startBtn: '시작',
+        modeTap: '탭', modeSwing: '스윙', modeGhost: '고스트', modeCam: '카메라',
+        settings: '설정', metronome: '메트로놈', recording: '녹음',
+        record: '녹음', play: '재생', clear: '지우기', kitSound: '드럼 소리',
+        rock: '록', electronic: '전자', jazz: '재즈',
+        masterVolume: '볼륨', ghostKit: '고스트 킷', calibrate: '보정',
+        sensitivity: '감도', cameraSticks: '카메라 스틱',
+        drumstickMode: '스틱 모드', length: '길이', language: '언어' },
+};
+
+let currentLang = 'en';
+
+function t(key) {
+  return (I18N[currentLang] && I18N[currentLang][key]) || I18N.en[key] || key;
+}
+
+function applyLanguage(lang) {
+  currentLang = I18N[lang] ? lang : 'en';
+  localStorage.setItem('airdrums-lang', currentLang);
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.textContent = t(key);
+  });
+  // Update dynamic labels
+  const rec = document.getElementById('recBtn');
+  if (rec && !recording && !countInActive) rec.textContent = t('record');
+  const metro = document.getElementById('metroBtn');
+  if (metro && !metroOn) metro.textContent = t('startBtn');
+}
+
 // ===== state =====
 let audioCtx = null;
 let masterGain = null;
@@ -325,9 +567,10 @@ let calibrated = false;
 // beta = tilt forward/back, gamma = tilt left/right
 // Screen position: x = gamma direction (left-right), y = beta direction (up-down)
 const KIT = [
+  { drum: 'crash',    dGamma: -25, dBeta: -35, label: 'CRASH',  x: 28, y:  8 },
   { drum: 'hihat',    dGamma: -40, dBeta: -10, label: 'HH',     x: 12, y: 32 },
-  { drum: 'hitom',    dGamma: -15, dBeta: -20, label: 'HI TOM', x: 34, y: 18 },
-  { drum: 'tom',      dGamma:  15, dBeta: -20, label: 'MID',    x: 58, y: 18 },
+  { drum: 'hitom',    dGamma: -15, dBeta: -25, label: 'HI TOM', x: 40, y: 20 },
+  { drum: 'tom',      dGamma:  15, dBeta: -25, label: 'MID',    x: 60, y: 20 },
   { drum: 'ride',     dGamma:  40, dBeta: -10, label: 'RIDE',   x: 88, y: 32 },
   { drum: 'snare',    dGamma:   0, dBeta:   0, label: 'SNARE',  x: 32, y: 58 },
   { drum: 'floortom', dGamma:  30, dBeta:  15, label: 'FLOOR',  x: 75, y: 58 },
@@ -344,12 +587,12 @@ const wristHistory = [null, null]; // last y positions per hand
 const lastCamHit = [0, 0];
 const CAM_HIT_COOLDOWN = 200;
 
-// Camera drum zones — acoustic kit layout (player's perspective, mirrored view):
-// hi-hat left, ride right, snare centre-left, 3 toms top, floor tom right, kick middle.
+// Camera drum zones — acoustic kit layout with crash on top.
 const CAM_ZONES = [
+  { drum: 'crash',    cx: 0.28, cy: 0.08, r: 0.10, color: '#f59e0b', label: 'CRASH',  type: 'cymbal' },
   { drum: 'hihat',    cx: 0.12, cy: 0.32, r: 0.10, color: '#e6c14a', label: 'HI-HAT', type: 'cymbal' },
-  { drum: 'hitom',    cx: 0.38, cy: 0.22, r: 0.09, color: '#c97a4a', label: 'HI TOM', type: 'drum' },
-  { drum: 'tom',      cx: 0.58, cy: 0.22, r: 0.09, color: '#b36a3c', label: 'MID TOM',type: 'drum' },
+  { drum: 'hitom',    cx: 0.42, cy: 0.22, r: 0.09, color: '#c97a4a', label: 'HI TOM', type: 'drum' },
+  { drum: 'tom',      cx: 0.60, cy: 0.22, r: 0.09, color: '#b36a3c', label: 'MID TOM',type: 'drum' },
   { drum: 'ride',     cx: 0.88, cy: 0.32, r: 0.11, color: '#f0c856', label: 'RIDE',   type: 'cymbal' },
   { drum: 'snare',    cx: 0.30, cy: 0.60, r: 0.11, color: '#d9d9d9', label: 'SNARE',  type: 'drum' },
   { drum: 'floortom', cx: 0.78, cy: 0.60, r: 0.12, color: '#8b4a2b', label: 'FLOOR',  type: 'drum' },
@@ -530,6 +773,16 @@ function playDrum(drum, velocity = 1, when = null) {
     ng.gain.setValueAtTime(v * 0.2, now);
     ng.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
     n.connect(ng).connect(getOutput());
+    n.start(now);
+  } else if (drum === 'crash') {
+    // Long bright splash
+    const n = makeNoise(1.2), hf = audioCtx.createBiquadFilter();
+    const bf = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
+    hf.type = 'highpass'; hf.frequency.value = 3500;
+    bf.type = 'bandpass'; bf.frequency.value = 7000; bf.Q.value = 1.2;
+    g.gain.setValueAtTime(v * 0.5, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+    n.connect(hf).connect(bf).connect(g).connect(getOutput());
     n.start(now);
   } else if (drum === 'ride') {
     const n = makeNoise(K.rideDecay + 0.1), hf = audioCtx.createBiquadFilter();
@@ -1218,6 +1471,28 @@ document.getElementById('vol').addEventListener('input', e => {
     masterGain.gain.setTargetAtTime(masterVolume, audioCtx.currentTime, 0.02);
   }
 });
+
+// Language selector
+const langSelect = document.getElementById('lang');
+Object.entries(I18N).forEach(([code, data]) => {
+  const opt = document.createElement('option');
+  opt.value = code;
+  opt.textContent = data.name;
+  langSelect.appendChild(opt);
+});
+const savedLang = localStorage.getItem('airdrums-lang');
+if (savedLang && I18N[savedLang]) {
+  langSelect.value = savedLang;
+  applyLanguage(savedLang);
+} else {
+  // Auto-detect from browser
+  const browserLang = (navigator.language || 'en').slice(0, 2).toLowerCase();
+  if (I18N[browserLang]) {
+    langSelect.value = browserLang;
+    applyLanguage(browserLang);
+  }
+}
+langSelect.addEventListener('change', e => applyLanguage(e.target.value));
 
 // Keyboard shortcuts (desktop)
 const KEY_MAP = {
