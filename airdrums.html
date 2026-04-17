@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Air Drums</title>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4/hands.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3/camera_utils.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { min-height: 100%; }
@@ -116,6 +118,35 @@
   }
   .beat-dot.on { background: #f59e0b; box-shadow: 0 0 12px #f59e0b; transform: scale(1.3); }
   .beat-dot.downbeat.on { background: #ef4444; box-shadow: 0 0 12px #ef4444; }
+  .cam-wrap {
+    position: relative; width: 100%; aspect-ratio: 4/3;
+    background: #000; border-radius: 14px; overflow: hidden;
+    border: 1px solid #1f2937;
+  }
+  .cam-wrap video, .cam-wrap canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .cam-wrap video { transform: scaleX(-1); }
+  .cam-wrap canvas { transform: scaleX(-1); pointer-events: none; }
+  .cam-status {
+    position: absolute; top: 8px; left: 8px;
+    background: rgba(0,0,0,0.6); padding: 4px 8px;
+    border-radius: 6px; font-size: 0.65rem; color: #f59e0b;
+    letter-spacing: 0.1em;
+  }
+  .mode-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .settings-toggle {
+    width: 100%; padding: 12px; background: transparent;
+    border: 1px solid #1f2937; border-radius: 12px;
+    color: #94a3b8; font-size: 0.75rem; letter-spacing: 0.15em;
+    text-transform: uppercase; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .settings-toggle .chev { transition: transform 0.2s; }
+  .settings-toggle.open .chev { transform: rotate(180deg); }
+  .settings-body { display: none; flex-direction: column; gap: 10px; }
+  .settings-body.open { display: flex; }
   .kit-map {
     position: relative; height: 200px;
     background: radial-gradient(ellipse at 50% 80%, #0f172a, #05070b);
@@ -154,10 +185,17 @@
   <button class="start-btn" id="start">Start</button>
 
   <div id="main" style="display:none; flex-direction:column; gap:12px;">
-    <div class="controls">
+    <div class="mode-grid">
       <button class="btn active" id="mode-tap">Tap</button>
       <button class="btn" id="mode-motion">Swing</button>
       <button class="btn" id="mode-ghost">Ghost</button>
+      <button class="btn" id="mode-camera">Cam</button>
+    </div>
+
+    <div class="cam-wrap" id="camWrap" style="display:none;">
+      <video id="cam" autoplay playsinline muted></video>
+      <canvas id="camCanvas" width="640" height="480"></canvas>
+      <div class="cam-status" id="camStatus">LOADING...</div>
     </div>
 
     <div class="pads" id="pads">
@@ -172,6 +210,12 @@
     </div>
 
     <div class="meter"><div class="meter-fill" id="meter"></div></div>
+
+    <button class="settings-toggle" id="settingsToggle">
+      <span>Settings</span><span class="chev">▼</span>
+    </button>
+
+    <div class="settings-body" id="settingsBody">
 
     <div class="card">
       <div class="section-title">Metronome</div>
@@ -211,8 +255,10 @@
       </div>
     </div>
 
+    </div><!-- /settings-body -->
+
     <div class="hint">
-      Tap = touch pads · Swing = swing phone · Ghost = invisible kit around you
+      Tap = touch pads · Swing = swing phone · Ghost = invisible kit · Cam = hand tracking
     </div>
 
     <div id="debug" style="font-size:0.6rem; color:#475569; text-align:center; word-break:break-all;"></div>
@@ -242,6 +288,31 @@ const KIT = [
   { drum: 'tom',   dGamma:  20, dBeta:  20, label: 'TOM',   x: 72, y: 70 },
   { drum: 'kick',  dGamma:   0, dBeta:  40, label: 'KICK',  x: 50, y: 88 },
 ];
+
+// ===== camera =====
+let camera = null;
+let hands = null;
+let camRunning = false;
+const wristHistory = [null, null]; // last y positions per hand
+const lastCamHit = [0, 0];
+const CAM_HIT_COOLDOWN = 200;
+
+// Camera zones: divide screen into 5 drum areas
+// x,y are normalised (0-1). drum is picked by which zone the wrist is in at hit.
+const CAM_ZONES = [
+  { drum: 'hihat', xMin: 0.0, xMax: 0.35, yMin: 0.0, yMax: 0.5, label: 'HH' },
+  { drum: 'snare', xMin: 0.35, xMax: 0.65, yMin: 0.2, yMax: 0.7, label: 'SNARE' },
+  { drum: 'ride',  xMin: 0.65, xMax: 1.0, yMin: 0.0, yMax: 0.5, label: 'RIDE' },
+  { drum: 'tom',   xMin: 0.65, xMax: 1.0, yMin: 0.5, yMax: 1.0, label: 'TOM' },
+  { drum: 'kick',  xMin: 0.35, xMax: 0.65, yMin: 0.7, yMax: 1.0, label: 'KICK' },
+];
+
+function zoneFor(x, y) {
+  for (const z of CAM_ZONES) {
+    if (x >= z.xMin && x < z.xMax && y >= z.yMin && y < z.yMax) return z;
+  }
+  return CAM_ZONES[1]; // default to snare
+}
 
 // ===== recording =====
 let recording = false;
@@ -618,15 +689,129 @@ function updateDebug() {
 // ===== mode switching =====
 function setMode(newMode) {
   mode = newMode;
-  ['tap','motion','ghost'].forEach(m => {
+  ['tap','motion','ghost','camera'].forEach(m => {
     const el = document.getElementById('mode-' + m);
     if (el) el.classList.toggle('active', m === newMode);
   });
-  pads.style.display = (newMode === 'ghost') ? 'none' : 'grid';
+  pads.style.display = (newMode === 'ghost' || newMode === 'camera') ? 'none' : 'grid';
   kitMap.style.display = (newMode === 'ghost') ? 'block' : 'none';
+  const camWrap = document.getElementById('camWrap');
+  camWrap.style.display = (newMode === 'camera') ? 'block' : 'none';
+
+  if (newMode === 'camera') {
+    startCamera();
+  } else {
+    stopCamera();
+  }
+
   if (newMode === 'tap') status.textContent = 'Tap Mode — tap the pads.';
   if (newMode === 'motion') status.textContent = 'Swing Mode — swing the phone!';
   if (newMode === 'ghost') status.textContent = calibrated ? 'Ghost Kit — swing toward invisible drums!' : 'Calibrate first!';
+  if (newMode === 'camera') status.textContent = 'Camera Mode — swing hands at invisible drums!';
+}
+
+// ===== camera mode =====
+async function startCamera() {
+  const camStatus = document.getElementById('camStatus');
+  const video = document.getElementById('cam');
+  const canvas = document.getElementById('camCanvas');
+  if (camRunning) return;
+  camStatus.textContent = 'LOADING...';
+
+  if (typeof Hands === 'undefined' || typeof Camera === 'undefined') {
+    camStatus.textContent = 'HAND TRACKING LIB FAILED TO LOAD';
+    return;
+  }
+
+  try {
+    if (!hands) {
+      hands = new Hands({
+        locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4/${f}`,
+      });
+      hands.setOptions({
+        maxNumHands: 2,
+        modelComplexity: 0,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5,
+      });
+      hands.onResults(onHandResults);
+    }
+
+    camera = new Camera(video, {
+      onFrame: async () => { if (camRunning) await hands.send({ image: video }); },
+      width: 640,
+      height: 480,
+    });
+    await camera.start();
+    camRunning = true;
+    camStatus.textContent = 'TRACKING';
+  } catch (err) {
+    camStatus.textContent = 'CAMERA DENIED OR UNAVAILABLE';
+  }
+}
+
+function stopCamera() {
+  if (!camRunning) return;
+  camRunning = false;
+  if (camera) { try { camera.stop(); } catch (_) {} }
+  const canvas = document.getElementById('camCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function onHandResults(results) {
+  const canvas = document.getElementById('camCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw drum zones
+  CAM_ZONES.forEach(z => {
+    ctx.fillStyle = 'rgba(245, 158, 11, 0.08)';
+    ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
+    ctx.lineWidth = 2;
+    const x = z.xMin * canvas.width;
+    const y = z.yMin * canvas.height;
+    const w = (z.xMax - z.xMin) * canvas.width;
+    const h = (z.yMax - z.yMin) * canvas.height;
+    ctx.fillRect(x, y, w, h);
+    ctx.strokeRect(x, y, w, h);
+    ctx.fillStyle = 'rgba(245, 158, 11, 0.9)';
+    ctx.font = 'bold 14px sans-serif';
+    ctx.fillText(z.label, x + 8, y + 20);
+  });
+
+  if (!results.multiHandLandmarks) return;
+
+  for (let i = 0; i < results.multiHandLandmarks.length && i < 2; i++) {
+    const landmarks = results.multiHandLandmarks[i];
+    const wrist = landmarks[0]; // wrist
+    const tip = landmarks[12];  // middle finger tip
+    const x = tip.x; // already 0-1 normalised
+    const y = tip.y;
+
+    // Draw hand
+    ctx.fillStyle = i === 0 ? '#ef4444' : '#10b981';
+    ctx.beginPath();
+    ctx.arc(x * canvas.width, y * canvas.height, 14, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Detect downward swing: y increases rapidly
+    const prev = wristHistory[i];
+    if (prev !== null) {
+      const dy = y - prev;
+      const now = Date.now();
+      if (dy > 0.06 && now - lastCamHit[i] > CAM_HIT_COOLDOWN) {
+        lastCamHit[i] = now;
+        const zone = zoneFor(x, y);
+        const velocity = Math.min(1, dy * 8 + 0.3);
+        playDrum(zone.drum, velocity);
+      }
+    }
+    wristHistory[i] = y;
+  }
+  // Clear unused hand history
+  if (results.multiHandLandmarks.length < 2) wristHistory[1] = null;
+  if (results.multiHandLandmarks.length < 1) wristHistory[0] = null;
 }
 
 // ===== events =====
@@ -636,6 +821,14 @@ pads.addEventListener('pointerdown', e => {
   if (p && mode === 'tap') playDrum(p.dataset.drum, 1);
 });
 document.getElementById('mode-tap').addEventListener('click', () => setMode('tap'));
+document.getElementById('mode-camera').addEventListener('click', () => setMode('camera'));
+
+const settingsToggle = document.getElementById('settingsToggle');
+const settingsBody = document.getElementById('settingsBody');
+settingsToggle.addEventListener('click', () => {
+  settingsBody.classList.toggle('open');
+  settingsToggle.classList.toggle('open');
+});
 document.getElementById('mode-motion').addEventListener('click', () => setMode('motion'));
 document.getElementById('mode-ghost').addEventListener('click', () => setMode('ghost'));
 document.getElementById('sens').addEventListener('input', e => {
