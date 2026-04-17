@@ -312,22 +312,40 @@ const wristHistory = [null, null]; // last y positions per hand
 const lastCamHit = [0, 0];
 const CAM_HIT_COOLDOWN = 200;
 
-// Camera zones: divide screen into 5 drum areas
-// x,y are normalised (0-1). drum is picked by which zone the wrist is in at hit.
+// Camera drum zones — circular/oval like real drums.
+// Positions are normalised (0-1) of the video frame.
 const CAM_ZONES = [
-  { drum: 'hihat', xMin: 0.0, xMax: 0.35, yMin: 0.0, yMax: 0.5, label: 'HH' },
-  { drum: 'snare', xMin: 0.35, xMax: 0.65, yMin: 0.2, yMax: 0.7, label: 'SNARE' },
-  { drum: 'ride',  xMin: 0.65, xMax: 1.0, yMin: 0.0, yMax: 0.5, label: 'RIDE' },
-  { drum: 'tom',   xMin: 0.65, xMax: 1.0, yMin: 0.5, yMax: 1.0, label: 'TOM' },
-  { drum: 'kick',  xMin: 0.35, xMax: 0.65, yMin: 0.7, yMax: 1.0, label: 'KICK' },
+  { drum: 'hihat', cx: 0.18, cy: 0.32, r: 0.12, color: '#facc15', label: 'HI-HAT', type: 'cymbal' },
+  { drum: 'ride',  cx: 0.82, cy: 0.32, r: 0.13, color: '#22d3ee', label: 'RIDE',   type: 'cymbal' },
+  { drum: 'tom',   cx: 0.5,  cy: 0.28, r: 0.11, color: '#34d399', label: 'TOM',    type: 'drum' },
+  { drum: 'snare', cx: 0.35, cy: 0.62, r: 0.13, color: '#f87171', label: 'SNARE',  type: 'drum' },
+  { drum: 'kick',  cx: 0.65, cy: 0.72, r: 0.16, color: '#a855f7', label: 'KICK',   type: 'drum' },
 ];
 
+// Visual state: which zone was most recently hit (for flash animation)
+const zoneFlash = {}; // drum -> timestamp
+
 function zoneFor(x, y) {
+  // Pick the nearest zone whose radius contains the point
+  let best = null, bestDist = Infinity;
   for (const z of CAM_ZONES) {
-    if (x >= z.xMin && x < z.xMax && y >= z.yMin && y < z.yMax) return z;
+    const dx = x - z.cx, dy = y - z.cy;
+    const d = Math.sqrt(dx*dx + dy*dy);
+    if (d < z.r && d < bestDist) { bestDist = d; best = z; }
   }
-  return CAM_ZONES[1]; // default to snare
+  if (best) return best;
+  // Outside any zone — pick nearest anyway (so every hit plays something)
+  for (const z of CAM_ZONES) {
+    const dx = x - z.cx, dy = y - z.cy;
+    const d = Math.sqrt(dx*dx + dy*dy);
+    if (d < bestDist) { bestDist = d; best = z; }
+  }
+  return best;
 }
+
+// Stick tip trail for smoothing + visualisation
+const trailHistory = [[], []]; // per hand: [{x, y, t}]
+const TRAIL_LEN = 10;
 
 // ===== recording =====
 let recording = false;
@@ -745,9 +763,9 @@ async function startCamera() {
       });
       hands.setOptions({
         maxNumHands: 2,
-        modelComplexity: 0,
-        minDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5,
+        modelComplexity: 1,
+        minDetectionConfidence: 0.6,
+        minTrackingConfidence: 0.6,
       });
       hands.onResults(onHandResults);
     }
@@ -774,26 +792,104 @@ function stopCamera() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+function drawKit(ctx, canvas) {
+  const W = canvas.width, H = canvas.height;
+  const now = Date.now();
+  for (const z of CAM_ZONES) {
+    const cx = z.cx * W, cy = z.cy * H;
+    const r = z.r * Math.min(W, H) * 1.2;
+
+    // Flash fade
+    const flashAt = zoneFlash[z.drum] || 0;
+    const age = now - flashAt;
+    const flash = age < 200 ? (1 - age / 200) : 0;
+
+    // Shadow
+    ctx.beginPath();
+    ctx.arc(cx, cy + 4, r, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    ctx.fill();
+
+    // Body with gradient
+    const grad = ctx.createRadialGradient(cx, cy - r * 0.3, r * 0.2, cx, cy, r);
+    if (z.type === 'cymbal') {
+      grad.addColorStop(0, lighten(z.color, 0.4));
+      grad.addColorStop(1, darken(z.color, 0.3));
+    } else {
+      grad.addColorStop(0, lighten(z.color, 0.2));
+      grad.addColorStop(0.7, z.color);
+      grad.addColorStop(1, darken(z.color, 0.4));
+    }
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Flash overlay
+    if (flash > 0) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r * (1 + flash * 0.15), 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${flash * 0.6})`;
+      ctx.fill();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = `rgba(255, 255, 255, ${flash})`;
+      ctx.stroke();
+    }
+
+    // Cymbal rings (concentric circles)
+    if (z.type === 'cymbal') {
+      ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+      ctx.lineWidth = 1;
+      for (let k = 1; k <= 5; k++) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, r * (k / 6), 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    } else {
+      // Drum rim
+      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r * 0.92, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Label
+    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    ctx.strokeStyle = 'rgba(0,0,0,0.8)';
+    ctx.lineWidth = 3;
+    ctx.font = 'bold 13px -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.strokeText(z.label, cx, cy);
+    ctx.fillText(z.label, cx, cy);
+  }
+}
+
+function lighten(hex, amt) { return mixHex(hex, '#ffffff', amt); }
+function darken(hex, amt)  { return mixHex(hex, '#000000', amt); }
+function mixHex(a, b, t) {
+  const pa = hexToRgb(a), pb = hexToRgb(b);
+  const r = Math.round(pa.r + (pb.r - pa.r) * t);
+  const g = Math.round(pa.g + (pb.g - pa.g) * t);
+  const bl = Math.round(pa.b + (pb.b - pa.b) * t);
+  return `rgb(${r},${g},${bl})`;
+}
+function hexToRgb(hex) {
+  const h = hex.replace('#', '');
+  return { r: parseInt(h.slice(0,2),16), g: parseInt(h.slice(2,4),16), b: parseInt(h.slice(4,6),16) };
+}
+
 function onHandResults(results) {
   const canvas = document.getElementById('camCanvas');
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw drum zones
-  CAM_ZONES.forEach(z => {
-    ctx.fillStyle = 'rgba(245, 158, 11, 0.08)';
-    ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
-    ctx.lineWidth = 2;
-    const x = z.xMin * canvas.width;
-    const y = z.yMin * canvas.height;
-    const w = (z.xMax - z.xMin) * canvas.width;
-    const h = (z.yMax - z.yMin) * canvas.height;
-    ctx.fillRect(x, y, w, h);
-    ctx.strokeRect(x, y, w, h);
-    ctx.fillStyle = 'rgba(245, 158, 11, 0.9)';
-    ctx.font = 'bold 14px sans-serif';
-    ctx.fillText(z.label, x + 8, y + 20);
-  });
+  // Dark overlay so kit stands out over the video
+  ctx.fillStyle = 'rgba(5, 7, 11, 0.25)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  drawKit(ctx, canvas);
 
   if (!results.multiHandLandmarks) return;
 
@@ -852,23 +948,56 @@ function onHandResults(results) {
       ctx.fill();
     }
 
-    // Detect downward swing: y increases rapidly
-    const prev = wristHistory[i];
-    if (prev !== null) {
-      const dy = y - prev;
-      const now = Date.now();
-      if (dy > 0.06 && now - lastCamHit[i] > CAM_HIT_COOLDOWN) {
-        lastCamHit[i] = now;
-        const zone = zoneFor(x, y);
-        const velocity = Math.min(1, dy * 8 + 0.3);
-        playDrum(zone.drum, velocity);
+    // Maintain a short trail of tip positions with timestamps
+    const trail = trailHistory[i];
+    trail.push({ x, y, t: Date.now() });
+    while (trail.length > TRAIL_LEN) trail.shift();
+
+    // Draw trail (fading tail behind the tip) — after we've drawn the stick
+    // above, this shows motion history so fast swings feel more visible.
+    if (trail.length > 1) {
+      for (let k = 1; k < trail.length; k++) {
+        const a = trail[k - 1], b = trail[k];
+        const alpha = (k / trail.length) * 0.5;
+        ctx.strokeStyle = color.replace('#', '').length === 6
+          ? `rgba(${parseInt(color.slice(1,3),16)},${parseInt(color.slice(3,5),16)},${parseInt(color.slice(5,7),16)},${alpha})`
+          : color;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(a.x * canvas.width, a.y * canvas.height);
+        ctx.lineTo(b.x * canvas.width, b.y * canvas.height);
+        ctx.stroke();
       }
     }
-    wristHistory[i] = y;
+
+    // Better hit detection using the trail:
+    // - Compute velocity (points per second) over the last ~60ms
+    // - Fire when moving downward fast AND the tip is inside (or close to) a zone
+    const now = Date.now();
+    if (trail.length >= 3 && now - lastCamHit[i] > CAM_HIT_COOLDOWN) {
+      const tail = trail[trail.length - 1];
+      const head = trail[Math.max(0, trail.length - 4)];
+      const dt = (tail.t - head.t) / 1000;
+      if (dt > 0) {
+        const vy = (tail.y - head.y) / dt; // +ve = moving down
+        const vx = (tail.x - head.x) / dt;
+        const vmag = Math.sqrt(vx*vx + vy*vy);
+        // Require mostly-downward motion at decent speed
+        if (vy > 1.0 && vmag > 1.2) {
+          const zone = zoneFor(x, y);
+          if (zone) {
+            lastCamHit[i] = now;
+            const velocity = Math.min(1, vmag * 0.4 + 0.25);
+            zoneFlash[zone.drum] = now;
+            playDrum(zone.drum, velocity);
+          }
+        }
+      }
+    }
   }
-  // Clear unused hand history
-  if (results.multiHandLandmarks.length < 2) wristHistory[1] = null;
-  if (results.multiHandLandmarks.length < 1) wristHistory[0] = null;
+  // Trim trails for hands that disappeared
+  if (results.multiHandLandmarks.length < 2) trailHistory[1] = [];
+  if (results.multiHandLandmarks.length < 1) trailHistory[0] = [];
 }
 
 // ===== events =====
