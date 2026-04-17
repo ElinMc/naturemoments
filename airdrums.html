@@ -373,6 +373,9 @@ function playDrum(drum, velocity = 1, when = null) {
   const zone = document.querySelector(`.zone[data-drum="${drum}"]`);
   if (zone) { zone.classList.add('hit'); setTimeout(() => zone.classList.remove('hit'), 120); }
 
+  hitCount++;
+  updateDebug();
+
   if (recording) {
     recEvents.push({ drum, velocity: v, t: Date.now() - recStartTime });
   }
@@ -570,10 +573,21 @@ function start() {
     return;
   }
 
+  // iOS "unlock" trick: play a silent buffer inside the user-gesture
+  // handler. Without this, iOS routes Web Audio to the muted category
+  // and the phone speaker stays silent even if the ringer is on.
+  try {
+    const silent = audioCtx.createBuffer(1, 1, 22050);
+    const src = audioCtx.createBufferSource();
+    src.buffer = silent;
+    src.connect(audioCtx.destination);
+    src.start(0);
+  } catch (_) {}
+
   // Play a test snare AFTER the audio context actually resumes. iOS can leave
   // the context suspended for a split second after a user gesture, and any
   // sounds scheduled during that window are silently dropped.
-  const playTest = () => playDrum('snare', 0.6);
+  const playTest = () => playDrum('snare', 0.8);
   if (audioCtx.state === 'suspended') {
     audioCtx.resume().then(playTest).catch(playTest);
   } else {
@@ -590,10 +604,13 @@ function start() {
   updateDebug();
 }
 
+let hitCount = 0;
 function updateDebug() {
+  const state = audioCtx ? audioCtx.state : 'no-ctx';
   debug.textContent =
-    'perm:' + motionPermissionResult +
-    ' | events:' + motionEventCount +
+    'audio:' + state + ' | hits:' + hitCount +
+    ' | perm:' + motionPermissionResult +
+    ' | motion-events:' + motionEventCount +
     ' | β:' + currentBeta.toFixed(0) + ' γ:' + currentGamma.toFixed(0) +
     (calibrated ? ' | calibrated' : '');
 }
