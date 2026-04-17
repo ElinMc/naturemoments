@@ -261,14 +261,20 @@ function buildKitMap() {
 
 function pickGhostDrum(ax, ay, az) {
   if (!calibrated) return 'snare';
-  // Combine the phone's current tilt (vs calibration) with the swing
-  // direction. This lets users hit distinct drums even when they hold
-  // the phone vertical and barely change orientation — the direction
-  // of the swing fills in the missing signal.
   const relBeta = currentBeta - calibBeta;
   const relGamma = currentGamma - calibGamma;
-  const effGamma = relGamma + (ax || 0) * 2.5;
-  const effBeta  = relBeta  + (-(ay || 0)) * 2.5;
+  // Convert swing acceleration to a virtual direction in degree-space so
+  // it can be compared with orientation offsets on the same scale.
+  const swingGamma = (ax || 0) * 4;
+  const swingBeta = -(ay || 0) * 4;
+  // Pick whichever signal is stronger — the phone's tilt or the swing
+  // direction. That way the user can either aim by tilting the phone
+  // (pointing toward the drum) OR by swinging in the drum's direction.
+  const orientMag = Math.abs(relBeta) + Math.abs(relGamma);
+  const swingMag = Math.abs(swingBeta) + Math.abs(swingGamma);
+  const useSwing = swingMag > orientMag;
+  const effGamma = useSwing ? swingGamma : relGamma;
+  const effBeta  = useSwing ? swingBeta  : relBeta;
   let best = KIT[0], bestDist = Infinity;
   for (const z of KIT) {
     const dB = effBeta - z.dBeta, dG = effGamma - z.dGamma;
