@@ -258,6 +258,19 @@
     <div class="meter"><div class="meter-fill" id="meter"></div></div>
 
     <div class="card">
+      <div class="section-title">Lessons</div>
+      <div id="lessonList" class="controls" style="grid-template-columns:1fr 1fr;"></div>
+      <div id="lessonActive" style="display:none;">
+        <div id="lessonDesc" style="font-size:0.78rem; color:#f1f5f9; margin-bottom:6px;"></div>
+        <div id="lessonSteps" style="margin-bottom:8px;"></div>
+        <div style="font-family:'SF Mono',Menlo,monospace; font-size:0.75rem; color:#f59e0b; font-weight:700;" id="lessonProgress"></div>
+        <div class="controls" style="margin-top:8px; grid-template-columns:1fr;">
+          <button class="btn" id="lessonStopBtn">Stop Lesson</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
       <div class="section-title">Song Mode</div>
       <div class="controls" id="songList"></div>
       <div class="song-lane" id="songLane" style="display:none;">
@@ -346,6 +359,28 @@
       <div class="controls" style="grid-template-columns:1fr;">
         <button class="btn" id="voiceToggle">Voice: OFF</button>
       </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Voice Commands</div>
+      <div style="font-size:0.65rem; color:#64748b; margin-bottom:8px; line-height:1.4;">
+        Say: "kick", "snare", "hat", "ride", "tom", "crash", "floor tom",<br>
+        "record", "play", "stop", "loop", "solo", "random"
+      </div>
+      <button class="btn" id="voiceCmdToggle" style="width:100%;">Commands: OFF</button>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Avatar</div>
+      <button class="btn" id="avatarToggle" style="width:100%;">Avatar: OFF</button>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Foot Tap Kick</div>
+      <div style="font-size:0.65rem; color:#64748b; margin-bottom:8px; line-height:1.4;">
+        Lay the phone face up on the floor, tap it with your foot = kick drum.
+      </div>
+      <button class="btn" id="footToggle" style="width:100%;">Foot Tap: OFF</button>
     </div>
 
     <div class="card">
@@ -637,6 +672,7 @@ function stepFx() {
     fxCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
     fxCtx.restore();
   }
+  drawAvatar();
   requestAnimationFrame(stepFx);
 }
 function initFx() {
@@ -924,6 +960,184 @@ function playSolo() {
   stopPlayback();
   solo.forEach(ev => playbackTimers.push(setTimeout(() => playDrum(ev.drum, 1), ev.t)));
   showToast('Drum solo!');
+}
+
+// ===== drum lessons =====
+// Interactive tutorials: an ordered sequence of drum hits with a target tempo.
+// The UI highlights the next drum to hit; when the user hits it (via any mode),
+// it advances. Shows BPM target and score.
+const LESSONS = [
+  { name: '1 — Single Strokes', seq: ['snare','snare','snare','snare','snare','snare','snare','snare'], desc: 'Hit the snare 8 times in a row. Keep it even.' },
+  { name: '2 — Kick + Snare',   seq: ['kick','snare','kick','snare','kick','snare','kick','snare'], desc: 'Alternate kick and snare. The basics of every beat.' },
+  { name: '3 — Rock Beat',      seq: ['kick','hihat','snare','hihat','kick','hihat','snare','hihat'], desc: 'Kick-and-hat, snare-and-hat. The classic rock feel.' },
+  { name: '4 — Paradiddle',     seq: ['snare','hitom','snare','snare','hitom','snare','hitom','hitom'], desc: 'R-L-R-R, L-R-L-L. Ancient drumming pattern.' },
+  { name: '5 — Tom Tour',       seq: ['hitom','tom','floortom','snare','hitom','tom','floortom','crash'], desc: 'Roll around the kit: high to low.' },
+  { name: '6 — Funk Groove',    seq: ['kick','hihat','hihat','snare','kick','kick','snare','hihat'], desc: 'Syncopated funk: double kick then snare.' },
+  { name: '7 — Jazz Ride',      seq: ['ride','ride','ride','snare','ride','ride','ride','snare'], desc: 'Ride cymbal with snare on 2 and 4.' },
+  { name: '8 — Big Finish',     seq: ['snare','hitom','tom','floortom','snare','crash','kick','crash'], desc: 'Tom roll into a big crash finish.' },
+];
+let lessonActive = null;
+let lessonStep = 0;
+let lessonHits = 0;
+let lessonMisses = 0;
+
+function startLesson(idx) {
+  lessonActive = LESSONS[idx];
+  lessonStep = 0;
+  lessonHits = 0;
+  lessonMisses = 0;
+  updateLessonDisplay();
+  document.getElementById('lessonActive').style.display = 'block';
+  document.getElementById('lessonList').style.display = 'none';
+}
+function stopLesson() {
+  lessonActive = null;
+  document.getElementById('lessonActive').style.display = 'none';
+  document.getElementById('lessonList').style.display = 'grid';
+}
+function updateLessonDisplay() {
+  if (!lessonActive) return;
+  const el = document.getElementById('lessonSteps');
+  el.innerHTML = lessonActive.seq.map((d, i) => {
+    const done = i < lessonStep;
+    const next = i === lessonStep;
+    const colour = { kick:'#a855f7', snare:'#f87171', hihat:'#facc15', hitom:'#60a5fa', tom:'#34d399', floortom:'#fb923c', ride:'#22d3ee', crash:'#f59e0b' }[d] || '#f59e0b';
+    const label = { kick:'K', snare:'S', hihat:'H', hitom:'T1', tom:'T2', floortom:'F', ride:'R', crash:'C' }[d];
+    return `<span style="display:inline-block;margin:2px;padding:6px 10px;border-radius:6px;background:${done ? '#1f2937' : (next ? colour : '#111827')};color:${done ? '#64748b' : (next ? '#0a0a0a' : '#cbd5e1')};font-weight:800;opacity:${done ? 0.5 : 1};border:${next ? '2px solid #fff' : '1px solid #1f2937'}">${label}</span>`;
+  }).join('');
+  document.getElementById('lessonDesc').textContent = lessonActive.desc;
+  document.getElementById('lessonProgress').textContent = lessonStep + ' / ' + lessonActive.seq.length + '  ·  ' + lessonHits + ' hit · ' + lessonMisses + ' miss';
+}
+function tryLessonHit(drum) {
+  if (!lessonActive || drum === 'click') return;
+  const want = lessonActive.seq[lessonStep];
+  if (drum === want) {
+    lessonStep++; lessonHits++;
+    if (lessonStep >= lessonActive.seq.length) {
+      showToast('Lesson complete!');
+      confettiBurst();
+      stopLesson();
+    } else {
+      updateLessonDisplay();
+    }
+  } else {
+    lessonMisses++;
+    updateLessonDisplay();
+  }
+}
+
+// ===== drummer avatar =====
+// Simple canvas cartoon: head, body, 2 arms. Arms raise when their hand hits
+// a drum, head bobs on kick. Drawn on the FX canvas in a corner so it doesn't
+// cover the main UI.
+let avatarEnabled = false;
+const armState = { L: 0, R: 0, head: 0 }; // 0..1 swing position, decays
+function triggerAvatar(drum) {
+  if (drum === 'kick' || drum === 'floortom') armState.head = 1;
+  if (['snare','hihat','hitom','crash'].includes(drum)) armState.L = 1;
+  if (['tom','floortom','ride'].includes(drum)) armState.R = 1;
+}
+function drawAvatar() {
+  if (!avatarEnabled || !fxCtx) return;
+  const W = fxCanvas.width, H = fxCanvas.height;
+  const cx = W - 90, cy = H - 110;
+  // Decay
+  armState.L = Math.max(0, armState.L - 0.08);
+  armState.R = Math.max(0, armState.R - 0.08);
+  armState.head = Math.max(0, armState.head - 0.06);
+  // Body
+  fxCtx.save();
+  fxCtx.strokeStyle = '#f59e0b';
+  fxCtx.lineWidth = 3;
+  fxCtx.fillStyle = '#0f172a';
+  // Head
+  fxCtx.beginPath();
+  fxCtx.arc(cx, cy - 40 + armState.head * 3, 14, 0, Math.PI * 2);
+  fxCtx.fill(); fxCtx.stroke();
+  // Body
+  fxCtx.beginPath();
+  fxCtx.moveTo(cx, cy - 26);
+  fxCtx.lineTo(cx, cy + 20);
+  fxCtx.stroke();
+  // Arms — raised when their state > 0
+  const armAngleL = Math.PI * (0.7 - armState.L * 0.6);
+  const armAngleR = Math.PI * (0.3 + armState.R * 0.6);
+  const armLen = 26;
+  fxCtx.beginPath();
+  fxCtx.moveTo(cx, cy - 18);
+  fxCtx.lineTo(cx + Math.cos(armAngleL) * armLen, cy - 18 + Math.sin(armAngleL) * armLen);
+  fxCtx.stroke();
+  fxCtx.beginPath();
+  fxCtx.moveTo(cx, cy - 18);
+  fxCtx.lineTo(cx + Math.cos(armAngleR) * armLen, cy - 18 + Math.sin(armAngleR) * armLen);
+  fxCtx.stroke();
+  // Legs
+  fxCtx.beginPath();
+  fxCtx.moveTo(cx, cy + 20);
+  fxCtx.lineTo(cx - 10, cy + 45);
+  fxCtx.moveTo(cx, cy + 20);
+  fxCtx.lineTo(cx + 10, cy + 45);
+  fxCtx.stroke();
+  fxCtx.restore();
+}
+
+// ===== foot tap detection (accelerometer on floor) =====
+// Pragmatic version: when the phone is laid flat, sharp vertical spikes =
+// foot tap. Plays kick. Toggle in settings; uses existing DeviceMotion
+// handler but with a stronger threshold to avoid overlap with Swing mode.
+let footTapEnabled = false;
+let lastFootTap = 0;
+function checkFootTap(ax, ay, az, mag) {
+  if (!footTapEnabled) return;
+  // Phone must be roughly flat (az strong) and Z-axis spike (kick foot tapping phone)
+  const now = Date.now();
+  if (Math.abs(az) > 8 && mag > 22 && now - lastFootTap > 200) {
+    lastFootTap = now;
+    playDrum('kick', 1);
+  }
+}
+
+// ===== voice commands =====
+let voiceRecognition = null;
+let voiceListening = false;
+function startVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showToast('Voice not supported here'); return; }
+  voiceRecognition = new SR();
+  voiceRecognition.continuous = true;
+  voiceRecognition.interimResults = false;
+  voiceRecognition.lang = 'en-US';
+  voiceRecognition.onresult = (e) => {
+    const last = e.results[e.results.length - 1][0].transcript.toLowerCase().trim();
+    handleVoiceCommand(last);
+  };
+  voiceRecognition.onend = () => { if (voiceListening) voiceRecognition.start(); };
+  voiceRecognition.start();
+  voiceListening = true;
+}
+function stopVoice() {
+  voiceListening = false;
+  if (voiceRecognition) { try { voiceRecognition.stop(); } catch (_) {} }
+}
+function handleVoiceCommand(text) {
+  const map = {
+    'kick':'kick','bass':'kick',
+    'snare':'snare',
+    'hat':'hihat','hi hat':'hihat','hihat':'hihat',
+    'tom':'tom','high tom':'hitom','hi tom':'hitom',
+    'mid tom':'tom','floor':'floortom','floor tom':'floortom',
+    'ride':'ride','crash':'crash',
+  };
+  for (const [word, drum] of Object.entries(map)) {
+    if (text.includes(word)) { playDrum(drum, 1); return; }
+  }
+  if (text.includes('record')) { if (!recording) startRecording(); }
+  else if (text.includes('stop'))   { if (recording) stopRecording(); stopPlayback(); if (metroOn) stopMetronome(); if (lessonActive) stopLesson(); }
+  else if (text.includes('play'))   { playRecording(); }
+  else if (text.includes('clear'))  { clearRecording(); }
+  else if (text.includes('loop'))   { loopMode = !loopMode; showToast('Loop ' + (loopMode ? 'ON' : 'OFF')); }
+  else if (text.includes('solo'))   { playSolo(); }
+  else if (text.includes('random')) { playRandomBeat(); }
 }
 
 // ===== stage skins =====
@@ -1537,6 +1751,8 @@ function playDrum(drum, velocity = 1, when = null) {
 
   if (drum !== 'click') {
     trySongHit(drum);
+    tryLessonHit(drum);
+    triggerAvatar(drum);
   }
 }
 
@@ -1605,6 +1821,7 @@ function handleMotion(e) {
   const ax = a.x || 0, ay = a.y || 0, az = a.z || 0;
   const mag = Math.sqrt(ax*ax + ay*ay + az*az);
   meter.style.width = Math.min(100, (mag / 40) * 100) + '%';
+  checkFootTap(ax, ay, az, mag);
   const now = Date.now();
   if (mag > threshold && now - lastHitTime > COOLDOWN_MS) {
     lastHitTime = now;
@@ -2283,6 +2500,48 @@ applyTheme(theme);
 // Drummer card
 showDrummer();
 document.getElementById('nextDrummer').addEventListener('click', nextDrummer);
+
+// Lessons
+const lessonListEl = document.getElementById('lessonList');
+LESSONS.forEach((l, i) => {
+  const b = document.createElement('button');
+  b.className = 'btn';
+  b.textContent = l.name;
+  b.style.fontSize = '0.68rem';
+  b.addEventListener('click', () => startLesson(i));
+  lessonListEl.appendChild(b);
+});
+document.getElementById('lessonStopBtn').addEventListener('click', stopLesson);
+
+// Voice commands toggle
+const voiceCmdBtn = document.getElementById('voiceCmdToggle');
+voiceCmdBtn.addEventListener('click', () => {
+  if (voiceListening) {
+    stopVoice();
+    voiceCmdBtn.textContent = 'Commands: OFF';
+    voiceCmdBtn.classList.remove('active');
+  } else {
+    startVoice();
+    voiceCmdBtn.textContent = 'Commands: LISTENING';
+    voiceCmdBtn.classList.add('active');
+  }
+});
+
+// Avatar toggle
+const avatarBtn = document.getElementById('avatarToggle');
+avatarBtn.addEventListener('click', () => {
+  avatarEnabled = !avatarEnabled;
+  avatarBtn.textContent = 'Avatar: ' + (avatarEnabled ? 'ON' : 'OFF');
+  avatarBtn.classList.toggle('active', avatarEnabled);
+});
+
+// Foot tap toggle
+const footBtn = document.getElementById('footToggle');
+footBtn.addEventListener('click', () => {
+  footTapEnabled = !footTapEnabled;
+  footBtn.textContent = 'Foot Tap: ' + (footTapEnabled ? 'ON' : 'OFF');
+  footBtn.classList.toggle('active', footTapEnabled);
+});
 
 // Voice count-in toggle
 const voiceBtn = document.getElementById('voiceToggle');
