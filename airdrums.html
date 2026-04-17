@@ -434,7 +434,7 @@ function getOutput() {
   if (!masterGain && audioCtx) {
     masterGain = audioCtx.createGain();
     masterGain.gain.value = masterVolume;
-    masterGain.connect(getOutput());
+    masterGain.connect(audioCtx.destination);
   }
   return masterGain;
 }
