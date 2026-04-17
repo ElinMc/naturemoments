@@ -63,11 +63,14 @@
     pointer-events: none;
   }
   .pad.hit { transform: scale(0.95); filter: brightness(1.8); box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15); }
-  .kick   { background: linear-gradient(160deg, #a855f7, #4c1d95); }
-  .snare  { background: linear-gradient(160deg, #f87171, #991b1b); }
-  .hihat  { background: linear-gradient(160deg, #facc15, #854d0e); }
-  .tom    { background: linear-gradient(160deg, #34d399, #065f46); }
-  .ride   { background: linear-gradient(160deg, #22d3ee, #155e75); }
+  .kick     { background: linear-gradient(160deg, #a855f7, #4c1d95); }
+  .snare    { background: linear-gradient(160deg, #f87171, #991b1b); }
+  .hihat    { background: linear-gradient(160deg, #facc15, #854d0e); }
+  .tom      { background: linear-gradient(160deg, #34d399, #065f46); }
+  .hitom    { background: linear-gradient(160deg, #60a5fa, #1e3a8a); }
+  .floortom { background: linear-gradient(160deg, #fb923c, #7c2d12); }
+  .ride     { background: linear-gradient(160deg, #22d3ee, #155e75); }
+  .pad-wide { grid-column: span 2; }
   .controls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
   .btn {
     padding: 12px 6px; background: #111827; color: #cbd5e1;
@@ -199,10 +202,13 @@
     </div>
 
     <div class="pads" id="pads">
-      <div class="pad hihat" data-drum="hihat">HI-HAT</div>
-      <div class="pad snare" data-drum="snare">SNARE</div>
-      <div class="pad kick"  data-drum="kick">KICK</div>
-      <div class="pad tom"   data-drum="tom">TOM</div>
+      <div class="pad hihat"    data-drum="hihat">HI-HAT</div>
+      <div class="pad ride"     data-drum="ride">RIDE</div>
+      <div class="pad hitom"    data-drum="hitom">HI TOM</div>
+      <div class="pad tom"      data-drum="tom">MID TOM</div>
+      <div class="pad snare"    data-drum="snare">SNARE</div>
+      <div class="pad floortom" data-drum="floortom">FLOOR</div>
+      <div class="pad kick pad-wide" data-drum="kick">KICK</div>
     </div>
 
     <div class="kit-map" id="kitMap" style="display:none;">
@@ -295,11 +301,13 @@ let calibrated = false;
 // beta = tilt forward/back, gamma = tilt left/right
 // Screen position: x = gamma direction (left-right), y = beta direction (up-down)
 const KIT = [
-  { drum: 'hihat', dGamma: -35, dBeta: -15, label: 'HH',    x: 18, y: 30 },
-  { drum: 'ride',  dGamma:  35, dBeta: -15, label: 'RIDE',  x: 82, y: 30 },
-  { drum: 'snare', dGamma:   0, dBeta:   0, label: 'SNARE', x: 50, y: 55 },
-  { drum: 'tom',   dGamma:  20, dBeta:  20, label: 'TOM',   x: 72, y: 70 },
-  { drum: 'kick',  dGamma:   0, dBeta:  40, label: 'KICK',  x: 50, y: 88 },
+  { drum: 'hihat',    dGamma: -40, dBeta: -10, label: 'HH',     x: 12, y: 32 },
+  { drum: 'hitom',    dGamma: -15, dBeta: -20, label: 'HI TOM', x: 34, y: 18 },
+  { drum: 'tom',      dGamma:  15, dBeta: -20, label: 'MID',    x: 58, y: 18 },
+  { drum: 'ride',     dGamma:  40, dBeta: -10, label: 'RIDE',   x: 88, y: 32 },
+  { drum: 'snare',    dGamma:   0, dBeta:   0, label: 'SNARE',  x: 32, y: 58 },
+  { drum: 'floortom', dGamma:  30, dBeta:  15, label: 'FLOOR',  x: 75, y: 58 },
+  { drum: 'kick',     dGamma:   0, dBeta:  35, label: 'KICK',   x: 50, y: 86 },
 ];
 
 // ===== camera =====
@@ -348,6 +356,18 @@ function zoneFor(x, y) {
 // Stick tip trail for smoothing + visualisation
 const trailHistory = [[], []]; // per hand: [{x, y, t}]
 const TRAIL_LEN = 10;
+// Remember which zone each hand was inside last frame so we can fire a hit
+// the moment the tip crosses INTO a zone (instant response, no velocity
+// threshold).
+const lastZoneIn = [null, null];
+
+function zoneInside(x, y) {
+  for (const z of CAM_ZONES) {
+    const dx = x - z.cx, dy = y - z.cy;
+    if (dx*dx + dy*dy < z.r * z.r) return z;
+  }
+  return null;
+}
 
 // ===== recording =====
 let recording = false;
@@ -771,9 +791,9 @@ async function startCamera() {
       });
       hands.setOptions({
         maxNumHands: 2,
-        modelComplexity: 1,
-        minDetectionConfidence: 0.6,
-        minTrackingConfidence: 0.6,
+        modelComplexity: 0,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5,
       });
       hands.onResults(onHandResults);
     }
@@ -998,34 +1018,32 @@ function onHandResults(results) {
       }
     }
 
-    // Better hit detection using the trail:
-    // - Compute velocity (points per second) over the last ~60ms
-    // - Fire when moving downward fast AND the tip is inside (or close to) a zone
+    // Instant hit: fire the moment the tip ENTERS a zone. Uses velocity
+    // (if any) just to scale loudness.
     const now = Date.now();
-    if (trail.length >= 3 && now - lastCamHit[i] > CAM_HIT_COOLDOWN) {
-      const tail = trail[trail.length - 1];
-      const head = trail[Math.max(0, trail.length - 4)];
-      const dt = (tail.t - head.t) / 1000;
-      if (dt > 0) {
-        const vy = (tail.y - head.y) / dt; // +ve = moving down
+    const currentZone = zoneInside(x, y);
+    const prevZoneName = lastZoneIn[i];
+    const currentZoneName = currentZone ? currentZone.drum : null;
+    if (currentZoneName && currentZoneName !== prevZoneName && now - lastCamHit[i] > CAM_HIT_COOLDOWN) {
+      lastCamHit[i] = now;
+      let velocity = 0.7;
+      if (trail.length >= 2) {
+        const tail = trail[trail.length - 1];
+        const head = trail[Math.max(0, trail.length - 3)];
+        const dt = Math.max(0.001, (tail.t - head.t) / 1000);
+        const vy = (tail.y - head.y) / dt;
         const vx = (tail.x - head.x) / dt;
         const vmag = Math.sqrt(vx*vx + vy*vy);
-        // Require mostly-downward motion at decent speed
-        if (vy > 1.0 && vmag > 1.2) {
-          const zone = zoneFor(x, y);
-          if (zone) {
-            lastCamHit[i] = now;
-            const velocity = Math.min(1, vmag * 0.4 + 0.25);
-            zoneFlash[zone.drum] = now;
-            playDrum(zone.drum, velocity);
-          }
-        }
+        velocity = Math.min(1, vmag * 0.3 + 0.4);
       }
+      zoneFlash[currentZone.drum] = now;
+      playDrum(currentZone.drum, velocity);
     }
+    lastZoneIn[i] = currentZoneName;
   }
   // Trim trails for hands that disappeared
-  if (results.multiHandLandmarks.length < 2) trailHistory[1] = [];
-  if (results.multiHandLandmarks.length < 1) trailHistory[0] = [];
+  if (results.multiHandLandmarks.length < 2) { trailHistory[1] = []; lastZoneIn[1] = null; }
+  if (results.multiHandLandmarks.length < 1) { trailHistory[0] = []; lastZoneIn[0] = null; }
 }
 
 // ===== events =====
