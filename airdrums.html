@@ -122,6 +122,27 @@
   }
   .beat-dot.on { background: #f59e0b; box-shadow: 0 0 12px #f59e0b; transform: scale(1.3); }
   .beat-dot.downbeat.on { background: #ef4444; box-shadow: 0 0 12px #ef4444; }
+  /* Light theme overrides */
+  html.light body { background: #f8fafc !important; background-image:
+    radial-gradient(circle at 20% 0%, rgba(245, 158, 11, 0.18), transparent 50%),
+    radial-gradient(circle at 80% 100%, rgba(239, 68, 68, 0.14), transparent 50%) !important;
+    color: #0f172a; }
+  html.light .card { background: rgba(255, 255, 255, 0.7); border-color: rgba(15, 23, 42, 0.08); }
+  html.light .section-title { color: #64748b; }
+  html.light .status { color: #475569; }
+  html.light .hint { color: #64748b; }
+  html.light .btn { background: #f1f5f9; color: #1e293b; border-color: #cbd5e1; }
+  html.light .btn.active { background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; }
+  html.light .settings-toggle { background: #fff; color: #475569; border-color: #cbd5e1; }
+  html.light input[type=range] { background: #cbd5e1; }
+  html.light .meter, html.light .xp-bar, html.light .cam-wrap, html.light .song-lane, html.light .kit-map { background: #fff; border-color: #cbd5e1; }
+  html.light select { background: #fff !important; color: #0f172a !important; border-color: #cbd5e1 !important; }
+  /* Mixer row */
+  .mix-row { display:flex; align-items:center; gap:8px; font-size:0.72rem; }
+  .mix-label { min-width:64px; color:#cbd5e1; font-weight:700; letter-spacing:0.05em; }
+  .mix-mute { padding:6px 10px; font-size:0.65rem; min-width:54px; }
+  .mix-mute.on { background:#ef4444; color:#fff; border-color:transparent; }
+  .mix-pitch { flex:1; }
   /* Stats + XP bar */
   .stat-row { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; }
   .stat-val { font-family: 'SF Mono', Menlo, monospace; color: #f59e0b; font-weight: 800; }
@@ -279,8 +300,51 @@
         <button class="btn play" id="playBtn" data-i18n="play">Play</button>
         <button class="btn" id="clearBtn" data-i18n="clear">Clear</button>
       </div>
-      <div class="controls" style="margin-top:6px; grid-template-columns: 1fr;">
+      <div class="controls" style="margin-top:6px; grid-template-columns:1fr 1fr;">
         <button class="btn" id="loopBtn">Loop: OFF</button>
+        <button class="btn" id="saveBtn">Save…</button>
+      </div>
+      <div id="savedList" style="margin-top:6px;"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Jam Helpers</div>
+      <div class="controls">
+        <button class="btn" id="randomBtn">Random Beat</button>
+        <button class="btn" id="soloBtn">Drum Solo</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Mixer</div>
+      <div id="mixerBody" style="display:flex;flex-direction:column;gap:6px;"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Stage Skin</div>
+      <div id="skinList" class="controls"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Theme</div>
+      <div class="controls" style="grid-template-columns:1fr 1fr;">
+        <button class="btn" id="themeDark">Dark</button>
+        <button class="btn" id="themeLight">Light</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Famous Drummer</div>
+      <div id="drummerCard" style="font-size:0.8rem; color:#f1f5f9; line-height:1.5;"></div>
+      <div class="controls" style="margin-top:8px; grid-template-columns:1fr;">
+        <button class="btn" id="nextDrummer">Next</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Count-In Voice</div>
+      <div class="controls" style="grid-template-columns:1fr;">
+        <button class="btn" id="voiceToggle">Voice: OFF</button>
       </div>
     </div>
 
@@ -353,6 +417,59 @@
 </div>
 
 <script>
+// ===== mixer state =====
+// Per-drum mute + pitch offset. Pitch is a semitone multiplier applied to
+// frequencies inside the synth. Mute just skips the drum entirely.
+const DRUM_NAMES = ['kick','snare','hihat','hitom','tom','floortom','ride','crash'];
+const drumMute = {}; const drumPitch = {};
+DRUM_NAMES.forEach(d => { drumMute[d] = false; drumPitch[d] = 0; });
+function pitchMul(drum) { return Math.pow(2, (drumPitch[drum] || 0) / 12); }
+
+// ===== saved beats =====
+function listSavedBeats() {
+  try { return JSON.parse(localStorage.getItem('airdrums-saved') || '[]'); }
+  catch (e) { return []; }
+}
+function writeSavedBeats(list) { localStorage.setItem('airdrums-saved', JSON.stringify(list)); }
+function saveCurrentBeat() {
+  if (!recEvents.length) { showToast('Nothing to save'); return; }
+  const name = (prompt('Name this beat:') || '').trim();
+  if (!name) return;
+  const list = listSavedBeats();
+  list.push({ name, events: recEvents, bpm: metroBpm, kit: currentKit, created: Date.now() });
+  writeSavedBeats(list);
+  refreshSavedBeats();
+  showToast('Saved: ' + name);
+}
+function loadSavedBeat(index) {
+  const list = listSavedBeats();
+  const b = list[index]; if (!b) return;
+  recEvents = b.events.slice();
+  if (b.bpm) { metroBpm = b.bpm; document.getElementById('bpm').value = b.bpm; document.getElementById('bpmVal').textContent = b.bpm; }
+  if (b.kit && KITS[b.kit]) { currentKit = b.kit; ALL_KITS.forEach(k => document.getElementById('kit-' + k).classList.toggle('active', k === b.kit)); }
+  recTime.textContent = b.events.length + ' hits · ' + b.name;
+  showToast('Loaded: ' + b.name);
+}
+function deleteSavedBeat(index) {
+  const list = listSavedBeats();
+  list.splice(index, 1);
+  writeSavedBeats(list);
+  refreshSavedBeats();
+}
+function refreshSavedBeats() {
+  const holder = document.getElementById('savedList');
+  if (!holder) return;
+  const list = listSavedBeats();
+  if (!list.length) { holder.innerHTML = '<div style="font-size:0.7rem;color:#64748b;padding:4px 0;">No saved beats yet</div>'; return; }
+  holder.innerHTML = list.map((b, i) =>
+    `<div style="display:flex;gap:6px;align-items:center;margin-top:4px;">
+      <button class="btn" data-load="${i}" style="flex:1;text-align:left;padding:8px 10px;font-size:0.72rem;">${b.name} <span style="color:#64748b">(${b.events.length})</span></button>
+      <button class="btn" data-del="${i}" style="padding:8px 10px;font-size:0.7rem;">✕</button>
+    </div>`).join('');
+  holder.querySelectorAll('[data-load]').forEach(el => el.addEventListener('click', () => loadSavedBeat(parseInt(el.dataset.load, 10))));
+  holder.querySelectorAll('[data-del]').forEach(el => el.addEventListener('click', () => deleteSavedBeat(parseInt(el.dataset.del, 10))));
+}
+
 // ===== stats / XP / achievements =====
 const defaultStats = { xp: 0, level: 1, streak: 0, lastPlay: null, totalHits: 0,
   dailyDate: null, dailyHits: 0, dailyDone: false, achievements: [] };
@@ -581,7 +698,61 @@ const SONGS = {
       p(24,'kick'),p(24,'hihat'), p(26,'snare'),p(26,'hihat'), p(28,'snare'),p(28,'hihat'), p(30,'crash'),
     ],
   },
+  'Disco Fever': { bpm: 120, notes: [
+    p(0,'kick'),p(0,'hihat'), p(2,'hihat'), p(4,'kick'),p(4,'snare'),p(4,'hihat'), p(6,'hihat'),
+    p(8,'kick'),p(8,'hihat'), p(10,'hihat'), p(12,'kick'),p(12,'snare'),p(12,'hihat'), p(14,'hihat'),
+    p(16,'kick'),p(16,'hihat'), p(18,'hihat'), p(20,'kick'),p(20,'snare'),p(20,'hihat'), p(22,'hihat'),
+    p(24,'kick'),p(24,'hihat'), p(26,'hihat'), p(28,'kick'),p(28,'snare'),p(28,'crash'), p(30,'ride'),
+  ]},
+  'Reggae': { bpm: 80, notes: [
+    p(2,'hihat'), p(4,'kick'),p(4,'snare'), p(6,'hihat'),
+    p(10,'hihat'), p(12,'kick'),p(12,'snare'), p(14,'hihat'),
+    p(18,'hihat'), p(20,'kick'),p(20,'snare'), p(22,'hihat'),
+    p(26,'hihat'), p(28,'kick'),p(28,'snare'), p(30,'crash'),
+  ]},
+  'Drum n Bass': { bpm: 170, notes: [
+    p(0,'kick'),p(0,'hihat'), p(2,'hihat'), p(4,'snare'),p(4,'hihat'), p(6,'hihat'), p(7,'kick'),
+    p(8,'hihat'), p(10,'kick'),p(10,'hihat'), p(12,'snare'),p(12,'hihat'), p(14,'hihat'),
+    p(16,'kick'),p(16,'hihat'), p(18,'hihat'), p(20,'snare'),p(20,'hihat'), p(22,'hihat'), p(23,'kick'),
+    p(24,'kick'),p(24,'hihat'), p(26,'hihat'), p(28,'snare'),p(28,'crash'), p(30,'floortom'),
+  ]},
+  'Latin Bossa': { bpm: 110, notes: [
+    p(0,'kick'),p(0,'ride'), p(2,'ride'), p(4,'snare'),p(4,'ride'), p(6,'ride'), p(7,'kick'),
+    p(8,'ride'), p(10,'ride'), p(12,'snare'),p(12,'ride'), p(14,'ride'), p(15,'kick'),
+    p(16,'kick'),p(16,'ride'), p(18,'ride'), p(20,'snare'),p(20,'ride'), p(22,'ride'),
+    p(24,'ride'), p(26,'ride'), p(28,'snare'),p(28,'ride'), p(30,'crash'),
+  ]},
+  'Shuffle Blues': { bpm: 90, notes: [
+    p(0,'kick'),p(0,'ride'), p(2,'ride'), p(4,'snare'),p(4,'ride'), p(6,'ride'),
+    p(8,'kick'),p(8,'ride'), p(10,'ride'), p(12,'snare'),p(12,'ride'), p(14,'ride'),
+    p(16,'kick'),p(16,'ride'), p(18,'ride'), p(20,'snare'),p(20,'ride'), p(22,'ride'),
+    p(24,'kick'),p(24,'ride'), p(26,'ride'), p(28,'snare'),p(28,'ride'), p(30,'crash'),
+  ]},
+  'Punk Fast': { bpm: 160, notes: [
+    p(0,'kick'),p(0,'hihat'), p(2,'hihat'), p(4,'snare'),p(4,'hihat'), p(6,'hihat'),
+    p(8,'kick'),p(8,'hihat'), p(10,'hihat'), p(12,'snare'),p(12,'hihat'), p(14,'hihat'),
+    p(16,'kick'),p(16,'hihat'), p(18,'hihat'), p(20,'snare'),p(20,'hihat'), p(22,'hihat'),
+    p(24,'kick'),p(24,'hihat'), p(26,'hihat'), p(28,'snare'),p(28,'crash'), p(30,'ride'),
+  ]},
+  'Pop Power': { bpm: 105, notes: [
+    p(0,'kick'),p(0,'hihat'), p(2,'hihat'), p(4,'snare'),p(4,'hihat'), p(6,'hihat'), p(7,'kick'),
+    p(8,'kick'),p(8,'hihat'), p(10,'hihat'), p(12,'snare'),p(12,'hihat'), p(14,'hihat'),
+    p(16,'kick'),p(16,'hihat'), p(18,'kick'),p(18,'hihat'), p(20,'snare'),p(20,'hihat'), p(22,'hihat'),
+    p(24,'kick'),p(24,'crash'), p(26,'hihat'), p(28,'snare'),p(28,'hihat'), p(30,'floortom'),
+  ]},
 };
+let songDifficulty = 'normal';
+function difficultyFilter(notes) {
+  if (songDifficulty === 'easy') return notes.filter(n => ['kick','snare','crash'].includes(n.drum));
+  if (songDifficulty === 'hard') {
+    const out = notes.slice();
+    for (const n of notes) {
+      if (n.drum === 'hihat' && Math.random() < 0.5) out.push({ t: n.t + STEP * 0.5, drum: n.drum });
+    }
+    return out;
+  }
+  return notes;
+}
 let songActive = false;
 let songStart = 0;
 let songScore = 0;
@@ -599,13 +770,14 @@ function startSong(name) {
   const song = SONGS[name];
   if (!song) return;
   currentSong = song;
+  const activeNotes = difficultyFilter(song.notes);
   songActive = true;
   songScore = 0;
   songCombo = 0;
   songMaxCombo = 0;
   songHits = 0;
   songPerfect = 0;
-  songTotal = song.notes.length;
+  songTotal = activeNotes.length;
   songScale = 100 / song.bpm; // slow down / speed up note times
   songStart = performance.now() + 2000; // 2s lead-in
   document.getElementById('songList').style.display = 'none';
@@ -616,7 +788,7 @@ function startSong(name) {
   songNoteElements.forEach(el => el.remove());
   songNoteElements = [];
   const lane = document.getElementById('songLane');
-  for (const n of song.notes) {
+  for (const n of activeNotes) {
     const el = document.createElement('div');
     el.className = 'note-chip';
     const drumColor = {
@@ -720,6 +892,105 @@ function trySongHit(drum) {
   document.getElementById('score').textContent = 'Score: ' + Math.round(songScore);
   if (songCombo > 0 && songCombo % 10 === 0) confettiBurst();
   return true;
+}
+
+// ===== random beat + drum solo =====
+function generateRandomBeat() {
+  const drums = ['kick','snare','hihat','tom','floortom'];
+  const pattern = [];
+  const steps = 16;
+  for (let i = 0; i < steps; i++) {
+    if (i % 8 === 0) pattern.push({ t: i * STEP, drum: 'kick' });
+    if (i % 8 === 4) pattern.push({ t: i * STEP, drum: 'snare' });
+    if (Math.random() < 0.7) pattern.push({ t: i * STEP, drum: 'hihat' });
+    if (Math.random() < 0.15) pattern.push({ t: i * STEP, drum: drums[Math.floor(Math.random() * drums.length)] });
+  }
+  return pattern;
+}
+function playRandomBeat() {
+  const beat = generateRandomBeat();
+  stopPlayback();
+  beat.forEach(ev => playbackTimers.push(setTimeout(() => playDrum(ev.drum, 0.8), ev.t)));
+  showToast('Random beat');
+}
+function playSolo() {
+  const solo = [
+    { t:    0, drum: 'snare' }, { t:  100, drum: 'snare' }, { t:  200, drum: 'snare' },
+    { t:  300, drum: 'hitom' }, { t:  400, drum: 'tom' },   { t:  500, drum: 'floortom' },
+    { t:  600, drum: 'snare' }, { t:  700, drum: 'snare' }, { t:  800, drum: 'tom' },
+    { t:  900, drum: 'tom' },   { t: 1000, drum: 'floortom' }, { t: 1100, drum: 'floortom' },
+    { t: 1200, drum: 'crash' }, { t: 1200, drum: 'kick' },
+  ];
+  stopPlayback();
+  solo.forEach(ev => playbackTimers.push(setTimeout(() => playDrum(ev.drum, 1), ev.t)));
+  showToast('Drum solo!');
+}
+
+// ===== stage skins =====
+const SKINS = {
+  black:   { name: 'Black',    bg: '#05070b', tint1: 'rgba(245, 158, 11, 0.08)', tint2: 'rgba(239, 68, 68, 0.06)' },
+  stadium: { name: 'Stadium',  bg: '#0b0f1a', tint1: 'rgba(59, 130, 246, 0.15)', tint2: 'rgba(239, 68, 68, 0.12)' },
+  garage:  { name: 'Garage',   bg: '#14110f', tint1: 'rgba(120, 80, 40, 0.18)',  tint2: 'rgba(80, 60, 40, 0.15)' },
+  neon:    { name: 'Neon',     bg: '#0a0016', tint1: 'rgba(168, 85, 247, 0.22)', tint2: 'rgba(34, 211, 238, 0.18)' },
+  beach:   { name: 'Beach',    bg: '#0b1a24', tint1: 'rgba(34, 211, 238, 0.18)', tint2: 'rgba(250, 204, 21, 0.15)' },
+};
+function applySkin(name) {
+  const s = SKINS[name] || SKINS.black;
+  document.body.style.background = s.bg;
+  document.body.style.backgroundImage =
+    `radial-gradient(circle at 20% 0%, ${s.tint1}, transparent 50%),` +
+    `radial-gradient(circle at 80% 100%, ${s.tint2}, transparent 50%)`;
+  localStorage.setItem('airdrums-skin', name);
+}
+
+// ===== theme (light/dark) =====
+let theme = localStorage.getItem('airdrums-theme') || 'dark';
+function applyTheme(t) {
+  theme = t;
+  document.documentElement.classList.toggle('light', t === 'light');
+  localStorage.setItem('airdrums-theme', t);
+}
+
+// ===== famous drummers =====
+const DRUMMERS = [
+  { name: 'John Bonham',       band: 'Led Zeppelin',    note: 'Huge thumping kick. The sound of "When the Levee Breaks".' },
+  { name: 'Travis Barker',     band: 'Blink-182',       note: 'Super fast, punk energy. Perfect snare crack.' },
+  { name: 'Neil Peart',        band: 'Rush',            note: 'Giant kit, jaw-dropping solos. Precision and power.' },
+  { name: 'Ringo Starr',       band: 'The Beatles',     note: 'Solid grooves. Every drummer learns his feel first.' },
+  { name: 'Keith Moon',        band: 'The Who',         note: 'Wild, chaotic fills. Broke lots of drums.' },
+  { name: 'Dave Grohl',        band: 'Nirvana / Foos',  note: 'Heavy-hitting, huge pocket. Became a guitarist too.' },
+  { name: 'Questlove',         band: 'The Roots',       note: 'Deep hip-hop groove. Hip-hop meets live drumming.' },
+  { name: 'Buddy Rich',        band: 'Jazz legend',     note: 'Fastest hands in jazz. Incredible technique.' },
+  { name: 'Sheila E.',         band: 'Prince band',     note: 'Percussion queen. Latin + pop + funk.' },
+  { name: 'Meg White',         band: 'White Stripes',   note: 'Simple, primal, unforgettable beats.' },
+];
+let drummerIndex = 0;
+function nextDrummer() {
+  drummerIndex = (drummerIndex + 1) % DRUMMERS.length;
+  showDrummer();
+}
+function showDrummer() {
+  const d = DRUMMERS[drummerIndex];
+  const el = document.getElementById('drummerCard');
+  if (!el) return;
+  el.innerHTML = `<strong style="color:#f59e0b">${d.name}</strong><br>
+    <span style="color:#94a3b8;font-size:0.72rem">${d.band}</span><br>
+    <span style="font-size:0.75rem">${d.note}</span>`;
+}
+
+// ===== TTS count-in =====
+let useVoiceCountIn = false;
+function speakNumber(n) {
+  if (!useVoiceCountIn || !('speechSynthesis' in window)) return;
+  const utter = new SpeechSynthesisUtterance(String(n));
+  const langMap = { en:'en', nl:'nl', de:'de', fr:'fr', es:'es', pt:'pt', it:'it', pl:'pl', ru:'ru', tr:'tr',
+                    sv:'sv', da:'da', no:'no', fi:'fi', el:'el', cs:'cs', uk:'uk', ar:'ar', he:'he', hi:'hi',
+                    id:'id', vi:'vi', th:'th', zh:'zh', ja:'ja', ko:'ko', cy:'cy' };
+  utter.lang = langMap[currentLang] || 'en';
+  utter.rate = 1.4;
+  utter.volume = 0.8;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utter);
 }
 
 // ===== i18n =====
@@ -1148,22 +1419,24 @@ const KITS = {
 
 function playDrum(drum, velocity = 1, when = null) {
   if (!audioCtx) return;
+  if (drum !== 'click' && drumMute[drum]) return;
   ensureAudio();
   const now = when != null ? when : audioCtx.currentTime;
   const v = Math.min(1, Math.max(0.2, velocity));
   const K = KITS[currentKit] || KITS.rock;
+  const pm = drum === 'click' ? 1 : pitchMul(drum);
 
   if (drum === 'kick') {
     const osc = audioCtx.createOscillator(), g = audioCtx.createGain();
     osc.type = K.kickOscType;
-    osc.frequency.setValueAtTime(K.kickF1, now);
-    osc.frequency.exponentialRampToValueAtTime(K.kickF2, now + 0.1);
+    osc.frequency.setValueAtTime(K.kickF1 * pm, now);
+    osc.frequency.exponentialRampToValueAtTime(K.kickF2 * pm, now + 0.1);
     g.gain.setValueAtTime(v * 1.1, now);
     g.gain.exponentialRampToValueAtTime(0.001, now + K.kickDecay);
     osc.connect(g).connect(getOutput());
     osc.start(now); osc.stop(now + K.kickDecay + 0.05);
     const click = makeNoise(0.02), cf = audioCtx.createBiquadFilter(), cg = audioCtx.createGain();
-    cf.type = 'bandpass'; cf.frequency.value = 2200;
+    cf.type = 'bandpass'; cf.frequency.value = 2200 * pm;
     cg.gain.setValueAtTime(v * 0.35, now);
     cg.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
     click.connect(cf).connect(cg).connect(getOutput());
@@ -1171,13 +1444,13 @@ function playDrum(drum, velocity = 1, when = null) {
   } else if (drum === 'snare') {
     const osc = audioCtx.createOscillator(), og = audioCtx.createGain();
     osc.type = K.snareBodyType;
-    osc.frequency.setValueAtTime(K.snareF, now);
+    osc.frequency.setValueAtTime(K.snareF * pm, now);
     og.gain.setValueAtTime(v * 0.35, now);
     og.gain.exponentialRampToValueAtTime(0.001, now + K.snareDecay * 0.7);
     osc.connect(og).connect(getOutput());
     osc.start(now); osc.stop(now + K.snareDecay);
     const n = makeNoise(K.snareDecay + 0.04), f = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
-    f.type = 'highpass'; f.frequency.value = K.snareNoiseHP;
+    f.type = 'highpass'; f.frequency.value = K.snareNoiseHP * pm;
     g.gain.setValueAtTime(v * K.snareNoiseGain, now);
     g.gain.exponentialRampToValueAtTime(0.001, now + K.snareDecay);
     n.connect(f).connect(g).connect(getOutput());
@@ -1185,8 +1458,8 @@ function playDrum(drum, velocity = 1, when = null) {
   } else if (drum === 'hihat') {
     const n = makeNoise(K.hihatDecay + 0.02), hf = audioCtx.createBiquadFilter();
     const bf = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
-    hf.type = 'highpass'; hf.frequency.value = K.hihatHP;
-    bf.type = 'bandpass'; bf.frequency.value = K.hihatBP; bf.Q.value = 1;
+    hf.type = 'highpass'; hf.frequency.value = K.hihatHP * pm;
+    bf.type = 'bandpass'; bf.frequency.value = K.hihatBP * pm; bf.Q.value = 1;
     g.gain.setValueAtTime(v * K.hihatGain, now);
     g.gain.exponentialRampToValueAtTime(0.001, now + K.hihatDecay);
     n.connect(hf).connect(bf).connect(g).connect(getOutput());
@@ -1218,8 +1491,8 @@ function playDrum(drum, velocity = 1, when = null) {
     // Long bright splash
     const n = makeNoise(1.2), hf = audioCtx.createBiquadFilter();
     const bf = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
-    hf.type = 'highpass'; hf.frequency.value = 3500;
-    bf.type = 'bandpass'; bf.frequency.value = 7000; bf.Q.value = 1.2;
+    hf.type = 'highpass'; hf.frequency.value = 3500 * pm;
+    bf.type = 'bandpass'; bf.frequency.value = 7000 * pm; bf.Q.value = 1.2;
     g.gain.setValueAtTime(v * 0.5, now);
     g.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
     n.connect(hf).connect(bf).connect(g).connect(getOutput());
@@ -1227,15 +1500,15 @@ function playDrum(drum, velocity = 1, when = null) {
   } else if (drum === 'ride') {
     const n = makeNoise(K.rideDecay + 0.1), hf = audioCtx.createBiquadFilter();
     const bf = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
-    hf.type = 'highpass'; hf.frequency.value = K.rideHP;
-    bf.type = 'bandpass'; bf.frequency.value = K.rideBP; bf.Q.value = 2;
+    hf.type = 'highpass'; hf.frequency.value = K.rideHP * pm;
+    bf.type = 'bandpass'; bf.frequency.value = K.rideBP * pm; bf.Q.value = 2;
     g.gain.setValueAtTime(v * 0.26, now);
     g.gain.exponentialRampToValueAtTime(0.001, now + K.rideDecay);
     n.connect(hf).connect(bf).connect(g).connect(getOutput());
     n.start(now);
     const osc = audioCtx.createOscillator(), og = audioCtx.createGain();
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(K.rideBellF, now);
+    osc.frequency.setValueAtTime(K.rideBellF * pm, now);
     og.gain.setValueAtTime(v * 0.07, now);
     og.gain.exponentialRampToValueAtTime(0.001, now + K.rideDecay * 0.7);
     osc.connect(og).connect(getOutput());
@@ -1365,6 +1638,7 @@ function startRecording() {
   let c = 0;
   const click = () => {
     playDrum('click', c === 0 ? 1 : 0.6);
+    speakNumber(c + 1);
     for (let i = 0; i < 4; i++) {
       const d = document.getElementById('dot' + i);
       if (d) d.classList.toggle('on', i === c);
@@ -1926,8 +2200,98 @@ Object.keys(SONGS).forEach(name => {
   btn.addEventListener('click', () => startSong(name));
   songList.appendChild(btn);
 });
+// Difficulty buttons prepended
+const diffWrap = document.createElement('div');
+diffWrap.className = 'controls';
+diffWrap.style.marginBottom = '8px';
+diffWrap.innerHTML = '<button class="btn" data-diff="easy">Easy</button>' +
+  '<button class="btn active" data-diff="normal">Normal</button>' +
+  '<button class="btn" data-diff="hard">Hard</button>';
+songList.parentNode.insertBefore(diffWrap, songList);
+diffWrap.querySelectorAll('[data-diff]').forEach(b => {
+  b.addEventListener('click', () => {
+    songDifficulty = b.dataset.diff;
+    diffWrap.querySelectorAll('[data-diff]').forEach(x => x.classList.toggle('active', x === b));
+  });
+});
 document.getElementById('songStopBtn').addEventListener('click', stopSong);
 document.getElementById('songResultBtn').addEventListener('click', stopSong);
+
+// Save / jam helpers
+document.getElementById('saveBtn').addEventListener('click', saveCurrentBeat);
+document.getElementById('randomBtn').addEventListener('click', playRandomBeat);
+document.getElementById('soloBtn').addEventListener('click', playSolo);
+refreshSavedBeats();
+
+// Mixer (mute + pitch per drum)
+const mixerBody = document.getElementById('mixerBody');
+DRUM_NAMES.forEach(d => {
+  const row = document.createElement('div');
+  row.className = 'mix-row';
+  const label = { kick:'KICK', snare:'SNARE', hihat:'HIHAT', hitom:'HI TOM', tom:'MID TOM', floortom:'FLOOR', ride:'RIDE', crash:'CRASH' }[d];
+  row.innerHTML = `<span class="mix-label">${label}</span>
+    <button class="btn mix-mute" data-mute="${d}">Mute</button>
+    <input type="range" class="mix-pitch" data-pitch="${d}" min="-12" max="12" value="0" step="1">
+    <span style="min-width:26px; text-align:right; color:#f59e0b; font-family:'SF Mono',Menlo,monospace; font-weight:700;" data-pv="${d}">0</span>`;
+  mixerBody.appendChild(row);
+});
+mixerBody.querySelectorAll('[data-mute]').forEach(b => {
+  b.addEventListener('click', () => {
+    const d = b.dataset.mute;
+    drumMute[d] = !drumMute[d];
+    b.classList.toggle('on', drumMute[d]);
+    b.textContent = drumMute[d] ? 'Muted' : 'Mute';
+  });
+});
+mixerBody.querySelectorAll('[data-pitch]').forEach(inp => {
+  inp.addEventListener('input', e => {
+    const d = inp.dataset.pitch;
+    drumPitch[d] = parseInt(inp.value, 10);
+    mixerBody.querySelector(`[data-pv="${d}"]`).textContent = inp.value;
+  });
+});
+
+// Skins
+const skinList = document.getElementById('skinList');
+skinList.style.gridTemplateColumns = 'repeat(3, 1fr)';
+Object.entries(SKINS).forEach(([key, s]) => {
+  const b = document.createElement('button');
+  b.className = 'btn';
+  b.textContent = s.name;
+  b.addEventListener('click', () => {
+    applySkin(key);
+    skinList.querySelectorAll('button').forEach(x => x.classList.toggle('active', x === b));
+  });
+  skinList.appendChild(b);
+});
+applySkin(localStorage.getItem('airdrums-skin') || 'black');
+
+// Theme
+document.getElementById('themeDark').addEventListener('click', () => {
+  applyTheme('dark');
+  document.getElementById('themeDark').classList.add('active');
+  document.getElementById('themeLight').classList.remove('active');
+});
+document.getElementById('themeLight').addEventListener('click', () => {
+  applyTheme('light');
+  document.getElementById('themeLight').classList.add('active');
+  document.getElementById('themeDark').classList.remove('active');
+});
+applyTheme(theme);
+(theme === 'light' ? document.getElementById('themeLight') : document.getElementById('themeDark')).classList.add('active');
+
+// Drummer card
+showDrummer();
+document.getElementById('nextDrummer').addEventListener('click', nextDrummer);
+
+// Voice count-in toggle
+const voiceBtn = document.getElementById('voiceToggle');
+voiceBtn.addEventListener('click', () => {
+  useVoiceCountIn = !useVoiceCountIn;
+  voiceBtn.textContent = 'Voice: ' + (useVoiceCountIn ? 'ON' : 'OFF');
+  voiceBtn.classList.toggle('active', useVoiceCountIn);
+  if (useVoiceCountIn) speakNumber(1);
+});
 
 // Initialise gamification UI
 initFx();
