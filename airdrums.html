@@ -258,19 +258,6 @@
     <div class="meter"><div class="meter-fill" id="meter"></div></div>
 
     <div class="card">
-      <div class="section-title">Lessons</div>
-      <div id="lessonList" class="controls" style="grid-template-columns:1fr 1fr;"></div>
-      <div id="lessonActive" style="display:none;">
-        <div id="lessonDesc" style="font-size:0.78rem; color:#f1f5f9; margin-bottom:6px;"></div>
-        <div id="lessonSteps" style="margin-bottom:8px;"></div>
-        <div style="font-family:'SF Mono',Menlo,monospace; font-size:0.75rem; color:#f59e0b; font-weight:700;" id="lessonProgress"></div>
-        <div class="controls" style="margin-top:8px; grid-template-columns:1fr;">
-          <button class="btn" id="lessonStopBtn">Stop Lesson</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
       <div class="section-title">Song Mode</div>
       <div class="controls" id="songList"></div>
       <div class="song-lane" id="songLane" style="display:none;">
@@ -318,14 +305,6 @@
         <button class="btn" id="saveBtn">Save…</button>
       </div>
       <div id="savedList" style="margin-top:6px;"></div>
-    </div>
-
-    <div class="card">
-      <div class="section-title">Jam Helpers</div>
-      <div class="controls">
-        <button class="btn" id="randomBtn">Random Beat</button>
-        <button class="btn" id="soloBtn">Drum Solo</button>
-      </div>
     </div>
 
     <div class="card">
@@ -2501,17 +2480,11 @@ applyTheme(theme);
 showDrummer();
 document.getElementById('nextDrummer').addEventListener('click', nextDrummer);
 
-// Lessons
-const lessonListEl = document.getElementById('lessonList');
-LESSONS.forEach((l, i) => {
-  const b = document.createElement('button');
-  b.className = 'btn';
-  b.textContent = l.name;
-  b.style.fontSize = '0.68rem';
-  b.addEventListener('click', () => startLesson(i));
-  lessonListEl.appendChild(b);
-});
-document.getElementById('lessonStopBtn').addEventListener('click', stopLesson);
+// Lessons card removed from UI; startLesson/stopLesson kept in case
+// voice commands call them later, but we don't wire any button to them.
+
+// Random / solo buttons removed from UI as well; their functions
+// (playRandomBeat, playSolo) still exist so voice commands can trigger them.
 
 // Voice commands toggle
 const voiceCmdBtn = document.getElementById('voiceCmdToggle');
