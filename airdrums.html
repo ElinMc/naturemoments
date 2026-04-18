@@ -350,11 +350,6 @@
     </div>
 
     <div class="card">
-      <div class="section-title">Avatar</div>
-      <button class="btn" id="avatarToggle" style="width:100%;">Avatar: OFF</button>
-    </div>
-
-    <div class="card">
       <div class="section-title">Foot Tap Kick</div>
       <div style="font-size:0.65rem; color:#64748b; margin-bottom:8px; line-height:1.4;">
         Lay the phone face up on the floor, tap it with your foot = kick drum.
@@ -385,11 +380,6 @@
         <input type="range" id="vol" min="0" max="100" value="80">
         <span class="sens-val" id="volVal">80</span>
       </div>
-    </div>
-
-    <div class="card">
-      <div class="section-title" data-i18n="ghostKit">Ghost Kit</div>
-      <button class="btn" id="calibBtn" style="width:100%;" data-i18n="calibrate">Calibrate</button>
     </div>
 
     <div class="card">
@@ -1542,7 +1532,7 @@ const recTime = document.getElementById('recTime');
 const recBtn = document.getElementById('recBtn');
 const playBtn = document.getElementById('playBtn');
 const clearBtn = document.getElementById('clearBtn');
-const calibBtn = document.getElementById('calibBtn');
+const calibBtn = null;
 const debug = document.getElementById('debug');
 
 // ===== sound =====
@@ -2026,7 +2016,14 @@ function setMode(newMode) {
 
   if (newMode === 'tap') status.textContent = 'Tap Mode — tap the pads.';
   if (newMode === 'motion') status.textContent = 'Swing Mode — swing the phone!';
-  if (newMode === 'ghost') status.textContent = calibrated ? 'Ghost Kit — swing toward invisible drums!' : 'Calibrate first!';
+  if (newMode === 'ghost') {
+    if (!calibrated) {
+      calibBeta = currentBeta;
+      calibGamma = currentGamma;
+      calibrated = true;
+    }
+    status.textContent = 'Ghost Kit — swing toward invisible drums!';
+  }
   if (newMode === 'camera') status.textContent = 'Camera Mode — swing hands at invisible drums!';
 }
 
@@ -2329,15 +2326,7 @@ document.getElementById('sens').addEventListener('input', e => {
 recBtn.addEventListener('click', () => recording ? stopRecording() : startRecording());
 playBtn.addEventListener('click', playRecording);
 clearBtn.addEventListener('click', clearRecording);
-calibBtn.addEventListener('click', () => {
-  calibBeta = currentBeta;
-  calibGamma = currentGamma;
-  calibrated = true;
-  calibBtn.textContent = 'Recalibrate';
-  calibBtn.classList.add('active');
-  if (mode === 'ghost') status.textContent = 'Ghost kit calibrated — swing!';
-  updateDebug();
-});
+// Ghost kit card removed — auto-calibrate on first entry into ghost mode.
 
 document.getElementById('bpm').addEventListener('input', e => {
   metroBpm = parseInt(e.target.value, 10);
@@ -2498,14 +2487,6 @@ voiceCmdBtn.addEventListener('click', () => {
     voiceCmdBtn.textContent = 'Commands: LISTENING';
     voiceCmdBtn.classList.add('active');
   }
-});
-
-// Avatar toggle
-const avatarBtn = document.getElementById('avatarToggle');
-avatarBtn.addEventListener('click', () => {
-  avatarEnabled = !avatarEnabled;
-  avatarBtn.textContent = 'Avatar: ' + (avatarEnabled ? 'ON' : 'OFF');
-  avatarBtn.classList.toggle('active', avatarEnabled);
 });
 
 // Foot tap toggle
