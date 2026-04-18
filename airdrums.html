@@ -227,10 +227,9 @@
   <button class="start-btn" id="start" data-i18n="start">Start</button>
 
   <div id="main" style="display:none; flex-direction:column; gap:12px;">
-    <div class="mode-grid">
+    <div class="mode-grid" style="grid-template-columns: repeat(3, 1fr);">
       <button class="btn active" id="mode-tap" data-i18n="modeTap">Tap</button>
       <button class="btn" id="mode-motion" data-i18n="modeSwing">Swing</button>
-      <button class="btn" id="mode-ghost" data-i18n="modeGhost">Ghost</button>
       <button class="btn" id="mode-camera" data-i18n="modeCam">Cam</button>
     </div>
 
@@ -2318,7 +2317,6 @@ settingsToggle.addEventListener('click', () => {
   settingsToggle.classList.toggle('open');
 });
 document.getElementById('mode-motion').addEventListener('click', () => setMode('motion'));
-document.getElementById('mode-ghost').addEventListener('click', () => setMode('ghost'));
 document.getElementById('sens').addEventListener('input', e => {
   threshold = parseInt(e.target.value, 10);
   document.getElementById('sensVal').textContent = threshold;
