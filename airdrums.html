@@ -2402,10 +2402,9 @@ diffWrap.querySelectorAll('[data-diff]').forEach(b => {
 document.getElementById('songStopBtn').addEventListener('click', stopSong);
 document.getElementById('songResultBtn').addEventListener('click', stopSong);
 
-// Save / jam helpers
+// Save button (Random / Solo buttons were removed from the UI;
+// functions are still callable via voice commands).
 document.getElementById('saveBtn').addEventListener('click', saveCurrentBeat);
-document.getElementById('randomBtn').addEventListener('click', playRandomBeat);
-document.getElementById('soloBtn').addEventListener('click', playSolo);
 refreshSavedBeats();
 
 // Mixer (mute + pitch per drum)
