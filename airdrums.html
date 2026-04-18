@@ -319,13 +319,6 @@
     </div>
 
     <div class="card">
-      <div class="section-title">Count-In Voice</div>
-      <div class="controls" style="grid-template-columns:1fr;">
-        <button class="btn" id="voiceToggle">Voice: OFF</button>
-      </div>
-    </div>
-
-    <div class="card">
       <div class="section-title">Voice Commands</div>
       <div style="font-size:0.65rem; color:#64748b; margin-bottom:8px; line-height:1.4;">
         Say: "kick", "snare", "hat", "ride", "tom", "crash", "floor tom",<br>
@@ -2459,14 +2452,7 @@ footBtn.addEventListener('click', () => {
   footBtn.classList.toggle('active', footTapEnabled);
 });
 
-// Voice count-in toggle
-const voiceBtn = document.getElementById('voiceToggle');
-voiceBtn.addEventListener('click', () => {
-  useVoiceCountIn = !useVoiceCountIn;
-  voiceBtn.textContent = 'Voice: ' + (useVoiceCountIn ? 'ON' : 'OFF');
-  voiceBtn.classList.toggle('active', useVoiceCountIn);
-  if (useVoiceCountIn) speakNumber(1);
-});
+// Count-in voice card removed.
 
 // Initialise gamification UI
 initFx();
