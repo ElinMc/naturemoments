@@ -256,20 +256,6 @@
 
     <div class="meter"><div class="meter-fill" id="meter"></div></div>
 
-    <div class="card">
-      <div class="section-title">Song Mode</div>
-      <div class="controls" id="songList"></div>
-      <div class="song-lane" id="songLane" style="display:none;">
-        <div class="hit-line"></div>
-        <div class="combo" id="combo">x0</div>
-        <div class="score" id="score">Score: 0</div>
-      </div>
-      <div class="controls" style="margin-top:6px; grid-template-columns:1fr 1fr;">
-        <button class="btn" id="songStopBtn" style="display:none;">Stop</button>
-        <button class="btn" id="songResultBtn" style="display:none;">Again</button>
-      </div>
-    </div>
-
     <button class="settings-toggle" id="settingsToggle">
       <span data-i18n="settings">Settings</span><span class="chev">▼</span>
     </button>
@@ -773,6 +759,7 @@ let songScale = 1; // ms scale based on BPM
 function startSong(name) {
   const song = SONGS[name];
   if (!song) return;
+  if (!document.getElementById('songList')) return; // UI removed
   currentSong = song;
   const activeNotes = difficultyFilter(song.notes);
   songActive = true;
@@ -2374,31 +2361,9 @@ document.getElementById('vol').addEventListener('input', e => {
   }
 });
 
-// Song mode buttons
-const songList = document.getElementById('songList');
-Object.keys(SONGS).forEach(name => {
-  const btn = document.createElement('button');
-  btn.className = 'btn';
-  btn.textContent = name;
-  btn.addEventListener('click', () => startSong(name));
-  songList.appendChild(btn);
-});
-// Difficulty buttons prepended
-const diffWrap = document.createElement('div');
-diffWrap.className = 'controls';
-diffWrap.style.marginBottom = '8px';
-diffWrap.innerHTML = '<button class="btn" data-diff="easy">Easy</button>' +
-  '<button class="btn active" data-diff="normal">Normal</button>' +
-  '<button class="btn" data-diff="hard">Hard</button>';
-songList.parentNode.insertBefore(diffWrap, songList);
-diffWrap.querySelectorAll('[data-diff]').forEach(b => {
-  b.addEventListener('click', () => {
-    songDifficulty = b.dataset.diff;
-    diffWrap.querySelectorAll('[data-diff]').forEach(x => x.classList.toggle('active', x === b));
-  });
-});
-document.getElementById('songStopBtn').addEventListener('click', stopSong);
-document.getElementById('songResultBtn').addEventListener('click', stopSong);
+// Song Mode card removed from UI. startSong/stopSong/trySongHit stay
+// defined but are unreachable from buttons (they noop without the
+// #songList and #songLane elements).
 
 // Save button (Random / Solo buttons were removed from the UI;
 // functions are still callable via voice commands).
