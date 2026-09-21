@@ -242,21 +242,42 @@ SaySomethingin's look could not be inspected directly, so this is our own direct
 
 ### 9.1 Recommendation
 
-Build the web app with **Vite, TypeScript and Svelte** as an installable Progressive Web App, then wrap it with **Capacitor** for the App Store. On iOS, playback and downloaded audio go through native plugins from day one, because WebView audio stops when the screen locks and Safari can evict cached files after seven days. Abstract playback behind one interface with a web implementation and a native implementation.
+Build the web app as an installable Progressive Web App, then wrap it with **Capacitor** for the App Store. For the household trial use plain HTML, CSS and JavaScript with no build step and no dependencies, as the other apps in this repository do; move to **Vite, TypeScript and Svelte** when the proper build starts. On iOS, playback and downloaded audio go through native plugins from day one, because WebView audio stops when the screen locks and Safari can evict cached files after seven days. Abstract playback behind one interface with a web implementation and a native implementation.
 
 Why not the current single-file vanilla style of the other apps in this repository: offline audio packs, spaced repetition state, accounts and payments justify a build step. Why Svelte: small output, easy to read, no framework overhead in the player. React with Expo is the credible alternative if you prefer one runtime for web and native.
 
 ### 9.2 Pieces
 
 - **Content:** lesson scripts as JSON (prompt, target, chunk IDs, pause length, audio refs, level and strand tags). Scripts live in the repository; audio is generated from them and packed per session.
-- **Audio:** two nl-NL neural voices, one female and one male, from Azure Neural HD or ElevenLabs, plus a native narrator recording for English prompts or a good English neural voice. A native Dutch speaker audits 200 random sentences for stress and the g, ch and ui sounds before launch. Later, record human voices for the 300 most frequent chunks. Cost for 6,000 sentences in two voices: tens of dollars in TTS.
+- **Audio:** two nl-NL voices, one female and one male. EU-first order of preference: (1) human recordings by two Dutch speakers, which is the most sovereign option and the best quality, and for a household trial of 300 phrases is under an hour of recording; (2) Acapela (Belgium), a long-standing EU text-to-speech vendor with Dutch voices; (3) Piper, open source and self-hosted on our own EU server, free but noticeably robotic. The best-sounding neural Dutch voices (Azure, Google, Amazon, ElevenLabs) are all US companies; if the EU options are not good enough, that is a quality-versus-sovereignty decision to take explicitly, not by default. A native Dutch speaker audits 200 random sentences for stress and the g, ch and ui sounds before launch.
 - **Scheduling:** authored interleaving in the script, plus ts-fsrs for the optional review block.
 - **Storage:** Dexie (IndexedDB) for progress and settings, Cache API on web and Capacitor Filesystem on iOS for audio packs, progress synced to an EU-hosted backend.
-- **Backend:** small but present from the first build, because a page in a browser cannot send email on a schedule while it is closed. Needed: a store of learners (email, time zone, send time, days, current klets, completed kletsen), a scheduled job that runs every fifteen minutes and sends the emails due, an email sender and an endpoint the app calls when a klets is finished. Recommended: Cloudflare Pages for the static app plus a Cloudflare Worker with a cron trigger and a D1 database, with Resend for email (free tier covers thousands of emails a month, EU data region available). Supabase in Frankfurt with pg_cron and an edge function is the alternative if we want Postgres and built-in magic-link login from day one. Stripe on the web later. App Store in-app purchase as convenience later, with the web as the primary sales channel.
+- **Backend:** small but present from the first build, because a page in a browser cannot send email on a schedule while it is closed. Needed: a store of learners (email, time zone, send time, days, current klets, completed kletsen), a job that runs every fifteen minutes and sends the emails due, an email sender and an endpoint the app calls when a klets is finished. Recommended, EU-first: one small Hetzner (Germany) cloud server in Falkenstein at about €5.50 a month running Caddy for TLS, a small Node service, SQLite and a systemd timer for the email job. Scaleway (France) serverless jobs and object storage are the managed alternative. Email through Scaleway Transactional Email (France; 300 a month free, then €0.25 per thousand) or Brevo (France). Payments later through Mollie (Netherlands), not Stripe.
 - **Login:** magic link by email. The learner already gives an email for the reminders, so there is no password to invent. The daily email's start button carries a short-lived token that signs the learner in on that device.
 - **Privacy:** email and progress events only. No microphone audio leaves the device. EU hosting. Sixteen plus terms.
 
-### 9.3 App Store path
+### 9.3 EU sovereignty: what is EU, what is not
+
+The rule is EU-based companies and EU-hosted data wherever a workable option exists, and an explicit note where it does not.
+
+| Component | EU choice | Notes |
+|---|---|---|
+| Domain and DNS | Theory7 or INWX (NL, DE) for the registration; DNS at the registrar or Hetzner DNS (DE, free) | EU throughout. EURid, the .eu registry, is in Brussels. |
+| Hosting, database, scheduled email job | Hetzner (DE) server in Falkenstein, or Scaleway (FR) | EU throughout. Replaces the earlier Cloudflare and Supabase suggestions, both US. |
+| Email sending | Scaleway Transactional Email (FR) or Brevo (FR) | EU. The recipients' own mailboxes (Gmail, Outlook) are outside our control. |
+| TLS certificates | Buypass (Norway, EEA) or ZeroSSL (Austria) via ACME | Let's Encrypt is a US non-profit; Caddy can use either alternative. |
+| Fonts | Self-hosted, sourced from Bunny Fonts (Slovenia) | Never load from Google Fonts. |
+| Dutch voices | Human recordings, then Acapela (BE), then self-hosted Piper | **Not fully possible at top quality.** The best neural Dutch voices are US (Azure, Google, Amazon, ElevenLabs). ReadSpeaker is Dutch-founded but owned by HOYA (Japan). |
+| Pronunciation scoring (later, optional) | Self-hosted Whisper on our EU server, or Mistral Voxtral (FR) for transcription | **Not possible for scoring.** No EU service offers phoneme-level pronunciation assessment for Dutch; Azure is the only one found. Recommendation stands: do not score. |
+| Payments (later) | Mollie (NL) or Adyen (NL) | EU. |
+| Analytics and error tracking | None for the trial; Plausible (Estonia) or self-hosted Matomo later | EU. |
+| Frontend code (Svelte, Vite, Capacitor) | Open source, MIT licences | Origin is mixed and partly US, but nothing runs on their servers and no data flows to them. For the trial, plain JavaScript with no build step and no dependencies avoids the question entirely. |
+| Package registry (npm) | Vendored dependencies, or none | **Not possible to replace.** npm is owned by GitHub (Microsoft, US). Keeping dependencies to zero or vendoring them removes the runtime exposure. |
+| Code hosting | GitHub today | **Not EU.** Codeberg (Germany, non-profit) is the EU alternative and a mirror there is easy. This assistant's session can only push to GitHub, so a move means adding a second remote on your side. |
+| The AI building it | Anthropic (US) | **Not EU.** Stated for completeness. Mistral (France) is the EU alternative if that matters to you. |
+| App Store distribution (later) | Install from the web as a home-screen app, which needs no store | **Not possible via Apple** without Apple (US). The DMA allows alternative marketplaces in the EU but their reach is small. Push notifications also go through Apple and Google, which is one more reason the reminder is email. |
+
+### 9.4 App Store path
 
 Apple's minimum functionality rule rejects thin web wrappers. Our app passes because it has native audio with lock-screen controls, genuine offline packs, native purchase and bundled content. Downloaded packs must declare their size on first download.
 
@@ -278,7 +299,7 @@ Ordering of authoring: A1 core, then A1 Gezellig and Winkelen, then Klussen and 
 | 0. Household trial, stage 1 | Web only. The player and one klets of about 30 phrases spoken in the pause, two generated voices, one profile. | Prove the loop feels right and the voices are good enough. |
 | 0. Household trial, stage 2 | Two profiles (A1 and A2), ten kletsen per level with recombined sentences, the "that one got me" tap, the daily email with tick-off and carry-over, magic-link login. | Does the recycling make things automatic? Does the email bring you back? |
 | 0. Household trial, stage 3 | Transcript peek, listening at speed, the review block, one Winkelen scene per level. | Which supports matter. Does situation-based content beat general content. |
-| 1. A1 on the web | Full A1 (core and four strands), offline, Stripe, native audit of the Dutch, five outside testers. | Launch to a small paying audience. |
+| 1. A1 on the web | Full A1 (core and four strands), offline, Mollie payments, native audit of the Dutch, five outside testers. | Launch to a small paying audience. |
 | 2. A2 and iOS | A2 content, Capacitor wrap, native audio, App Store submission, in-app purchase. | Broaden distribution. |
 | 3. B1 | B1 content, record and compare, weekly narrator email. | Retain learners past the beginner cliff. |
 | 4. B2 | B2 content, the email scene with text, Flemish awareness module. | Complete the promise. |
@@ -301,7 +322,7 @@ No timelines here on purpose. Each stage of the household trial is days, not wee
 2. **Netherlands Dutch only** for the first version, with Flemish as a later awareness module. I recommend yes.
 3. **Voices.** Neural TTS for launch with a native audit, human recordings later for the most frequent chunks. I recommend yes.
 4. **Transcript peek after sessions.** I recommend yes, off by default at A1.
-5. **Stack.** Vite, TypeScript and Svelte with Capacitor. Or Expo if you prefer React.
+5. **Stack.** Decided in outline: EU-first (section 9.3), plain JavaScript for the trial, Vite and Svelte with Capacitor later.
 6. **Pricing model.** Subscription, per-level purchase or both.
 7. **Which strand goes into the prototype.** I suggest Winkelen because the checkout script is short, universal and instantly useful.
 8. **Who checks the Dutch.** A native NT2 teacher needs to review every script. Do you have someone, or should the plan include finding one?
