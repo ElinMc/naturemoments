@@ -320,14 +320,14 @@ No timelines here on purpose. Each stage of the household trial is days, not wee
 
 1. **Name.** Decided: Klets.
 2. **Netherlands Dutch only** for the first version, with Flemish as a later awareness module. I recommend yes.
-3. **Voices.** Neural TTS for launch with a native audit, human recordings later for the most frequent chunks. I recommend yes.
+3. **Voices.** Decided: human recordings by native speakers, lists in content/.
 4. **Transcript peek after sessions.** I recommend yes, off by default at A1.
 5. **Stack.** Decided in outline: EU-first (section 9.3), plain JavaScript for the trial, Vite and Svelte with Capacitor later.
 6. **Pricing model.** Subscription, per-level purchase or both.
 7. **Which strand goes into the prototype.** I suggest Winkelen because the checkout script is short, universal and instantly useful.
 8. **Who checks the Dutch.** A native NT2 teacher needs to review every script. Do you have someone, or should the plan include finding one?
 
-Decided so far: the name is Klets; the first build is a private household trial on the web for two learners at A1 and A2; the daily email with tick-off and carry-over is part of the trial. Once the rest is decided, the first build is stage 1 of the trial.
+Decided so far: the name is Klets; the app lives at klets.mclworks.eu (domain at INWX); hosting on Hetzner, email via Scaleway (see SETUP.md); voices are human recordings (see content/RECORDING.md); the first build is a private household trial on the web for two learners at A1 and A2; the daily email with tick-off and carry-over is part of the trial. Once the rest is decided, the first build is stage 1 of the trial.
 
 ---
 
