@@ -1,6 +1,6 @@
 # Klets - vision and outline for a spoken Dutch app
 
-Name: **Klets** (from *kletsen*, to chat; *een klets* is a chat and, in this app, one ten-minute session). Tagline for English readers: *Klets - Dutch, out loud*. A quick web check found no Dutch learning app of that name; a proper trademark and app store check is still needed before launch. The name must never lean on "SaySomethingin", "SSi" or "Say Something in Dutch" - that is an existing Welsh company's brand and they sell a Dutch course.
+Name: **Klets** (from *kletsen*, to chat; *een klets* is a chat and, in this app, one five-minute session). Tagline for English readers: *Klets - Dutch, out loud*. A quick web check found no Dutch learning app of that name; a proper trademark and app store check is still needed before launch. The name must never lean on "SaySomethingin", "SSi" or "Say Something in Dutch" - that is an existing Welsh company's brand and they sell a Dutch course.
 
 Status: vision and outline only. Nothing has been built. Four research briefings sit in `research/` and this document draws on them.
 
@@ -64,7 +64,7 @@ The unit of memory is a chunk: *ik wil*, *even kijken*, *heb je zin om*, *kunt u
 
 The spacing is written into the script, as it is in Pimsleur and SaySomethingin. Rule of thumb for authors: a new chunk is used three times in its session, returns in each of the next two sessions, then roughly every fifth session, and is combined with something new each time it returns. This gives every learner the same tested experience.
 
-On top of that, an optional five-minute *Herhaling* (review) block at the end of a session uses FSRS scheduling on chunks. Signals are implicit: a "that one got me" tap during the pause and replay counts. This is the one adaptive element and it is optional. We do not interrupt the flow to grade people.
+On top of that, an optional two-minute *Herhaling* (review) block after a klets uses FSRS scheduling on chunks. Signals are implicit: a "that one got me" tap during the pause and replay counts. This is the one adaptive element and it is optional. We do not interrupt the flow to grade people.
 
 ### 4.5 Listening practice at speed
 
@@ -77,8 +77,8 @@ From around session eight of each level, each session ends with a two-minute lis
 - **Culture asides.** The four strands are as much about unwritten rules as words. The narrator explains the one-biscuit rule, the birthday circle and the Tikkie in twenty seconds each, at the moment the phrase comes up.
 - **The English problem.** Dutch people switch to English the moment they hear an accent. Every level has a short module on holding the line: *"Ik oefen mijn Nederlands, mag ik het in het Nederlands proberen?"* No other course addresses this and it is the main reason expats give up.
 - **Real institutions by name.** Albert Heijn, Gamma, Magister, Marktplaats, Tikkie. Learners meet them tomorrow, so the course should too.
-- **No streaks.** Streaks make people do a minimum to keep a number alive. We show minutes spoken this week and sentences produced. The daily email (section 8.5) points at one ten-minute klets and waits patiently if you miss it.
-- **Ten minutes is the unit.** Every klets is authored to take ten minutes. Two kletsen make a session in the sense used by SaySomethingin. Ten minutes fits a school run or a coffee break and is short enough that "not today" is hard to justify.
+- **No streaks.** Streaks make people do a minimum to keep a number alive. We show minutes spoken this week and sentences produced. The daily email (section 8.5) points at one five-minute klets and waits patiently if you miss it.
+- **Five minutes is the unit.** Every klets is authored to take five minutes and hold 15 to 20 spoken sentences. Four kletsen make a session in the sense used by SaySomethingin. Five minutes fits a spare moment and, more important, gets finished. Because one klets is too short to recycle much inside itself, the recycling is written across the chain of kletsen, and the player offers "nog een klets?" at the end so that a spare ten minutes turns into two.
 
 ## 5. Level structure A1 to B2
 
@@ -86,12 +86,12 @@ From around session eight of each level, each session ends with a two-minute lis
 
 | Level | CEFR can-do (spoken) | What the learner can do in the Netherlands | Content |
 |---|---|---|---|
-| A1 | Simple phrases about people and places. Simple interaction if the other person is slow and helpful. | Greet, order at the bakker, get through the checkout, say who they are and where they live, congratulate everyone at a birthday circle, phone the school to say a child is ill. | 25 core sessions + 8 per strand (each session is two kletsen) |
+| A1 | Simple phrases about people and places. Simple interaction if the other person is slow and helpful. | Greet, order at the bakker, get through the checkout, say who they are and where they live, congratulate everyone at a birthday circle, phone the school to say a child is ill. | 25 core sessions + 8 per strand (each session is four kletsen) |
 | A2 | Routine exchanges on familiar matters. Short descriptions of daily life. | Invite and decline with the agenda dance, deal with a shop return, ask for wood cut to size, apply for school leave, handle the WhatsApp parent group. | 25 core + 9 per strand |
 | B1 | Deal with most everyday situations, explain a problem, give reasons, tell a story. | Argue politely at dinner, negotiate on Marktplaats, describe a leak to a plumber and read a quote, hold a ten-minute talk with a teacher, choose a profile with the decaan. | 25 core + 10 per strand |
 | B2 | Fluent, spontaneous interaction without strain. Present a viewpoint with pros and cons. | Recognise sarcasm and use it, escalate a complaint, manage a builder's extra work, hold a mentor conversation about a child's wellbeing, write and read an email to the school. | 25 core + 10 per strand |
 
-Total: roughly 500 kletsen of ten minutes (250 sessions of 20 minutes), about 80 hours of guided speaking, plus listening files. Around 6,000 unique Dutch sentences and 1,500 to 2,000 chunks. That is comparable to three SaySomethingin levels and five times what Pimsleur offers for Dutch.
+Total: roughly 1,000 kletsen of five minutes (250 sessions of 20 minutes), about 80 hours of guided speaking, plus listening files. Around 6,000 unique Dutch sentences and 1,500 to 2,000 chunks. That is comparable to three SaySomethingin levels and five times what Pimsleur offers for Dutch.
 
 ### 5.2 Honest claims about hours
 
@@ -200,14 +200,14 @@ Each strand below gives the situations, the cultural rules the narrator explains
 
 1. **Vandaag (Today).** One big button: today's klets, the same one the morning email pointed at. Under it: a tick when it is done, minutes spoken this week, next Diploma and one line from the narrator.
 2. **Player.** The whole screen is the session. Large pause ring, a pause button, a "that one got me" tap, replay last, speed control for the native voices (0.8x to 1.2x), and a session timeline as a thin bar. No text of the sentence during the session. Lock-screen controls on iOS.
-3. **Na de les (After).** Optional transcript with *de/het* colours, the culture asides as text, the option to start the five-minute Herhaling.
+3. **Na de les (After).** Optional transcript with *de/het* colours, the culture asides as text, the option to start the two-minute Herhaling or the next klets.
 4. **Het pad (The path).** The level map: core spine down the middle, four strands branching off, Diploma at the bottom. Strands can be hidden.
 5. **Luisteren.** The listening files at speed, downloadable, meant for the bike or the washing up.
 6. **Instellingen.** Voices, transcript on or off, downloads, account, subscription, and the daily email: address, time, days of the week, pause.
 
 ### 8.2 Onboarding
 
-Three questions (why Dutch, which strands apply, how much Dutch already), then the spoken self-check, then straight into the first klets. The first klets is free with no account. From the second klets the learner gives an email address, which is both the login (a magic link, no password) and the address for the daily email. Paywall after the first ten kletsen of the chosen level.
+Three questions (why Dutch, which strands apply, how much Dutch already), then the spoken self-check, then straight into the first klets. The first klets is free with no account. From the second klets the learner gives an email address, which is both the login (a magic link, no password) and the address for the daily email. Paywall after the first twenty kletsen of the chosen level.
 
 ### 8.3 Optional record and compare
 
@@ -217,9 +217,9 @@ Record your attempt during the pause, then hear yours and the native voice back 
 
 The email is the spine of the habit and replaces streaks.
 
-- **One email a day, at a time the learner chooses** (default 07.30 local time), on the days they choose. It names today's klets, says what it is about, gives the key Dutch phrase as a hook and has one button: *Start je klets* (ten minutes). The button deep-links straight into the player with the learner signed in.
+- **One email a day, at a time the learner chooses** (default 07.30 local time), on the days they choose. It names today's klets, says what it is about, gives the key Dutch phrase as a hook and has one button: *Start je klets* (five minutes). The button deep-links straight into the player with the learner signed in.
 - **Done means finished, not opened.** A klets is ticked off when the player reaches the end. The app reports that to the server; if the phone was offline it reports when it is next online.
-- **If it is not done, tomorrow's email points at the same klets.** No guilt, no counter of missed days on the first few misses. The copy changes tone gently: day one *"Vandaag: Klets 7, Bij de bakker"*; day two *"Klets 7 is still waiting for you, no rush"*; from day four the email offers a five-minute half klets as a way back in. The content never moves on without you.
+- **If it is not done, tomorrow's email points at the same klets.** No guilt, no counter of missed days on the first few misses. The copy changes tone gently: day one *"Vandaag: Klets 7, Bij de bakker"*; day two *"Klets 7 is still waiting for you, no rush"*; from day four the email offers a two-minute *proefje* of three phrases as a way back in. The content never moves on without you.
 - **Pause and unsubscribe in one tap** from every email. Holiday pause with a return date. After fourteen days of silence the emails drop to one a week until the learner comes back.
 - **Two people, two emails.** Each profile has its own address, time and days, so a household on different levels each gets their own klets.
 - **Nothing to read in the email except the hook.** The learning happens in the app, out loud. The phrase in the email is there so that people who only skim still meet one piece of Dutch a day.
