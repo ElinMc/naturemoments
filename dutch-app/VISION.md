@@ -1,6 +1,6 @@
-# Zeg het maar - vision and outline for a spoken Dutch app
+# Klets - vision and outline for a spoken Dutch app
 
-Working title: **Zeg het maar** ("go on, say it" - the phrase every Dutch shopkeeper uses when it is your turn). Alternatives: *Hardop* (out loud), *Gewoon Zeggen*. The name is a placeholder until you choose one. It must not use "SaySomethingin", "SSi" or "Say Something in Dutch" - that is an existing Welsh company's brand and they sell a Dutch course.
+Name: **Klets** (from *kletsen*, to chat; *een klets* is a chat and, in this app, one ten-minute session). Tagline for English readers: *Klets - Dutch, out loud*. A quick web check found no Dutch learning app of that name; a proper trademark and app store check is still needed before launch. The name must never lean on "SaySomethingin", "SSi" or "Say Something in Dutch" - that is an existing Welsh company's brand and they sell a Dutch course.
 
 Status: vision and outline only. Nothing has been built. Four research briefings sit in `research/` and this document draws on them.
 
@@ -77,7 +77,8 @@ From around session eight of each level, each session ends with a two-minute lis
 - **Culture asides.** The four strands are as much about unwritten rules as words. The narrator explains the one-biscuit rule, the birthday circle and the Tikkie in twenty seconds each, at the moment the phrase comes up.
 - **The English problem.** Dutch people switch to English the moment they hear an accent. Every level has a short module on holding the line: *"Ik oefen mijn Nederlands, mag ik het in het Nederlands proberen?"* No other course addresses this and it is the main reason expats give up.
 - **Real institutions by name.** Albert Heijn, Gamma, Magister, Marktplaats, Tikkie. Learners meet them tomorrow, so the course should too.
-- **No streaks.** Streaks make people do a minimum to keep a number alive. We show minutes spoken this week and sentences produced. Gentle nudges by email, in the narrator's voice.
+- **No streaks.** Streaks make people do a minimum to keep a number alive. We show minutes spoken this week and sentences produced. The daily email (section 8.5) points at one ten-minute klets and waits patiently if you miss it.
+- **Ten minutes is the unit.** Every klets is authored to take ten minutes. Two kletsen make a session in the sense used by SaySomethingin. Ten minutes fits a school run or a coffee break and is short enough that "not today" is hard to justify.
 
 ## 5. Level structure A1 to B2
 
@@ -85,12 +86,12 @@ From around session eight of each level, each session ends with a two-minute lis
 
 | Level | CEFR can-do (spoken) | What the learner can do in the Netherlands | Content |
 |---|---|---|---|
-| A1 | Simple phrases about people and places. Simple interaction if the other person is slow and helpful. | Greet, order at the bakker, get through the checkout, say who they are and where they live, congratulate everyone at a birthday circle, phone the school to say a child is ill. | 25 core sessions + 8 per strand |
+| A1 | Simple phrases about people and places. Simple interaction if the other person is slow and helpful. | Greet, order at the bakker, get through the checkout, say who they are and where they live, congratulate everyone at a birthday circle, phone the school to say a child is ill. | 25 core sessions + 8 per strand (each session is two kletsen) |
 | A2 | Routine exchanges on familiar matters. Short descriptions of daily life. | Invite and decline with the agenda dance, deal with a shop return, ask for wood cut to size, apply for school leave, handle the WhatsApp parent group. | 25 core + 9 per strand |
 | B1 | Deal with most everyday situations, explain a problem, give reasons, tell a story. | Argue politely at dinner, negotiate on Marktplaats, describe a leak to a plumber and read a quote, hold a ten-minute talk with a teacher, choose a profile with the decaan. | 25 core + 10 per strand |
 | B2 | Fluent, spontaneous interaction without strain. Present a viewpoint with pros and cons. | Recognise sarcasm and use it, escalate a complaint, manage a builder's extra work, hold a mentor conversation about a child's wellbeing, write and read an email to the school. | 25 core + 10 per strand |
 
-Total: roughly 250 sessions of 20 minutes, about 80 hours of guided speaking, plus listening files. Around 6,000 unique Dutch sentences and 1,500 to 2,000 chunks. That is comparable to three SaySomethingin levels and five times what Pimsleur offers for Dutch.
+Total: roughly 500 kletsen of ten minutes (250 sessions of 20 minutes), about 80 hours of guided speaking, plus listening files. Around 6,000 unique Dutch sentences and 1,500 to 2,000 chunks. That is comparable to three SaySomethingin levels and five times what Pimsleur offers for Dutch.
 
 ### 5.2 Honest claims about hours
 
@@ -197,22 +198,33 @@ Each strand below gives the situations, the cultural rules the narrator explains
 
 ### 8.1 Screens
 
-1. **Vandaag (Today).** One big button: continue where you left off. Under it: minutes spoken this week, next Diploma, and one line from the narrator.
+1. **Vandaag (Today).** One big button: today's klets, the same one the morning email pointed at. Under it: a tick when it is done, minutes spoken this week, next Diploma and one line from the narrator.
 2. **Player.** The whole screen is the session. Large pause ring, a pause button, a "that one got me" tap, replay last, speed control for the native voices (0.8x to 1.2x), and a session timeline as a thin bar. No text of the sentence during the session. Lock-screen controls on iOS.
 3. **Na de les (After).** Optional transcript with *de/het* colours, the culture asides as text, the option to start the five-minute Herhaling.
 4. **Het pad (The path).** The level map: core spine down the middle, four strands branching off, Diploma at the bottom. Strands can be hidden.
 5. **Luisteren.** The listening files at speed, downloadable, meant for the bike or the washing up.
-6. **Instellingen.** Voices, transcript on or off, downloads, account, subscription.
+6. **Instellingen.** Voices, transcript on or off, downloads, account, subscription, and the daily email: address, time, days of the week, pause.
 
 ### 8.2 Onboarding
 
-Three questions (why Dutch, which strands apply, how much Dutch already), then the spoken self-check, then straight into session one. Session one is free, no account. Account required from session two. Paywall after the first five core sessions of the chosen level.
+Three questions (why Dutch, which strands apply, how much Dutch already), then the spoken self-check, then straight into the first klets. The first klets is free with no account. From the second klets the learner gives an email address, which is both the login (a magic link, no password) and the address for the daily email. Paywall after the first ten kletsen of the chosen level.
 
 ### 8.3 Optional record and compare
 
 Record your attempt during the pause, then hear yours and the native voice back to back. No scoring. Off by default. Nothing leaves the device. Pronunciation scoring can come later if users ask for a number, and Azure supports nl-NL if we ever want it.
 
-### 8.4 Tone of voice
+### 8.4 The daily klets email
+
+The email is the spine of the habit and replaces streaks.
+
+- **One email a day, at a time the learner chooses** (default 07.30 local time), on the days they choose. It names today's klets, says what it is about, gives the key Dutch phrase as a hook and has one button: *Start je klets* (ten minutes). The button deep-links straight into the player with the learner signed in.
+- **Done means finished, not opened.** A klets is ticked off when the player reaches the end. The app reports that to the server; if the phone was offline it reports when it is next online.
+- **If it is not done, tomorrow's email points at the same klets.** No guilt, no counter of missed days on the first few misses. The copy changes tone gently: day one *"Vandaag: Klets 7, Bij de bakker"*; day two *"Klets 7 is still waiting for you, no rush"*; from day four the email offers a five-minute half klets as a way back in. The content never moves on without you.
+- **Pause and unsubscribe in one tap** from every email. Holiday pause with a return date. After fourteen days of silence the emails drop to one a week until the learner comes back.
+- **Two people, two emails.** Each profile has its own address, time and days, so a household on different levels each gets their own klets.
+- **Nothing to read in the email except the hook.** The learning happens in the app, out loud. The phrase in the email is there so that people who only skim still meet one piece of Dutch a day.
+
+### 8.5 Tone of voice
 
 First person, warm, plain, a little cheeky, never cute. The narrator is a person who learned Dutch as an adult and remembers how it felt. Examples:
 
@@ -222,7 +234,7 @@ First person, warm, plain, a little cheeky, never cute. The narrator is a person
 
 Copy rules match your own writing preferences: British spelling, no contractions, no comma before *and* in a short list, plain words.
 
-### 8.5 Visual direction
+### 8.6 Visual direction
 
 SaySomethingin's look could not be inspected directly, so this is our own direction rather than a copy: a single-purpose player, lots of space, one accent colour, large type, dark and light themes. Suggested palette: warm off-white and deep ink, with Dutch orange used sparingly as the action colour and a second accent of canal green for progress. Typography: a friendly humanist sans for the interface and a rounded display face for the narrator's lines. Illustration: small line drawings of the scenes (a biscuit tin, a Gamma trolley, a schoolbag on a flag). Every screen must work at phone width with one thumb.
 
@@ -240,7 +252,8 @@ Why not the current single-file vanilla style of the other apps in this reposito
 - **Audio:** two nl-NL neural voices, one female and one male, from Azure Neural HD or ElevenLabs, plus a native narrator recording for English prompts or a good English neural voice. A native Dutch speaker audits 200 random sentences for stress and the g, ch and ui sounds before launch. Later, record human voices for the 300 most frequent chunks. Cost for 6,000 sentences in two voices: tens of dollars in TTS.
 - **Scheduling:** authored interleaving in the script, plus ts-fsrs for the optional review block.
 - **Storage:** Dexie (IndexedDB) for progress and settings, Cache API on web and Capacitor Filesystem on iOS for audio packs, progress synced to an EU-hosted backend.
-- **Backend:** small. Accounts, progress sync, entitlements. Supabase in an EU region or similar. Stripe on the web. App Store in-app purchase as convenience later, with the web as the primary sales channel.
+- **Backend:** small but present from the first build, because a page in a browser cannot send email on a schedule while it is closed. Needed: a store of learners (email, time zone, send time, days, current klets, completed kletsen), a scheduled job that runs every fifteen minutes and sends the emails due, an email sender and an endpoint the app calls when a klets is finished. Recommended: Cloudflare Pages for the static app plus a Cloudflare Worker with a cron trigger and a D1 database, with Resend for email (free tier covers thousands of emails a month, EU data region available). Supabase in Frankfurt with pg_cron and an edge function is the alternative if we want Postgres and built-in magic-link login from day one. Stripe on the web later. App Store in-app purchase as convenience later, with the web as the primary sales channel.
+- **Login:** magic link by email. The learner already gives an email for the reminders, so there is no password to invent. The daily email's start button carries a short-lived token that signs the learner in on that device.
 - **Privacy:** email and progress events only. No microphone audio leaves the device. EU hosting. Sixteen plus terms.
 
 ### 9.3 App Store path
@@ -262,13 +275,15 @@ Ordering of authoring: A1 core, then A1 Gezellig and Winkelen, then Klussen and 
 
 | Phase | Scope | Purpose |
 |---|---|---|
-| 0. Prototype | Web only. A1 core sessions 1 to 5 plus one Winkelen scene. TTS voices. No accounts. | Prove the loop feels right and the voices are good enough. Test with five expats. |
-| 1. A1 on the web | Full A1 (core and four strands), accounts, offline, Stripe, transcript peek, listening files. | Launch to a small paying audience. |
+| 0. Household trial, stage 1 | Web only. The player and one klets of about 30 phrases spoken in the pause, two generated voices, one profile. | Prove the loop feels right and the voices are good enough. |
+| 0. Household trial, stage 2 | Two profiles (A1 and A2), ten kletsen per level with recombined sentences, the "that one got me" tap, the daily email with tick-off and carry-over, magic-link login. | Does the recycling make things automatic? Does the email bring you back? |
+| 0. Household trial, stage 3 | Transcript peek, listening at speed, the review block, one Winkelen scene per level. | Which supports matter. Does situation-based content beat general content. |
+| 1. A1 on the web | Full A1 (core and four strands), offline, Stripe, native audit of the Dutch, five outside testers. | Launch to a small paying audience. |
 | 2. A2 and iOS | A2 content, Capacitor wrap, native audio, App Store submission, in-app purchase. | Broaden distribution. |
 | 3. B1 | B1 content, record and compare, weekly narrator email. | Retain learners past the beginner cliff. |
 | 4. B2 | B2 content, the email scene with text, Flemish awareness module. | Complete the promise. |
 
-No timelines here on purpose. Phase 0 is a few weeks of work; each content level is months of authoring.
+No timelines here on purpose. Each stage of the household trial is days, not weeks, and each stage must put phrases in your mouth on its own. Each content level after that is months of authoring. The trial's success test: after two weeks, did both of you finish eight or more kletsen without forcing it, and did either of you use a phrase on a real Dutch person?
 
 ## 12. Risks and where I disagree with the brief
 
@@ -282,7 +297,7 @@ No timelines here on purpose. Phase 0 is a few weeks of work; each content level
 
 ## 13. Decisions I need from you before building
 
-1. **Name.** Zeg het maar, Hardop, something else?
+1. **Name.** Decided: Klets.
 2. **Netherlands Dutch only** for the first version, with Flemish as a later awareness module. I recommend yes.
 3. **Voices.** Neural TTS for launch with a native audit, human recordings later for the most frequent chunks. I recommend yes.
 4. **Transcript peek after sessions.** I recommend yes, off by default at A1.
@@ -291,7 +306,7 @@ No timelines here on purpose. Phase 0 is a few weeks of work; each content level
 7. **Which strand goes into the prototype.** I suggest Winkelen because the checkout script is short, universal and instantly useful.
 8. **Who checks the Dutch.** A native NT2 teacher needs to review every script. Do you have someone, or should the plan include finding one?
 
-Once you decide, the first build is Phase 0: the player, five core sessions and one shop scene, on the web.
+Decided so far: the name is Klets; the first build is a private household trial on the web for two learners at A1 and A2; the daily email with tick-off and carry-over is part of the trial. Once the rest is decided, the first build is stage 1 of the trial.
 
 ---
 
