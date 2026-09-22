@@ -1,6 +1,6 @@
-# Recording list A1 - kletsen 1 to 10
+# Recording list A1 - kletsen 1 to 10 (Belgian Dutch)
 
-Record the **Nederlands** column only, in order, two seconds of silence between lines. (u) = formal register. (vraag) = question, rising intonation. Names Tom and Anne are placeholders and should be said as written.
+Standard Belgian Dutch as spoken in Flanders. Record the **Nederlands** column only, in order, two seconds of silence between lines. (u) = formal register. (vraag) = question, rising intonation. (TT) = tussentaal, said the way people really say it. Names Tom and Anne are placeholders and should be said as written.
 
 ## A1-01 Ik wil Nederlands spreken
 
@@ -119,9 +119,9 @@ Record the **Nederlands** column only, in order, two seconds of silence between 
 | A1-05-15 | Heb je zin in thee? (vraag) | Do you fancy a tea? |
 | A1-05-16 | lekker | tasty (nice) |
 | A1-05-17 | Dat is lekker. | That is nice. |
-| A1-05-18 | Dank je. | Thank you. |
-| A1-05-19 | Alsjeblieft. | Here you are. |
-| A1-05-20 | Ik heb geen zin. | I do not feel like it. |
+| A1-05-18 | Dank u. | Thank you. |
+| A1-05-19 | Alstublieft. | Here you are. |
+| A1-05-20 | Merci! | Thanks! |
 
 ## A1-06 Ik ben Tom
 
@@ -136,42 +136,42 @@ Record the **Nederlands** column only, in order, two seconds of silence between 
 | A1-06-07 | Ik kom uit Engeland. | I come from England. |
 | A1-06-08 | Waar kom je vandaan? (vraag) | Where do you come from? |
 | A1-06-09 | ik woon | I live |
-| A1-06-10 | Ik woon in Nederland. | I live in the Netherlands. |
+| A1-06-10 | Ik woon in België. | I live in Belgium. |
 | A1-06-11 | hier | here |
 | A1-06-12 | Ik woon hier. | I live here. |
 | A1-06-13 | Waar woon je? (vraag) | Where do you live? |
 | A1-06-14 | Ik woon hier sinds maart. | I have lived here since March. |
-| A1-06-15 | Hoe gaat het? (vraag) | How are you? |
-| A1-06-16 | Goed, en met jou? (vraag) | Fine, and you? |
-| A1-06-17 | Gaat wel. | So-so. |
-| A1-06-18 | Leuk je te ontmoeten. | Nice to meet you. |
+| A1-06-15 | Hoe is 't? (vraag) | How are you? |
+| A1-06-16 | Goed, en met u? (vraag) | Fine, and you? |
+| A1-06-17 | Ça va. (TT) | Fine. |
+| A1-06-18 | Aangenaam. | Nice to meet you. |
 | A1-06-19 | Tot morgen. | See you tomorrow. |
-| A1-06-20 | Doei! | Bye! |
+| A1-06-20 | Dag! Salut! | Bye! |
 
 ## A1-07 Lekker weertje
 
 | ID | Nederlands | English prompt |
 |---|---|---|
-| A1-07-01 | Hoi! | Hi! |
+| A1-07-01 | Dag! | Hi! |
 | A1-07-02 | de buurman | the neighbour (man) |
 | A1-07-03 | de buurvrouw | the neighbour (woman) |
-| A1-07-04 | Lekker weertje, hè? (vraag) | Nice weather, is it not? |
-| A1-07-05 | Wat een rotweer. | What awful weather. |
+| A1-07-04 | Schoon weer, hè? (vraag) | Nice weather, is it not? |
+| A1-07-05 | Amai, wat een weer. | Goodness, what weather. |
 | A1-07-06 | Koud, hè? (vraag) | Cold, is it not? |
-| A1-07-07 | Fijne dag nog! | Have a nice day! |
-| A1-07-08 | Fijn weekend! | Have a nice weekend! |
+| A1-07-07 | Nog een prettige dag! | Have a nice day! |
+| A1-07-08 | Prettig weekend! | Have a nice weekend! |
 | A1-07-09 | Hoe was je weekend? (vraag) | How was your weekend? |
 | A1-07-10 | Rustig. | Quiet. |
-| A1-07-11 | Niks bijzonders. | Nothing special. |
+| A1-07-11 | Niets speciaals. | Nothing special. |
 | A1-07-12 | Wat ga je doen dit weekend? (vraag) | What are you doing this weekend? |
-| A1-07-13 | Ik ga niks doen. | I am going to do nothing. |
+| A1-07-13 | Ik ga niets doen. | I am going to do nothing. |
 | A1-07-14 | werken | to work |
 | A1-07-15 | Ik moet werken. | I have to work. |
 | A1-07-16 | Wat doe je? (vraag) | What do you do? |
-| A1-07-17 | Ik werk bij een school. | I work at a school. |
+| A1-07-17 | Ik werk in Gent. | I work in Ghent. |
 | A1-07-18 | nog | yet (still) |
 | A1-07-19 | Ik weet het nog niet. | I do not know yet. |
-| A1-07-20 | Druk, druk, druk! | Busy, busy, busy! |
+| A1-07-20 | 't Is goed. (TT) | OK. |
 
 ## A1-08 Kun je me helpen?
 
@@ -182,9 +182,9 @@ Record the **Nederlands** column only, in order, two seconds of silence between 
 | A1-08-03 | Kun je me helpen? (vraag) | Can you help me? |
 | A1-08-04 | Ik wil je helpen. | I want to help you. |
 | A1-08-05 | nog een keer | once more |
-| A1-08-06 | Kun je dat nog een keer zeggen? (vraag) | Can you say that once more? |
-| A1-08-07 | langzaam | slowly |
-| A1-08-08 | Kun je langzaam praten? (vraag) | Can you talk slowly? |
+| A1-08-06 | Kun je dat nog eens zeggen? (vraag) | Can you say that once more? |
+| A1-08-07 | trager | slower |
+| A1-08-08 | Kun je wat trager spreken? (vraag) | Can you speak a bit slower? |
 | A1-08-09 | ik begrijp | I understand |
 | A1-08-10 | Ik begrijp het. | I understand. |
 | A1-08-11 | Ik begrijp het niet. | I do not understand. |
@@ -196,30 +196,30 @@ Record the **Nederlands** column only, in order, two seconds of silence between 
 | A1-08-17 | Mag ik het in het Nederlands proberen? (vraag) | May I try it in Dutch? |
 | A1-08-18 | Ik spreek liever Nederlands. | I prefer to speak Dutch. |
 | A1-08-19 | Niet in het Engels, graag. | Not in English, please. |
-| A1-08-20 | Dank je wel. | Thank you very much. |
+| A1-08-20 | Dank u wel. | Thank you very much. |
 
 ## A1-09 Bij de bakker
 
 | ID | Nederlands | English prompt |
 |---|---|---|
 | A1-09-01 | de bakker | the baker's |
-| A1-09-02 | Wie is er aan de beurt? (u, vraag) | Who is next? |
-| A1-09-03 | Ik ben aan de beurt. | It is my turn. |
-| A1-09-04 | Zegt u het maar. (u) | Go ahead, what can I get you? |
-| A1-09-05 | Mag ik een bruinbrood? (vraag) | May I have a brown loaf? |
-| A1-09-06 | Heel of half? (u, vraag) | Whole or half? |
+| A1-09-02 | Aan wie is 't? (u, vraag) | Who is next? |
+| A1-09-03 | Aan mij. | Me. (it is my turn) |
+| A1-09-04 | Zeg het maar. (u) | Go ahead, what can I get you? |
+| A1-09-05 | Een bruin brood, alstublieft. | A brown loaf, please. |
+| A1-09-06 | Een heel of een half? (u, vraag) | A whole one or a half? |
 | A1-09-07 | Een heel, graag. | A whole one, please. |
 | A1-09-08 | Gesneden? (u, vraag) | Sliced? |
 | A1-09-09 | Ja, graag. | Yes, please. |
-| A1-09-10 | Anders nog iets? (u, vraag) | Anything else? |
-| A1-09-11 | Nee, dat was het. | No, that is all. |
-| A1-09-12 | Dat is dan vier vijftig. (u) | That is four fifty then. |
-| A1-09-13 | Pinnen, graag. | By card, please. |
+| A1-09-10 | Nog iets? (u, vraag) | Anything else? |
+| A1-09-11 | Nee, dat is alles. | No, that is all. |
+| A1-09-12 | Dat is vier euro vijftig. (u) | That is four euros fifty. |
+| A1-09-13 | Met de kaart, alstublieft. | By card, please. |
 | A1-09-14 | Alstublieft. (u) | Here you are. |
 | A1-09-15 | Dank u wel. (u) | Thank you. |
-| A1-09-16 | Mag ik zes broodjes? (vraag) | May I have six rolls? |
-| A1-09-17 | Doe maar twee croissants. | Two croissants, please. |
-| A1-09-18 | Hoeveel kost dit? (vraag) | How much is this? |
+| A1-09-16 | Zes pistolets, alstublieft. | Six rolls, please. |
+| A1-09-17 | En twee koffiekoeken. | And two pastries. |
+| A1-09-18 | Hoeveel is 't? (vraag) | How much is it? |
 
 ## A1-10 Bij de kassa
 
@@ -227,23 +227,23 @@ Record the **Nederlands** column only, in order, two seconds of silence between 
 |---|---|---|
 | A1-10-01 | de supermarkt | the supermarket |
 | A1-10-02 | de kassa | the checkout |
-| A1-10-03 | Heeft u een bonuskaart? (u, vraag) | Do you have a loyalty card? |
+| A1-10-03 | Heeft u een klantenkaart? (u, vraag) | Do you have a loyalty card? |
 | A1-10-04 | Nee. | No. |
-| A1-10-05 | Ja, alstublieft. (u) | Yes, here you are. |
-| A1-10-06 | Wilt u de bon? (u, vraag) | Do you want the receipt? |
-| A1-10-07 | Nee hoor. | No thanks. |
-| A1-10-08 | Spaart u zegels? (u, vraag) | Are you collecting stamps? |
-| A1-10-09 | Nee, dank u. (u) | No, thank you. |
-| A1-10-10 | Pinnen? (u, vraag) | Card? |
-| A1-10-11 | Ja. | Yes. |
-| A1-10-12 | Tasje erbij? (u, vraag) | A bag with that? |
-| A1-10-13 | Ik kijk even rond. | I am just looking around. |
+| A1-10-05 | Ja, mijn Xtra-kaart. | Yes, my Xtra card. |
+| A1-10-06 | Wilt u het ticket? (u, vraag) | Do you want the receipt? |
+| A1-10-07 | Nee, merci. | No thanks. |
+| A1-10-08 | Cash of met de kaart? (u, vraag) | Cash or card? |
+| A1-10-09 | Met de kaart. | By card. |
+| A1-10-10 | Bancontact gaat ook. (u) | Bancontact works too. |
+| A1-10-11 | Ja, dat is goed. | Yes, that is fine. |
+| A1-10-12 | Wilt u een zakje? (u, vraag) | Do you want a bag? |
+| A1-10-13 | Ik kijk eens rond. | I am just looking around. |
 | A1-10-14 | Waar staat de melk? (vraag) | Where is the milk? |
 | A1-10-15 | Achterin. | At the back. |
 | A1-10-16 | Bij de kassa. | By the checkout. |
 | A1-10-17 | Ik zoek de kaas. | I am looking for the cheese. |
-| A1-10-18 | Alleen pinnen. (u) | Card only. |
-| A1-10-19 | Fijne dag verder! | Have a good rest of the day! |
+| A1-10-18 | Enkel met de kaart. (u) | Card only. |
+| A1-10-19 | Nog een prettige dag! | Have a good rest of the day! |
 
 ## Checklist for the speaker
 

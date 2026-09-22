@@ -8,15 +8,15 @@ Status: vision and outline only. Nothing has been built. Four research briefings
 
 ## 1. The vision in one paragraph
 
-An audio-first Dutch course for English-speaking adults who live in the Netherlands, built around the situations of their actual lives. You speak out loud from the first minute. An English prompt, a pause, you say the Dutch, then two native speakers say it. Nothing to read, nothing to type, no flashcards, no streaks. The script recycles what you know into new sentences so that speaking becomes automatic rather than remembered. The course runs from CEFR A1 to B2 along a core spine plus four scenario strands: being sociable, going into shops, doing DIY and being a parent with children at secondary school. Web app first, App Store second.
+An audio-first Dutch course for English-speaking adults who live in Flanders, taught in Belgian Dutch and built around the situations of their actual lives. You speak out loud from the first minute. An English prompt, a pause, you say the Dutch, then two native speakers say it. Nothing to read, nothing to type, no flashcards, no streaks. The script recycles what you know into new sentences so that speaking becomes automatic rather than remembered. The course runs from CEFR A1 to B2 along a core spine plus four scenario strands: being sociable, going into shops, doing DIY and being a parent with children at secondary school. Web app first, App Store second.
 
-The promise to the learner: *after your first session you will have said things in Dutch you can use tomorrow, and after Level A2 you will hold your own at the school gate, the bouwmarkt and the kringverjaardag.*
+The promise to the learner: *after your first session you will have said things in Dutch you can use tomorrow, and after Level A2 you will hold your own at the schoolpoort, the Brico and the buurtfeest.*
 
 ## 2. Who it is for
 
-- **Primary:** English-speaking adults settled in the Netherlands for the medium to long term - partners, parents, people with Dutch employers who work in English. They have tried Duolingo, maybe a course, and still freeze when the neighbour speaks to them.
+- **Primary:** English-speaking adults settled in Flanders for the medium to long term - partners, parents, people with Belgian employers who work in English. A Netherlands edition can follow: the core spine is largely shared, the strands are not. They have tried Duolingo, maybe a course, and still freeze when the neighbour speaks to them.
 - **Secondary:** people planning a move, and partners of Dutch speakers living elsewhere.
-- **Not for:** inburgering candidates who need reading and writing at exam standard, children, and people who want grammar explained. The app can point them elsewhere.
+- **Not for:** inburgering candidates who need reading and writing at exam standard (though the Flemish inburgering requirement moves to B1 spoken from September 2027, which this course serves directly), children, and people who want grammar explained. The app can point them elsewhere.
 
 The four strands are chosen for this person. They are life-stage specific in a way no existing Dutch product is. That is the wedge.
 
@@ -28,9 +28,9 @@ Full detail is in the four research files. The points that shape the design:
 
 **The SaySomethingin method is well defined and copyable as a technique.** The technique is not protectable; their scripts and brand are. Their core: full sentences from minute one, formulaic chunks recombined, no writing or notes, do not repeat lessons, mistakes are the point, double-speed listening practice from a few lessons in, warm and cheeky first-person copy. Known criticisms: no reading or writing (visual learners struggle), no grammar (people do not know why), pace can overwhelm, and their newer adaptive product has had bugs. We should copy the strengths and fix the criticisms.
 
-**CEFR gives us the yardstick.** Dutch has its own exams (Staatsexamen NT2 I at B1 and II at B2, inburgering now targeted at B1, CNaVT profiles). Vocabulary targets for NT2 from Bossers (2022): roughly 1,000 words at A1, 2,000 at A2, 5,000 at B1. Guided learning hours are only published for English (Cambridge: A2 180 to 200, B1 350 to 400, B2 500 to 600 cumulative) and are commonly transferred to Dutch. An audio course supplies part of those hours; we should not claim it supplies all of them.
+**CEFR gives us the yardstick.** Flanders teaches NT2 in *richtgraden* at CVO and Ligo: richtgraad 1 is A1 to A2 and ends with the NT2-test, richtgraad 2 is B1, richtgraad 3 is B2. Inburgering asks for A2 today and B1 spoken from 1 September 2027. The Netherlands has its own exams (Staatsexamen NT2 I at B1 and II at B2) and CNaVT covers both countries. Vocabulary targets for NT2 from Bossers (2022): roughly 1,000 words at A1, 2,000 at A2, 5,000 at B1. Guided learning hours are only published for English (Cambridge: A2 180 to 200, B1 350 to 400, B2 500 to 600 cumulative) and are commonly transferred to Dutch. An audio course supplies part of those hours; we should not claim it supplies all of them.
 
-**Teach Netherlands Dutch.** Randstad standard, hard g, *je/jij* as default with explicit *u* rules, any r tolerated. A short awareness module on Flemish later. All TTS voices nl-NL.
+**Teach Belgian Dutch.** Standard Dutch as spoken in Flanders (the VRT norm): soft g, *u* as the default with strangers, shop staff, teachers and officials, *je/jij* with friends and once a colleague switches. The spoken vernacular is tussentaal with *ge/gij* and words like *goesting*, *plezant*, *allee* and *amai*: the learner must understand it from A1 and should not try to produce *gij* below B2. Both recorded voices are Flemish. A Netherlands awareness module comes later, not the other way round.
 
 **Technology is a solved problem, content is not.** Web first with Capacitor for iOS works if audio and storage go through native plugins on iOS. Two neural TTS voices for around 6,000 sentences cost tens of dollars, not thousands. The real cost is writing and checking about 200 scripted sessions of interleaved Dutch. Budget the project around authoring, not code.
 
@@ -74,9 +74,9 @@ From around session eight of each level, each session ends with a two-minute lis
 
 - **A transcript after the session, never during.** The single biggest criticism of SaySomethingin is that visual learners are lost and later find the spelling alien. We keep the session audio-only, then offer a "peek" at the transcript afterwards, with *de/het* marked. Off by default until Level A2.
 - **A one-line note when the language does something odd.** Not grammar teaching. A spoken aside such as *"Notice the verb jumped to the end there. It always does after 'omdat'. You do not need to know why yet."*
-- **Culture asides.** The four strands are as much about unwritten rules as words. The narrator explains the one-biscuit rule, the birthday circle and the Tikkie in twenty seconds each, at the moment the phrase comes up.
-- **The English problem.** Dutch people switch to English the moment they hear an accent. Every level has a short module on holding the line: *"Ik oefen mijn Nederlands, mag ik het in het Nederlands proberen?"* No other course addresses this and it is the main reason expats give up.
-- **Real institutions by name.** Albert Heijn, Gamma, Magister, Marktplaats, Tikkie. Learners meet them tomorrow, so the course should too.
+- **Culture asides.** The four strands are as much about unwritten rules as words. The narrator explains one kiss not three, *trakteren* on your birthday, the Payconiq and the Chiro in twenty seconds each, at the moment the phrase comes up.
+- **The English problem.** Flemings switch to English (or French) the moment they hear an accent. Every level has a short module on holding the line: *"Ik oefen mijn Nederlands, mag ik het in het Nederlands proberen?"* No other course addresses this and it is the main reason expats give up.
+- **Real institutions by name.** Colruyt, Brico, Smartschool, 2dehands, Payconiq, the CLB. Learners meet them tomorrow, so the course should too.
 - **No streaks.** Streaks make people do a minimum to keep a number alive. We show minutes spoken this week and sentences produced. The daily email (section 8.5) points at one five-minute klets and waits patiently if you miss it.
 - **Five minutes is the unit.** Every klets is authored to take five minutes and hold 15 to 20 spoken sentences. Four kletsen make a session in the sense used by SaySomethingin. Five minutes fits a spare moment and, more important, gets finished. Because one klets is too short to recycle much inside itself, the recycling is written across the chain of kletsen, and the player offers "nog een klets?" at the end so that a spare ten minutes turns into two.
 
@@ -84,12 +84,12 @@ From around session eight of each level, each session ends with a two-minute lis
 
 ### 5.1 What each level promises
 
-| Level | CEFR can-do (spoken) | What the learner can do in the Netherlands | Content |
+| Level | CEFR can-do (spoken) | What the learner can do in Flanders | Content |
 |---|---|---|---|
-| A1 | Simple phrases about people and places. Simple interaction if the other person is slow and helpful. | Greet, order at the bakker, get through the checkout, say who they are and where they live, congratulate everyone at a birthday circle, phone the school to say a child is ill. | 25 core sessions + 8 per strand (each session is four kletsen) |
-| A2 | Routine exchanges on familiar matters. Short descriptions of daily life. | Invite and decline with the agenda dance, deal with a shop return, ask for wood cut to size, apply for school leave, handle the WhatsApp parent group. | 25 core + 9 per strand |
-| B1 | Deal with most everyday situations, explain a problem, give reasons, tell a story. | Argue politely at dinner, negotiate on Marktplaats, describe a leak to a plumber and read a quote, hold a ten-minute talk with a teacher, choose a profile with the decaan. | 25 core + 10 per strand |
-| B2 | Fluent, spontaneous interaction without strain. Present a viewpoint with pros and cons. | Recognise sarcasm and use it, escalate a complaint, manage a builder's extra work, hold a mentor conversation about a child's wellbeing, write and read an email to the school. | 25 core + 10 per strand |
+| A1 | Simple phrases about people and places. Simple interaction if the other person is slow and helpful. | Greet, order at the bakker, get through the Colruyt checkout, say who they are and where they live, wish someone *proficiat*, phone the school to say a child is ill. | 25 core sessions + 8 per strand (each session is four kletsen) |
+| A2 | Routine exchanges on familiar matters. Short descriptions of daily life. | Invite and decline, deal with a shop return with the ticket, ask for wood cut to size at Brico, write a *briefje* for an absence, handle the class WhatsApp group. | 25 core + 9 per strand |
+| B1 | Deal with most everyday situations, explain a problem, give reasons, tell a story. | Argue politely at dinner, negotiate on 2dehands, describe a leak to a plumber and read an offerte, hold an oudercontact with the klastitularis, talk richtingen and attesten. | 25 core + 10 per strand |
+| B2 | Fluent, spontaneous interaction without strain. Present a viewpoint with pros and cons. | Recognise sarcasm and use it, escalate a complaint, manage a builder's extra work, talk to the CLB about a child's wellbeing, contest a B-attest, write and read an email to the school. | 25 core + 10 per strand |
 
 Total: roughly 1,000 kletsen of five minutes (250 sessions of 20 minutes), about 80 hours of guided speaking, plus listening files. Around 6,000 unique Dutch sentences and 1,500 to 2,000 chunks. That is comparable to three SaySomethingin levels and five times what Pimsleur offers for Dutch.
 
@@ -112,7 +112,7 @@ Onboarding asks three questions and then plays a two-minute spoken self-check at
 
 ### 5.5 Progress metaphor
 
-Dutch children earn swimming diplomas A, B and C. The course should use a diploma metaphor rather than belts: *Diploma A1*, *Diploma A2* and so on, with a short spoken "you did it" from the narrator and a certificate that is fun to share. Checkpoints inside a level are called *Tussenstand* (halfway score) rather than tests.
+Flemish children earn *zwembrevetten* for 25, 50 and 100 metres. The course uses a brevet metaphor rather than belts: *Brevet A1*, *Brevet A2* and so on, with a short spoken "you did it" from the narrator and a certificate that is fun to share. Checkpoints inside a level are called *Tussenstand* (halfway score) rather than tests.
 
 ## 6. Course architecture
 
@@ -130,78 +130,78 @@ Rules:
 - Core sessions come first and unlock the strand sessions at the same level. Learners can do any strand in any order and skip strands that do not apply. A parent without children will never see *Ouders*.
 - Strand sessions use only chunks the core has taught plus the strand's own. Strand chunks flow back into later core sessions so nothing is orphaned.
 - Every session is scripted as a small scene with a beginning and an end so it feels like a situation, not a drill.
-- Each level ends with a *Diploma* session: a long free-flow scene that mixes everything.
+- Each level ends with a *Brevet* session: a long free-flow scene that mixes everything.
 
 ## 7. The four strands
 
-Each strand below gives the situations, the cultural rules the narrator explains, sample chunks at each level and the scenes. Full vocabulary lists, about 60 to 120 items per strand, are in `research/03-scenario-vocabulary.md`.
+Each strand below gives the situations, the cultural rules the narrator explains, sample chunks at each level and the scenes. The Netherlands-oriented vocabulary lists are in `research/03-scenario-vocabulary.md`; the Flemish differences, which take precedence, are in `research/05-flemish-differences.md`.
 
 ### 7.1 Gezellig - being sociable
 
-**Situations:** the stairwell neighbour, first day at work, the birthday circle, the Friday borrel, coffee at someone's house, texting to arrange and cancel, the sports club and bar duty, the dinner where everyone says what they think, the friend who is being sarcastic.
+**Situations:** the neighbour on the stairs, first day at work, a birthday at work, op café with a round, the frituur, coffee at someone's house, texting to arrange and cancel, the Chiro or scouts and what parents are roped into, the buurtfeest and the kermis, the dinner where everyone says what they think, the friend who is being sarcastic.
 
-**Rules the narrator explains:** three kisses versus a handshake; walking the whole circle saying *gefeliciteerd* to everyone, including *met je moeder*; the biscuit tin comes round once; *even in mijn agenda kijken* is a real step, not a brush-off; a plain *nee* needs no excuse; *doe normaal*; the Tikkie arrives and you say *komt in orde*; volunteering is implied by club membership.
+**Rules the narrator explains:** one kiss with friends, a handshake otherwise, let the Fleming lead; *proficiat* not *gefeliciteerd*, and on your birthday you *trakteert* at work; *'t is mijn tournee* in the café; the Payconiq request that follows a shared bill; Flemings move to first names and *je* slowly, so keep *u* until they say *zeg maar Els*; *ge/gij* is what you hear, *je* is what you say; the jeugdbeweging is a national institution and parents cook on camp, drive and turn up to the spaghettiavond; the zomerbar and the kermis are where the village is in summer.
 
 **Sample chunks:**
-- A1: *Hoe gaat het? Goed, en met jou? Lekker weertje, hè? Gefeliciteerd met je moeder. Koffie, graag. Ik ga ervandoor. Bedankt voor de gezellige avond.*
-- A2: *Heb je zin om zaterdag te komen eten? Even in mijn agenda kijken. Dan kan ik helaas niet. Zal ik iets meenemen? Dat hoeft niet, hoor. Kun je een pakketje voor me aannemen? Ik stuur je wel een Tikkie.*
-- B1: *Volgens mij ... Daar ben ik het niet mee eens. Daar zit wat in. Je raadt het nooit. Wat een gedoe. Niet verkeerd. Ik heb er geen zin in.*
-- B2: *Lekker dan. Ja, dat zal wel. Meen je dat? Zo bedoelde ik het niet. Eerlijk gezegd vind ik het niet zo'n goed idee. We komen er wel uit.*
+- A1: *Hoe is 't? Goed, en met u? Schoon weer, hè? Proficiat! Koffie, graag. Merci. Aangenaam. Dag! Salut!*
+- A2: *Heb je zin om zaterdag te komen eten? Even in mijn agenda kijken. Dan kan ik jammer genoeg niet. Zal ik iets meebrengen? Dat is niet nodig. Kun je een pakje voor mij aannemen? Ik stuur je een Payconiq. 't Is mijn tournee. Mijn zoon zit in de Chiro.*
+- B1: *Volgens mij ... Daar ben ik het niet mee eens. Kom eens langs. We spreken af op café. Ik ben content. Dat trekt op niets. Rap, rap. Op voorhand bedankt.*
+- B2: *Zijde zeker? (understood) Ik zit ermee verveeld. Dat kan tellen. Eerlijk gezegd vind ik het geen goed idee. We komen er wel uit.* Recognising a colleague's switch to *ge* as friendliness.
 
-**Scenes:** Op de trap (A1), Even voorstellen (A1), De kringverjaardag (A1/A2), Koffie doen? (A2), De nieuwe buren (A2), Vrijmibo (B1), Hoe was je weekend? (B1), Bardienst bij de club (B1), Daar ben ik het niet mee eens (B2), Lekker dan (B2).
+**Scenes:** Op de trap (A1), Even voorstellen (A1), Proficiat! (A1/A2), Iets gaan drinken? (A2), De nieuwe buren (A2), Op café (B1), Hoe was je weekend? (B1), Kookploeg op kamp (B1), Daar ben ik het niet mee eens (B2), Allee, dat meent ge niet (B2).
 
 ### 7.2 Winkelen - going into shops
 
-**Situations:** the bakker on Saturday, the supermarket checkout script, the bottle return machine, the market by weight, drogist versus apotheek, trying on and exchanging clothes, the bike repair shop, a faulty item, haggling on Marktplaats.
+**Situations:** the bakker on Saturday (*aan wie is 't?*), the Colruyt or Delhaize checkout, the blauwe zak and the containerpark, the market by weight, the apotheek and the apotheek van wacht, trying on and exchanging clothes, the velomaker, a faulty item under the two-year guarantee, haggling on 2dehands.
 
-**Rules the narrator explains:** the checkout has a fixed script (*bonuskaart, bon, zegels, pinnen, tasje*); many shops are pin only; *een ons* is 100 g and *een pond* is 500 g; painkillers at Kruidvat, prescriptions at the apotheek; change-of-mind returns get a *tegoedbon*, faulty goods fall under *wettelijke garantie*; on Marktplaats bidding is expected and same-day pickup earns a discount.
+**Rules the narrator explains:** the checkout script is *klantenkaart, ticket, cash of met de kaart, zakje*; free plastic bags are banned; there is no deposit on cans or bottles, they go in the blauwe zak; painkillers are sold only at the apotheek, not at Kruidvat or Di; *hesp* is ham and *een pistolet* is a roll; the legal guarantee is two years and a physical shop need not take goods back if you change your mind; on 2dehands bidding is expected and *enkel afhalen* is normal.
 
 **Sample chunks:**
-- A1: *Wie is er aan de beurt? Zegt u het maar. Een heel bruinbrood, gesneden. Anders nog iets? Nee, dat was het. Wilt u de bon? Pinnen, graag. Ik kijk even rond.*
-- A2: *Een pond kaas, alstublieft. Heeft u dit in een andere maat? Mag ik dit passen? Het zit te strak. Kan ik dit ruilen? Mijn band is lek. Wanneer is hij klaar?*
-- B1: *Ik wil graag een klacht indienen. Het is na twee weken kapotgegaan. Volgens de wet heb ik recht op reparatie of vervanging. Is dit nog beschikbaar? Wat is je laatste prijs? Als je hem voor 40 doet, haal ik hem morgen op.*
-- B2: *Kunt u dit uit coulance vergoeden? Ik wil dit graag schriftelijk bevestigd hebben. De prijs is aan de hoge kant vergeleken met vergelijkbare advertenties. Laten we elkaar in het midden ontmoeten.*
+- A1: *Aan wie is 't? Zeg het maar. Een bruin brood, alstublieft. Gesneden? Nog iets? Nee, dat is alles. Wilt u het ticket? Met de kaart. Ik kijk eens rond. Hoeveel is 't?*
+- A2: *Een halve kilo kaas. Tweehonderd gram hesp. Heeft u dit in een andere maat? Mag ik dit passen? Het is te klein. Kan ik dit ruilen? Ik heb het ticket nog. Mijn band is plat. Ik heb een voorschrift. Waar is de apotheek van wacht? In promotie. De solden.*
+- B1: *Ik wil een klacht indienen. Valt dit onder de garantie? Herstellen of vervangen? Is dit nog beschikbaar? Wat is uw laatste prijs? Kan ik het afhalen in Gent? Ik bied 40 euro.*
+- B2: *Ik verwacht dat u dit oplost. Ik ga naar Test Aankoop. Het herroepingsrecht geldt hier niet, dat weet ik, maar ... Laten we elkaar in het midden vinden.*
 
-**Scenes:** Bij de bakker (A1), De kassa bij Albert Heijn (A1), Statiegeld inleveren (A1/A2), Op de markt (A2), Bij Kruidvat en de apotheek (A2), In de kledingwinkel (A2), Bij de fietsenmaker (A2/B1), Dit is kapot (B1), Marktplaats-onderhandeling (B1), Ik wil mijn geld terug (B2).
+**Scenes:** Bij de bakker (A1), De kassa bij Colruyt (A1), De blauwe zak (A1/A2), Op de markt (A2), Bij de apotheek (A2), In de kledingwinkel (A2), Bij de velomaker (A2/B1), Dit is stuk (B1), 2dehands-onderhandeling (B1), Ik wil mijn geld terug (B2).
 
 ### 7.3 Klussen - doing DIY
 
-**Situations:** finding the right plugs at Gamma, the wood-cutting service, mixing paint, hiring a trailer, painting walls white before handing back a rental, the pre-inspection, a leaking tap or blocked drain, a tripped fuse group, phoning a plumber, reading a quote, buying second-hand tools, checking with the VvE or gemeente before a dormer.
+**Situations:** finding the right *vijzen* and *pluggen* at Brico or Hubo, the wood-cutting service, mixing paint, hiring a trailer, the plaatsbeschrijving when renting, a leaking tap or blocked drain, a tripped fuse in the zekeringkast, phoning a loodgieter, reading an offerte, buying second-hand tools on 2dehands, the syndicus and the VME, checking the Omgevingsloket before an extension.
 
-**Rules the narrator explains:** staff are addressed with *u* and the opener is *Kunt u me even helpen?*; mixed paint cannot be returned; a rental must go back in the state of the *opnamerapport* and the *voorinspectie* tells you what to fix; a tripped *groep* is yours to reset, anything else is for an *erkend installateur*; always get an *offerte* first and agree *meerwerk* before it happens; VvE permission is needed for anything touching common parts even when the gemeente does not need a permit.
-
-**Sample chunks:**
-- A1: *Waar vind ik de schroeven? Ik zoek pluggen voor een gipswand. Kunt u dit op maat zagen? Twee stukken van 60 bij 40. Hoeveel liter heb ik nodig voor 20 m²? De kraan lekt. De afvoer is verstopt. Er is geen stroom.* Tools: *de boormachine, de schroevendraaier, de waterpas, de rolmaat, het kitpistool, het plamuurmes.* Fixings: *de schroef, de plug, de spijker, de bout, de moer.*
-- A2: *Ik ga dit weekend klussen. Ik ben niet zo handig. Kan ik je boormachine even lenen? Kunt u deze kleur mengen? Ik wil RAL 9010. Wat is de borg? Ik moet de muren wit opleveren. Mag ik hier behangen?* Verbs: *boren, schuren, plamuren, gronden, aflakken, sausen, witten, kitten, tegelen, laminaat leggen.*
-- B1: *Ik bel over een lekkage. Kunt u langskomen? Het is geen spoed. Kunt u een offerte maken? Zijn de voorrijkosten inbegrepen? Is dat inclusief btw? Er is een groep uitgevallen. De aardlekschakelaar is eruit gesprongen. Heb ik hier een vergunning voor nodig?*
-- B2: *Sinds een week hoor ik een tikkend geluid in de leidingen. Ik heb zelf al geprobeerd om ..., maar dat hielp niet. Ik vermoed dat het aan de ... ligt. Meerwerk graag eerst overleggen. Dat is meer dan we hadden afgesproken. Afspraak is afspraak.*
-
-**Scenes:** Waar liggen de pluggen? (A1), Hout op maat (A1/A2), Verf mengen (A2), Een aanhanger huren (A2), De voorinspectie (A2/B1), Geen stroom (B1), De loodgieter bellen (B1), Tweedehands boormachine (B1/B2), De offerte bespreken (B2), De VvE en de dakkapel (B2).
-
-### 7.4 Ouders - parent of a child at secondary school
-
-**Situations:** phoning in sick before 8.15, the timetable and homework chat at home, the parents' WhatsApp group and school gate, applying for leave, the open day, the ten-minute talk with a subject teacher, profile choice with the decaan, the mentor conversation about wellbeing, the promotion meeting outcome, emailing the school.
-
-**Rules the narrator explains:** the system from groep 8 through doorstroomtoets and schooladvies to vmbo, havo and vwo; brugklas and dakpanklas; grades out of 10 where 5.5 rounds to a pass and *een zesje* is scraping by; SO versus proefwerk versus toetsweek; PTA, schoolexamen and centraal examen; the flag and schoolbag when a child passes; *overgaan* versus *blijven zitten*; Magister and Somtoday; leave only for *gewichtige omstandigheden* and the leerplichtambtenaar; the parental contribution is voluntary; the support ladder from mentor to zorgcoördinator; you address teachers as *u* and *meneer/mevrouw* plus surname; emails open with *Beste* or *Geachte* and close *Met vriendelijke groet*.
+**Rules the narrator explains:** staff are addressed with *u*; mixed paint cannot be returned; a rental needs a *plaatsbeschrijving* at move-in and the *huurwaarborg* is at most three months' rent on a blocked account; every flat building has a syndicus and the VME meets once a year; interior works need no permit, an extension up to 40 m² needs a *melding*, the rest goes through the Omgevingsloket; renovation of a house older than ten years is at 6% VAT with a contractor; always get an *offerte* and agree extra work first; *verplaatsingskosten* not *voorrijkosten*; dienstencheques for a poetshulp.
 
 **Sample chunks:**
-- A1: *Ze zit in de tweede. Hij doet havo. Hoe laat ben je uit? Heb je huiswerk? Wat heb je gehaald? Een 6 is voldoende. Mijn dochter is ziek, ze komt vandaag niet. Ze is weer beter. Geslaagd!*
-- A2: *De cijfers staan in Magister. Kan ik verlof aanvragen voor een bruiloft? Ik wil graag een tienminutengesprek met de docent Engels. Moet ik de ouderbijdrage betalen? Wie kan er rijden naar het gala? Ik stuur een Tikkie.* Vocabulary: *de mentor, de decaan, de brugklas, het rapport, de toetsweek, de herkansing, overgaan, blijven zitten, het kluisje, de ouderavond.*
-- B1: *Ze twijfelt tussen N&G en E&M. Ze heeft moeite met wiskunde. Hij loopt achter met Frans. Het gaat de goede kant op. Hij zit midden in de puberteit. Ze zit niet lekker in haar vel. Succes met de toetsweek allemaal! Herkenbaar!*
-- B2: *Ik wilde het graag hebben over hoe het gaat met Tom. Hoe ervaart u hem in de klas? We maken ons zorgen over haar welzijn. Ligt ze op koers om over te gaan? Wat kunnen wij thuis doen? Kunt u me doorverwijzen naar de zorgcoördinator? Zijn er signalen van pesten? Geachte mevrouw De Vries, ik ben de moeder van Sara uit 2B.*
+- A1: *Waar vind ik de vijzen? Ik zoek pluggen voor een gipswand. Kunt u dit op maat zagen? Twee stukken van 60 op 40. De kraan lekt. De afvoer is verstopt. De stroom is uitgevallen. De lamp is stuk.* Tools: *de boormachine, de schroevendraaier, de waterpas, de rolmeter, de borstel, de vijs, de nagel, de plug.*
+- A2: *Ik ga dit weekend klussen. Ik ben niet zo handig. Kan ik je boormachine even lenen? Kunt u deze kleur mengen? Wat is de waarborg? De zekeringkast. De chauffage werkt niet. De plaatsbeschrijving. De syndicus. Dienstencheques.*
+- B1: *Ik bel voor een lek. Kunt u langskomen? Kunt u een offerte maken? Zijn de verplaatsingskosten inbegrepen? Is dat met 6% btw? Heb ik hier een vergunning voor nodig? Ik heb een melding gedaan via het Omgevingsloket. Mijn VerbouwPremie.*
+- B2: *Sinds een week hoor ik een tikkend geluid in de leidingen. Ik vermoed dat het aan de ... ligt. Meerwerk graag eerst overleggen. Dat is meer dan we hadden afgesproken. Kunt u dat schriftelijk bevestigen? De tegensprekelijke plaatsbeschrijving. Naar de vrederechter.*
 
-**Scenes:** Ziekmelden (A1), Hoe laat ben je uit? (A1), Aan het hek en in de groepsapp (A2), Verlof aanvragen (A2), De open dag (A2/B1), Het tienminutengesprek (B1), Profielkeuze bij de decaan (B1), Het mentorgesprek (B2), Blijven zitten of afstromen? (B2), De mail aan school (B2).
+**Scenes:** Waar liggen de vijzen? (A1), Hout op maat (A1/A2), Verf mengen (A2), Een aanhangwagen huren (A2), De plaatsbeschrijving (A2/B1), Geen stroom (B1), De loodgieter bellen (B1), Tweedehands boormachine (B1/B2), De offerte bespreken (B2), De algemene vergadering van de VME (B2).
 
-**A deliberate deviation:** this strand needs a little reading and writing at B2, because school communication is written. The email scene shows the text after the spoken version. That is the only place the course touches writing.
+### 7.4 Ouders - parent of a child at secondary school (het secundair)
+
+**Situations:** the *briefje* for a sick day and the doktersattest from day four, the agenda and homework chat at home, the class WhatsApp group and the schoolpoort, the schoolrekening, the opendeurdag, the oudercontact with the klastitularis, richtingen and finaliteiten at the end of the eerste graad, the klassenraad and an A, B or C-attest, bijkomende proeven in August, talking to the CLB, emailing the school, the 100 dagen and the proclamatie.
+
+**Rules the narrator explains:** the system from the lager (*het zesde leerjaar*) into *het eerste middelbaar*, A-stroom and B-stroom, then finaliteiten (doorstroom, dubbele, arbeidsmarkt) that everyone still calls ASO, TSO and BSO; typical richtingen (Latijn, STEM, Economie, Humane wetenschappen, Moderne talen); points and percentages where 50% passes and below is a *tekort*; *dagelijks werk* versus the exams at Kerst and juni; the klassenraad gives an A-attest (go on freely), a B-attest (go on but not into certain richtingen) or a C-attest (repeat, *bissen*), and parents can appeal; four parental *briefjes* a year of up to three days, then a doktersattest, always one in exam weeks; Smartschool and the co-account; no maximumfactuur in secondary, so the schoolrekening is real money; the CLB is outside the school and handles study choice, medical checks and wellbeing; *redelijke aanpassingen* for dyslexia under the leersteundecreet; teachers are *mevrouw* or *meneer* plus surname; emails open *Beste* or *Geachte* and close *Met vriendelijke groeten*; the jeugdbeweging, the 100 dagen and the proclamatie are the rituals.
+
+**Sample chunks:**
+- A1: *Ze zit in het derde middelbaar. Hij doet Latijn. Hoe laat ben je thuis? Heb je huiswerk? Hoeveel had je? Vijftig procent is geslaagd. Ze is ziek, ik schrijf een briefje. Ze is weer beter. De boekentas. De brooddoos. De refter. De speelplaats.*
+- A2: *De punten staan op Smartschool. Ik heb een bericht gestuurd via het co-account. Ik wil graag een oudercontact met de klastitularis. Wanneer is het rapport? Wie kan er rijden naar het zwemmen? Merci voor het doorsturen! Denk aan het ziektebriefje. De schoolrekening. De bosklassen. De examens beginnen maandag.*
+- B1: *Ze twijfelt tussen Economie en Humane wetenschappen. Hij heeft een tekort voor wiskunde. Hij is gebuisd voor Frans. Ze moet bijkomende proeven doen. Hij is aan 't blokken. Ze zit de hele dag op haar gsm. Hij trekt zijn plan. Ze heeft weinig goesting om te studeren. Kunnen we redelijke aanpassingen aanvragen?*
+- B2: *Hoe doet hij het in de klas? Hoe zit het met zijn inzet? Welke richting raadt u aan? Dreigt er een B-attest? Wat is het advies van de klassenraad? Kunnen we het CLB betrekken? We gaan in beroep tegen het attest. Beste mevrouw Peeters, ik ben de mama van Arthur uit 3 Latijn.*
+
+**Scenes:** Een briefje schrijven (A1), Hoe laat ben je thuis? (A1), Aan de schoolpoort en in de klasgroep (A2), Het doktersattest (A2), De opendeurdag (A2/B1), Het oudercontact (B1), Welke richting? (B1), Het CLB (B2), Een B-attest (B2), De mail aan school (B2).
+
+**A deliberate deviation:** this strand needs a little reading and writing at B2, because school communication is written and Smartschool is text. The email scene shows the text after the spoken version. That is the only place the course touches writing.
 
 ## 8. Product outline
 
 ### 8.1 Screens
 
-1. **Vandaag (Today).** One big button: today's klets, the same one the morning email pointed at. Under it: a tick when it is done, minutes spoken this week, next Diploma and one line from the narrator.
+1. **Vandaag (Today).** One big button: today's klets, the same one the morning email pointed at. Under it: a tick when it is done, minutes spoken this week, next Brevet and one line from the narrator.
 2. **Player.** The whole screen is the session. Large pause ring, a pause button, a "that one got me" tap, replay last, speed control for the native voices (0.8x to 1.2x), and a session timeline as a thin bar. No text of the sentence during the session. Lock-screen controls on iOS.
 3. **Na de les (After).** Optional transcript with *de/het* colours, the culture asides as text, the option to start the two-minute Herhaling or the next klets.
-4. **Het pad (The path).** The level map: core spine down the middle, four strands branching off, Diploma at the bottom. Strands can be hidden.
+4. **Het pad (The path).** The level map: core spine down the middle, four strands branching off, Brevet at the bottom. Strands can be hidden.
 5. **Luisteren.** The listening files at speed, downloadable, meant for the bike or the washing up.
 6. **Instellingen.** Voices, transcript on or off, downloads, account, subscription, and the daily email: address, time, days of the week, pause.
 
@@ -249,7 +249,7 @@ Why not the current single-file vanilla style of the other apps in this reposito
 ### 9.2 Pieces
 
 - **Content:** lesson scripts as JSON (prompt, target, chunk IDs, pause length, audio refs, level and strand tags). Scripts live in the repository; audio is generated from them and packed per session.
-- **Audio:** two nl-NL voices, one female and one male. EU-first order of preference: (1) human recordings by two Dutch speakers, which is the most sovereign option and the best quality, and for a household trial of 300 phrases is under an hour of recording; (2) Acapela (Belgium), a long-standing EU text-to-speech vendor with Dutch voices; (3) Piper, open source and self-hosted on our own EU server, free but noticeably robotic. The best-sounding neural Dutch voices (Azure, Google, Amazon, ElevenLabs) are all US companies; if the EU options are not good enough, that is a quality-versus-sovereignty decision to take explicitly, not by default. A native Dutch speaker audits 200 random sentences for stress and the g, ch and ui sounds before launch.
+- **Audio:** two Flemish voices, one female and one male. EU-first order of preference: (1) human recordings by two Flemish speakers, which is the most sovereign option and the best quality, and for a household trial of 300 phrases is under an hour of recording; (2) Acapela (Belgium), a long-standing EU text-to-speech vendor with Belgian Dutch voices; (3) Piper, open source and self-hosted on our own EU server, free but noticeably robotic. The best-sounding neural Dutch voices (Azure, Google, Amazon, ElevenLabs) are all US companies; if the EU options are not good enough, that is a quality-versus-sovereignty decision to take explicitly, not by default. A native Dutch speaker audits 200 random sentences for stress and the g, ch and ui sounds before launch.
 - **Scheduling:** authored interleaving in the script, plus ts-fsrs for the optional review block.
 - **Storage:** Dexie (IndexedDB) for progress and settings, Cache API on web and Capacitor Filesystem on iOS for audio packs, progress synced to an EU-hosted backend.
 - **Backend:** small but present from the first build, because a page in a browser cannot send email on a schedule while it is closed. Needed: a store of learners (email, time zone, send time, days, current klets, completed kletsen), a job that runs every fifteen minutes and sends the emails due, an email sender and an endpoint the app calls when a klets is finished. Recommended, EU-first: one small Hetzner (Germany) cloud server in Falkenstein at about €5.50 a month running Caddy for TLS, a small Node service, SQLite and a systemd timer for the email job. Scaleway (France) serverless jobs and object storage are the managed alternative. Email through Scaleway Transactional Email (France; 300 a month free, then €0.25 per thousand) or Brevo (France). Payments later through Mollie (Netherlands), not Stripe.
@@ -267,7 +267,7 @@ The rule is EU-based companies and EU-hosted data wherever a workable option exi
 | Email sending | Scaleway Transactional Email (FR) or Brevo (FR) | EU. The recipients' own mailboxes (Gmail, Outlook) are outside our control. |
 | TLS certificates | Buypass (Norway, EEA) or ZeroSSL (Austria) via ACME | Let's Encrypt is a US non-profit; Caddy can use either alternative. |
 | Fonts | Self-hosted, sourced from Bunny Fonts (Slovenia) | Never load from Google Fonts. |
-| Dutch voices | Human recordings, then Acapela (BE), then self-hosted Piper | **Not fully possible at top quality.** The best neural Dutch voices are US (Azure, Google, Amazon, ElevenLabs). ReadSpeaker is Dutch-founded but owned by HOYA (Japan). |
+| Flemish voices | Human recordings (decided), then Acapela (BE), then self-hosted Piper nl_BE | **Not fully possible at top quality from a vendor.** The best neural Belgian Dutch voices are US (Azure nl-BE, Google, Amazon Lisa). ReadSpeaker is Dutch-founded but owned by HOYA (Japan). Human recording sidesteps the problem. |
 | Pronunciation scoring (later, optional) | Self-hosted Whisper on our EU server, or Mistral Voxtral (FR) for transcription | **Not possible for scoring.** No EU service offers phoneme-level pronunciation assessment for Dutch; Azure is the only one found. Recommendation stands: do not score. |
 | Payments (later) | Mollie (NL) or Adyen (NL) | EU. |
 | Analytics and error tracking | None for the trial; Plausible (Estonia) or self-hosted Matomo later | EU. |
@@ -302,24 +302,24 @@ Ordering of authoring: A1 core, then A1 Gezellig and Winkelen, then Klussen and 
 | 1. A1 on the web | Full A1 (core and four strands), offline, Mollie payments, native audit of the Dutch, five outside testers. | Launch to a small paying audience. |
 | 2. A2 and iOS | A2 content, Capacitor wrap, native audio, App Store submission, in-app purchase. | Broaden distribution. |
 | 3. B1 | B1 content, record and compare, weekly narrator email. | Retain learners past the beginner cliff. |
-| 4. B2 | B2 content, the email scene with text, Flemish awareness module. | Complete the promise. |
+| 4. B2 | B2 content, the email scene with text, Netherlands awareness module. | Complete the promise. |
 
 No timelines here on purpose. Each stage of the household trial is days, not weeks, and each stage must put phrases in your mouth on its own. Each content level after that is months of authoring. The trial's success test: after two weeks, did both of you finish eight or more kletsen without forcing it, and did either of you use a phrase on a real Dutch person?
 
 ## 12. Risks and where I disagree with the brief
 
-- **The market is small.** Dutch learners are mostly in the Netherlands and Belgium and many get by in English. This is a good product for a niche, not a growth business. Price it accordingly: around €8 a month or €60 a year, or a one-off price per level, which audio learners like.
+- **The market is small.** Dutch learners are mostly in Belgium and the Netherlands and many get by in English. Flanders alone is a niche within a niche, but it is the one nobody serves: every Dutch app teaches Hollands, and a Fleming can hear it in one sentence. This is a good product for a niche, not a growth business. Price it accordingly: around €8 a month or €60 a year, or a one-off price per level, which audio learners like.
 - **Content volume is the cost.** Eighty hours of scripted, checked, interleaved Dutch is the equivalent of writing several textbooks. Start with A1 and see whether people finish it before committing to B2.
 - **Pure audio has limits at B2.** B2 is about nuance and register and the Dutch you meet at B2 is often written (school emails, quotes, contracts). The course should admit that and add reading at B2 rather than pretend. I have done that in the Ouders strand and I would do it in Klussen for quotes too.
 - **The Dutch switch to English.** If the app does not train learners to hold the conversation in Dutch, the rest is wasted. I have made this a core module at every level. It is the feature I would market hardest.
-- **TTS on the hard sounds.** The g, ch and ui are exactly where neural voices are sometimes off. The native audit is not optional.
+- **Voices.** With human Flemish recordings the risk moves from synthetic voices to consistency: same speaker, room and microphone for every session, and enough sessions to cover 1,000 kletsen over time.
 - **Overwhelm.** SaySomethingin's learners report feeling lost early on. The three-in-four rule, the optional pause and the transcript peek are there to soften this without losing the method.
 - **Naming.** Own name, generic description of the method, no reuse of anyone's scripts.
 
 ## 13. Decisions I need from you before building
 
 1. **Name.** Decided: Klets.
-2. **Netherlands Dutch only** for the first version, with Flemish as a later awareness module. I recommend yes.
+2. **Variety.** Decided: Belgian Dutch first, because you live in Flanders. A Netherlands edition of the strands can follow.
 3. **Voices.** Decided: human recordings by native speakers, lists in content/.
 4. **Transcript peek after sessions.** I recommend yes, off by default at A1.
 5. **Stack.** Decided in outline: EU-first (section 9.3), plain JavaScript for the trial, Vite and Svelte with Capacitor later.
