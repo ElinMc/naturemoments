@@ -5,7 +5,7 @@ Two lists to record: `recording-A1.md` (about 190 lines, for the A1 learner) and
 The English prompts are not for the Dutch speaker. Elin records those separately (same method, same lists, English column) or the app shows them as text in the trial. Either works.
 
 ## Who
-- A native speaker of Netherlands Dutch, hard g, Randstad or general standard accent. Not Flemish for this trial, so the two voices sound like one country.
+- A native speaker of Belgian Dutch (Flemish), speaking Standard Dutch as heard on the VRT: soft g, clear standard vocabulary, no dialect and no heavy tussentaal. The lines are written in Belgian Dutch (u where a Fleming would say u, *ticket* not *bon*, *voorschrift* not *recept*). If a line reads as too Hollands to the speaker, they should say the natural Flemish version and note it. Both voices should be Flemish, so the two sound like one country.
 - Someone who can read a line naturally as if talking to a friend who is learning, not as a newsreader and not over-articulated.
 
 ## Where and with what
