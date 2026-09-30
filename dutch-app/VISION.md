@@ -70,10 +70,12 @@ On top of that, an optional two-minute *Herhaling* (review) block after a klets 
 
 From around session eight of each level, each session ends with a two-minute listening file made from sentences you already know, played at 1.5x and later 2x. The learner is told they do not need to understand it. Purpose: normal speed starts to feel slow. This is one of SaySomethingin's most praised features and it is cheap to make.
 
-### 4.6 Where we deliberately differ from SaySomethingin
+### 4.6 Extras beyond SaySomethingin (all off by default)
 
-- **A transcript after the session, never during.** The single biggest criticism of SaySomethingin is that visual learners are lost and later find the spelling alien. We keep the session audio-only, then offer a "peek" at the transcript afterwards, with *de/het* marked. Off by default until Level A2.
-- **A one-line note when the language does something odd.** Not grammar teaching. A spoken aside such as *"Notice the verb jumped to the end there. It always does after 'omdat'. You do not need to know why yet."*
+The core loop is the SaySomethingin method unchanged, written down as a checklist in `METHOD.md`. The items below are extras a learner can switch on after a klets. None of them appears during the loop.
+
+- **A transcript after the session, never during.** The single biggest criticism of SaySomethingin is that visual learners are lost and later find the spelling alien. We keep the session audio-only, then offer a "peek" at the transcript afterwards, with *de/het* marked. Off by default at every level; the learner switches it on themselves.
+- **No grammar notes.** SaySomethingin explains nothing and neither do we. The only spoken asides are encouragement and, at most, one short cultural note per klets when a phrase needs it.
 - **Culture asides.** The four strands are as much about unwritten rules as words. The narrator explains one kiss not three, *trakteren* on your birthday, the Payconiq and the Chiro in twenty seconds each, at the moment the phrase comes up.
 - **The English problem.** Flemings switch to English (or French) the moment they hear an accent. Every level has a short module on holding the line: *"Ik oefen mijn Nederlands, mag ik het in het Nederlands proberen?"* No other course addresses this and it is the main reason expats give up.
 - **Real institutions by name.** Colruyt, Brico, Smartschool, 2dehands, Payconiq, the CLB. Learners meet them tomorrow, so the course should too.
