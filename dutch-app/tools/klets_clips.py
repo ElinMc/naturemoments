@@ -229,9 +229,29 @@ def main():
                 print(f"  {a:7.2f}-{b:7.2f}  {text}")
             report.append(f"# Klets clips report - free mode\n\nRun: {stamp}\nInput: {args.audio}\n{len(phrases)} phrases. Fill in the English column in phrases.json, or leave it empty for listening-only practice.\n")
 
-        (out / "phrases.json").write_text(json.dumps({"generated": stamp, "source": os.path.basename(args.audio),
-                                                      "mode": "aligned" if args.list else "free", "klets": args.klets,
-                                                      "phrases": phrases}, ensure_ascii=False, indent=2), encoding="utf-8")
+        data = {"generated": stamp, "source": os.path.basename(args.audio), "mode": "aligned" if args.list else "free",
+                "klets": args.klets, "voices": 1, "phrases": phrases}
+        pj = out / "phrases.json"
+        if args.list and pj.exists():
+            # a second speaker for the same klets: keep the first speaker's clip as file, add this one as file2
+            try:
+                old = json.loads(pj.read_text(encoding="utf-8"))
+            except Exception:
+                old = None
+            if old and old.get("klets") == args.klets and old.get("phrases"):
+                byid = {p["id"]: p for p in old["phrases"]}
+                for p in phrases:
+                    o = byid.get(p["id"])
+                    if o and o.get("speaker") != args.speaker:
+                        o["file2"] = p["file"]; o["speaker2"] = args.speaker; o["duration2"] = p["duration"]
+                    elif o:
+                        byid[p["id"]] = p
+                    else:
+                        byid[p["id"]] = p
+                merged = [byid[e["id"]] for e in expected if e["id"] in byid]
+                data = {**old, "generated": stamp, "voices": 2 if any("file2" in p for p in merged) else 1, "phrases": merged}
+                print("merged with the existing phrases.json as a second voice")
+        pj.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
         (out / "report.md").write_text("\n".join(report), encoding="utf-8")
         print(f"\nwrote {len(phrases)} clips to {out/'clips'}, plus phrases.json and report.md")
 

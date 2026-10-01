@@ -1,5 +1,7 @@
 # Klets tools - from a recording to phrase clips
 
+Two tools. `klets_clips.py` cuts a recording of someone reading a sheet (or any recording) into phrase clips. `klets_class.py` mines long class recordings for the phrases the teacher says most and cuts those. Both write a folder the player in `../app` opens directly.
+
 `klets_clips.py` takes any recording (.m4a from Voice Memos, the Soniox app, a WAV from Audacity) and produces:
 
 - `clips/<id>.m4a` - one loudness-matched mono AAC clip per phrase (plays in every browser, including Safari)
@@ -35,6 +37,25 @@ python3 klets_clips.py --audio ~/Downloads/gesprek.m4a --out ~/Desktop/klets-fre
 ```
 
 Whisper's own sentence segments become phrases. The English column is empty; fill it in `phrases.json` by hand or leave it empty for listening practice. This is the mode for vocabulary from real life: ask your Flemish speaker to talk you through a shop visit or a school letter, record it, run the script, and you have clips of exactly the phrases you will meet.
+
+## Class recordings: klets_class.py
+
+```bash
+python3 klets_class.py --out ~/klets-class --speaker "Speaker 1" --top 40 --min-count 3 \
+  --audio les1.m4a --transcript les1.srt --translation les1.en.srt \
+  --audio les2.m4a --transcript les2.srt --translation les2.en.srt
+```
+
+Export the Dutch transcript from Soniox with timestamps (SRT or VTT is ideal; Soniox JSON with tokens also works) and the English translation as SRT too. The tool counts every two-to-six-word phrase across all the lessons, keeps the ones that recur, drops phrases that cross a comma or full stop, and for each one finds the clearest example in the teacher's voice (give the teacher's speaker label with `--speaker`). It writes:
+
+- `clips/c001-phrase.m4a` - the phrase, cut from the sentence (tight when you add `--refine`, which uses Whisper word timestamps; otherwise the whole sentence)
+- `clips/c001-zin1.m4a` - the full sentence it came from, plus more examples with `--examples 2`
+- `phrases.json` - phrase, count, clip, example sentences with their Soniox English
+- `report.md` - the top phrases with counts, the top words, and what to do next
+
+If the Soniox export has no timestamps (plain text), the tool times the audio with Whisper itself; `--refine` then needs the setup from `setup-mac.sh`.
+
+Honest limits: a classroom recording has students, noise and overlap. Expect to delete a quarter of the clips after listening once. The counting is on the transcript, so Soniox mishearings count too; the report shows the example sentence so you can spot them.
 
 ## phrases.json shape
 

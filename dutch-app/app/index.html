@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#f6f1e9">
+<title>Klets</title>
+<style>
+  :root { --bg:#f6f1e9; --ink:#1e1b16; --muted:#7a7268; --line:#e2dbcf; --accent:#e8622a; --green:#2f8f6b; --card:#fffdf9; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#15130f; --ink:#f3ede3; --muted:#a39b8e; --line:#2c2821; --accent:#ff7a3d; --green:#4fbf93; --card:#1e1b16; } }
+  * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  html, body { height:100%; }
+  body { font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background:var(--bg); color:var(--ink); display:flex; flex-direction:column; align-items:center; padding:max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)); }
+  main { width:100%; max-width:520px; flex:1; display:flex; flex-direction:column; }
+  h1 { font-size:28px; letter-spacing:-0.5px; margin:8px 0 4px; }
+  .sub { color:var(--muted); font-size:15px; line-height:1.45; }
+  .screen { display:none; flex:1; flex-direction:column; }
+  .screen.on { display:flex; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; margin-top:16px; }
+  button { font:inherit; border:0; border-radius:14px; padding:16px 20px; font-size:18px; font-weight:600; cursor:pointer; color:#fff; background:var(--accent); width:100%; }
+  button.ghost { background:transparent; color:var(--ink); border:1px solid var(--line); }
+  button:disabled { opacity:.45; }
+  .row { display:flex; gap:10px; margin-top:12px; }
+  .row button { flex:1; }
+  label.file { display:block; margin-top:12px; }
+  input[type=file] { display:none; }
+  .stat { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line); font-size:15px; }
+  .stat:last-child { border:0; }
+  /* player */
+  .player { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+  .ring { width:min(62vw, 260px); height:min(62vw, 260px); border-radius:50%; position:relative; display:grid; place-items:center; margin:12px 0 20px; }
+  .ring svg { position:absolute; inset:0; transform:rotate(-90deg); }
+  .ring circle { fill:none; stroke-width:10; }
+  .ring .track { stroke:var(--line); }
+  .ring .fill { stroke:var(--accent); stroke-linecap:round; transition:stroke-dashoffset .1s linear; }
+  .ring.listen .fill { stroke:var(--green); }
+  .state { font-size:22px; font-weight:700; }
+  .state small { display:block; font-weight:500; color:var(--muted); font-size:14px; margin-top:4px; }
+  .prompt { font-size:24px; line-height:1.3; min-height:64px; margin-top:8px; padding:0 8px; }
+  .bar { height:4px; background:var(--line); border-radius:2px; width:100%; margin-top:10px; overflow:hidden; }
+  .bar i { display:block; height:100%; width:0; background:var(--green); transition:width .3s; }
+  .controls { width:100%; margin-top:18px; }
+  .controls .row button { padding:14px; font-size:16px; }
+  .got { background:transparent; color:var(--accent); border:2px solid var(--accent); }
+  .got.hit { background:var(--accent); color:#fff; }
+  .tiny { font-size:13px; color:var(--muted); margin-top:10px; }
+  .settings label { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--line); font-size:15px; }
+  .settings label:last-child { border:0; }
+  input[type=range] { width:50%; }
+  details { margin-top:14px; }
+  summary { cursor:pointer; color:var(--muted); font-size:14px; }
+  .peek li { padding:6px 0; border-bottom:1px solid var(--line); font-size:15px; }
+  .peek li span { color:var(--muted); display:block; font-size:13px; }
+</style>
+</head>
+<body>
+<main>
+
+<!-- START -->
+<section id="s-start" class="screen on">
+  <h1>Klets</h1>
+  <p class="sub">Dutch, out loud. You hear English, you say the Dutch, then you hear it from a Flemish speaker. Nothing to read, nothing to tap.</p>
+  <div class="card">
+    <div id="loadinfo" class="sub">No phrases loaded yet.</div>
+    <label class="file"><button class="ghost" type="button" onclick="document.getElementById('dir').click()">Open a klets folder</button>
+      <input id="dir" type="file" webkitdirectory multiple></label>
+    <p class="tiny">A folder made by klets_clips.py or klets_class.py, containing phrases.json and a clips folder.</p>
+  </div>
+  <div class="card" id="resumecard" style="display:none">
+    <div class="stat"><span>Phrases</span><b id="st-n"></b></div>
+    <div class="stat"><span>Voices</span><b id="st-v"></b></div>
+    <div class="stat"><span>Where you were</span><b id="st-pos"></b></div>
+    <div class="row"><button id="btn-start">Start je klets</button></div>
+    <div class="row"><button class="ghost" id="btn-restart">Start from the beginning</button></div>
+  </div>
+  <div class="card settings">
+    <label>Pause length <input id="opt-pause" type="range" min="0.6" max="2.2" step="0.1" value="1.2"></label>
+    <label>English prompt<select id="opt-prompt"><option value="speech">spoken (device voice)</option><option value="text">text only</option></select></label>
+    <label>Second hearing when only one voice<select id="opt-repeat"><option value="1">yes, play it twice</option><option value="0">no, once</option></select></label>
+    <label>Items per klets <input id="opt-len" type="range" min="8" max="30" step="1" value="18"></label>
+    <label>Transcript after a klets<select id="opt-peek"><option value="0">off</option><option value="1">on</option></select></label>
+  </div>
+  <p class="tiny">Say it out loud. Do not write anything down. Do not repeat a klets. Three in four right is enough. Mistakes are the lesson working.</p>
+</section>
+
+<!-- PLAYER -->
+<section id="s-play" class="screen">
+  <div class="player">
+    <div class="ring" id="ring">
+      <svg viewBox="0 0 100 100"><circle class="track" cx="50" cy="50" r="44"/><circle class="fill" id="fill" cx="50" cy="50" r="44" stroke-dasharray="276.5" stroke-dashoffset="276.5"/></svg>
+      <div class="state" id="state">Luister<small id="state2">&nbsp;</small></div>
+    </div>
+    <div class="prompt" id="prompt"></div>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="controls">
+      <div class="row"><button class="got" id="btn-got">That one got me</button></div>
+      <div class="row"><button class="ghost" id="btn-pause">Pause</button><button class="ghost" id="btn-again">Hear it again</button></div>
+      <div class="row"><button class="ghost" id="btn-stop">Stop for now</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- DONE -->
+<section id="s-done" class="screen">
+  <h1>Klaar.</h1>
+  <p class="sub" id="donetext"></p>
+  <div class="card">
+    <div class="stat"><span>Sentences said out loud</span><b id="d-n"></b></div>
+    <div class="stat"><span>Ones that got you</span><b id="d-got"></b></div>
+    <div class="stat"><span>Minutes</span><b id="d-min"></b></div>
+    <div class="row"><button id="btn-more">Nog een klets?</button></div>
+    <div class="row"><button class="ghost" id="btn-home">Genoeg voor vandaag</button></div>
+  </div>
+  <details id="peek" style="display:none"><summary>Peek at what you said (Dutch)</summary><ul class="peek" id="peeklist"></ul></details>
+</section>
+
+</main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const S = { phrases:[], urls:{}, name:'', voices:1, pos:0, order:[], got:new Set(), done:0, t0:0, playing:false, paused:false, cancel:null, lastItem:null };
+  const opts = { pause:1.2, prompt:'speech', repeat:1, len:18, peek:0 };
+  const LS = k => 'klets:' + (S.name||'default') + ':' + k;
+
+  // ----- settings -----
+  const bind = (id, key, num) => { const el=$(id); const saved=localStorage.getItem('klets:opt:'+key); if(saved!==null){ el.value=saved; } opts[key]= num? +el.value : el.value; el.addEventListener('change',()=>{ opts[key]= num? +el.value : el.value; localStorage.setItem('klets:opt:'+key, el.value); }); };
+  bind('opt-pause','pause',true); bind('opt-prompt','prompt',false); bind('opt-repeat','repeat',true); bind('opt-len','len',true); bind('opt-peek','peek',true);
+
+  // ----- loading -----
+  function setLoaded(){ $('loadinfo').textContent = `${S.name}: ${S.phrases.length} phrases, ${S.voices} voice${S.voices>1?'s':''}.`; $('st-n').textContent=S.phrases.length; $('st-v').textContent=S.voices; const p=+(localStorage.getItem(LS('pos'))||0); S.pos=Math.min(p,S.phrases.length); $('st-pos').textContent = S.pos? `phrase ${S.pos} of ${S.phrases.length}` : 'at the start'; $('resumecard').style.display='block'; }
+  $('dir').addEventListener('change', async e => {
+    const files=[...e.target.files]; const pj=files.find(f=>f.name==='phrases.json'); if(!pj){ alert('No phrases.json in that folder.'); return; }
+    const data=JSON.parse(await pj.text()); const root=pj.webkitRelativePath.split('/').slice(0,-1).join('/');
+    S.urls={}; for(const f of files){ const rel=f.webkitRelativePath.slice(root.length+1); S.urls[rel]=URL.createObjectURL(f); }
+    load(data, root.split('/').pop()||'klets');
+  });
+  async function tryFetch(){ try{ const r=await fetch('phrases.json',{cache:'no-store'}); if(!r.ok) return; const data=await r.json(); S.urls=null; const segs=location.pathname.split('/').filter(Boolean); if(segs.length && /\.html?$/i.test(segs[segs.length-1])) segs.pop(); load(data, segs.pop()||'klets'); }catch(_){} }
+  function load(data,name){ S.phrases=(data.phrases||[]).filter(p=>p.file); S.voices=data.voices||(S.phrases.some(p=>p.file2)?2:1); S.name=name; setLoaded(); }
+  const urlFor = rel => S.urls? S.urls[rel] : rel;
+
+  // ----- audio -----
+  const cache={}; function audioFor(rel){ if(!cache[rel]){ const a=new Audio(urlFor(rel)); a.preload='auto'; cache[rel]=a; } return cache[rel]; }
+  function play(rel){ return new Promise(res=>{ const a=audioFor(rel); a.currentTime=0; const end=()=>{ a.removeEventListener('ended',end); res(); }; a.addEventListener('ended',end); a.play().catch(()=>res()); S.cancel=()=>{ a.pause(); a.removeEventListener('ended',end); res(); }; }); }
+  function speak(text){ return new Promise(res=>{ if(opts.prompt!=='speech' || !('speechSynthesis' in window)){ setTimeout(res, Math.min(2500, 600+text.length*45)); return; } const u=new SpeechSynthesisUtterance(text); u.lang='en-GB'; u.rate=0.95; const v=speechSynthesis.getVoices().find(v=>v.lang==='en-GB')||speechSynthesis.getVoices().find(v=>v.lang.startsWith('en')); if(v) u.voice=v; let done=false; const fin=()=>{ if(!done){done=true;res();} }; u.onend=fin; u.onerror=fin; speechSynthesis.cancel(); speechSynthesis.speak(u); setTimeout(fin, 1500+text.length*80); S.cancel=()=>{ speechSynthesis.cancel(); fin(); }; }); }
+  function wait(ms){ return new Promise(res=>{ const t=setTimeout(res,ms); S.cancel=()=>{ clearTimeout(t); res(); }; }); }
+  function ring(seconds, cls){ const f=$('fill'); const r=$('ring'); r.className='ring '+(cls||''); f.style.transition='none'; f.style.strokeDashoffset=276.5; requestAnimationFrame(()=>{ f.style.transition=`stroke-dashoffset ${seconds}s linear`; f.style.strokeDashoffset=0; }); }
+  function state(a,b){ $('state').firstChild.textContent=a; $('state2').innerHTML=b||'&nbsp;'; }
+
+  // ----- the loop -----
+  function buildOrder(){ // new items in order, with earlier ones woven back in: after every 4 new, 2 old
+    const n=S.phrases.length, start=S.pos, order=[]; let fresh=0;
+    for(let i=start;i<n && order.length<opts.len;i++){ order.push(i); fresh++; if(fresh%4===0 && i>3){ const pool=[]; for(let k=Math.max(0,i-16);k<i-1;k++) pool.push(k); for(let r=0;r<2 && pool.length;r++){ order.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]); } } }
+    return order;
+  }
+  async function runItem(i){
+    const p=S.phrases[i]; S.lastItem=i; $('btn-got').classList.toggle('hit', S.got.has(i));
+    // What to say: the phrase itself when it has an English prompt; otherwise (class mode) the example
+    // sentence it came from, with the phrase alone as the second hearing.
+    const ex = (!p.en && p.examples && p.examples[0] && p.examples[0].en) ? p.examples[0] : null;
+    const en = ex ? ex.en : (p.en||''); const file = ex ? ex.file : p.file; const dur = (ex ? ex.duration : p.duration) || 1.5;
+    const second = p.file2 ? {file:p.file2, dur:p.duration2||dur, label:'voice two'} : (ex ? {file:p.file, dur:p.duration||dur, label:'the phrase alone'} : (opts.repeat ? {file:p.file, dur, label:'once more'} : null));
+    $('prompt').textContent = en;   // English only. Never Dutch.
+    state('Luister','English'); ring(0.01); await speak(en); if(S.stopped) return;
+    const pauseS = Math.max(2.2, (dur*1.4+0.8)*opts.pause);
+    state('Jij','say it out loud'); ring(pauseS,'you'); await wait(pauseS*1000); if(S.stopped) return;
+    state('Luister', S.voices>1?'voice one':'the speaker'); ring(dur,'listen'); await play(file); if(S.stopped) return;
+    await wait(350);
+    if(second){ state('Luister', second.label); ring(second.dur,'listen'); await play(second.file); }
+    if(S.stopped) return;
+    await wait(500);
+  }
+  async function session(){
+    S.order=buildOrder(); if(!S.order.length){ alert('Nothing left in this folder. Start from the beginning or open another.'); return; }
+    S.stopped=false; S.done=0; S.t0=Date.now(); show('s-play'); $('prompt').textContent='';
+    for(let k=0;k<S.order.length;k++){
+      $('bar').style.width=(k/S.order.length*100)+'%';
+      while(S.paused){ await wait(200); }
+      await runItem(S.order[k]); if(S.stopped) return;
+      S.done++; const i=S.order[k]; if(i>=S.pos){ S.pos=i+1; localStorage.setItem(LS('pos'),S.pos); }
+    }
+    finish();
+  }
+  function finish(){
+    $('bar').style.width='100%'; const min=Math.round((Date.now()-S.t0)/6000)/10;
+    $('d-n').textContent=S.done; $('d-got').textContent=[...S.got].filter(i=>S.order.includes(i)).length; $('d-min').textContent=min;
+    $('donetext').textContent = S.pos>=S.phrases.length ? 'That was the last of this folder. Well done.' : `You just said ${S.done} things in Dutch out loud. That is the whole job.`;
+    localStorage.setItem(LS('got'), JSON.stringify([...S.got]));
+    const peek=$('peek'); peek.style.display = opts.peek? 'block':'none'; peek.open=false;
+    $('peeklist').innerHTML = S.order.map(i=>{ const p=S.phrases[i]; return `<li>${esc(p.nl)}<span>${esc(p.en||'')}</span></li>`; }).join('');
+    show('s-done');
+  }
+  const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on')); $(id).classList.add('on'); }
+
+  // ----- buttons -----
+  $('btn-start').onclick = () => { if('speechSynthesis' in window) speechSynthesis.getVoices(); S.got=new Set(JSON.parse(localStorage.getItem(LS('got'))||'[]')); session(); };
+  $('btn-restart').onclick = () => { S.pos=0; localStorage.setItem(LS('pos'),0); localStorage.removeItem(LS('got')); S.got=new Set(); session(); };
+  $('btn-got').onclick = () => { if(S.lastItem==null) return; if(S.got.has(S.lastItem)) S.got.delete(S.lastItem); else S.got.add(S.lastItem); $('btn-got').classList.toggle('hit', S.got.has(S.lastItem)); };
+  $('btn-pause').onclick = () => { S.paused=!S.paused; $('btn-pause').textContent = S.paused? 'Go on' : 'Pause'; if(S.paused && S.cancel) S.cancel(); };
+  $('btn-again').onclick = async () => { if(S.lastItem==null) return; const p=S.phrases[S.lastItem]; const ex=(!p.en&&p.examples&&p.examples[0])?p.examples[0]:null; await play(ex?ex.file:p.file); };
+  $('btn-stop').onclick = () => { S.stopped=true; if(S.cancel) S.cancel(); S.paused=false; $('btn-pause').textContent='Pause'; setLoaded(); show('s-start'); };
+  $('btn-more').onclick = () => session();
+  $('btn-home').onclick = () => { setLoaded(); show('s-start'); };
+  tryFetch();
+})();
+</script>
+</body>
+</html>
